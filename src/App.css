@@ -1,0 +1,14 @@
+html {
+    text-align: center;
+    background-color: whitesmoke;
+    height: 100%;
+    width: 100%;
+}
+
+body, #root {
+    height: 100%;
+}
+
+.App {
+    height: 100%;
+}
