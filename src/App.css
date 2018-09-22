@@ -12,3 +12,53 @@ body, #root {
 .App {
     height: 100%;
 }
+
+.control-panel {
+    background-color: lightblue;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn {
+    height: 40px;
+    background-color: lightskyblue;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    border: none;
+    outline: none;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.btn:active {
+    background-color: red;
+}
+
+.btn-select-month {
+    border-radius: 10px;
+}
+
+.btn-add,
+.btn-open-search {
+    position: absolute;
+    font-size: 0;
+    width: 40px;
+    border-radius: 100%;
+}
+
+.btn-add {
+    left: 10px;
+    background-image: url('./icons/add.svg');
+    background-size: 35px;
+}
+
+.btn-open-search {
+    user-select: none;
+    right: 10px;
+    display: block;
+    background-image: url('./icons/search.svg');
+    background-size: 28px;
+}
