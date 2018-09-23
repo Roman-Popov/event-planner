@@ -14,11 +14,15 @@ body, #root {
 }
 
 .control-panel {
+    position: fixed;
+    top: 0;
+    width: 100%;
     background-color: lightblue;
     height: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 
 .btn {
@@ -98,11 +102,13 @@ body, #root {
     display: flex;
     flex-wrap: wrap;
     height: calc(100% - 60px);
+    margin-top: 65px;
 }
 
 .select-month fieldset {
     box-sizing: border-box;
     margin: 0;
+    padding-top: 0;
     width: 50%;
     display: flex;
     flex-direction: column;
@@ -130,4 +136,50 @@ body, #root {
 
 .select-month .radio-selected {
     background: lightskyblue;
+}
+
+.list-days {
+    margin-top: 80px;
+}
+
+.list-days ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.list-days ul li {
+    height: 50px;
+    border-top: 1px solid gray;
+}
+
+.list-days .business-day {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    min-height: 50px;
+    width: 50px;
+}
+
+.list-days .day-of-week,
+.list-days .day-of-month {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+.list-days .day-of-week {
+    height: 30%;
+    font-size: 0.7em;
+}
+
+.list-days .day-of-week[data-holiday='true']{
+    color: red;
+}
+
+.list-days .day-of-month {
+    height: 70%;
+    font-size: 1.5em;
 }

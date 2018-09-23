@@ -69,7 +69,11 @@ class App extends Component {
                 )} />
 
                 <Route exact path="/" render={() => (
-                    <MainPage />
+                    <MainPage
+                        months={months}
+                        currentMonth={currentMonth}
+                        currentYear={currentYear}
+                    />
                 )} />
 
                 <Route path="/search" render={() => (
