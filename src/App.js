@@ -7,6 +7,7 @@ import Header from './components/Header';
 import MainPage from './components/MainPage';
 import SearchPage from './components/SearchPage';
 import SelectMonthPage from './components/SelectMonthPage';
+import AddTaskPage from './components/AddTaskPage';
 
 
 
@@ -19,7 +20,7 @@ class App extends Component {
         years: [],
         currentMonth: '',
         currentYear: '',
-        selectMonth: true,
+        currentTasks: []
     }
 
     componentWillMount() {
@@ -72,6 +73,15 @@ class App extends Component {
                     <MainPage
                         months={months}
                         currentMonth={currentMonth}
+                        currentYear={currentYear}
+                    />
+                )} />
+
+                <Route path="/add-task" render={() => (
+                    <AddTaskPage
+                        months={months}
+                        currentMonth={currentMonth}
+                        years={years}
                         currentYear={currentYear}
                     />
                 )} />

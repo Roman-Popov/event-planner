@@ -5,16 +5,9 @@ html {
     width: 100%;
 }
 
-body, #root {
-    height: 100%;
-}
-
-.App {
-    height: 100%;
-}
-
 .control-panel {
     position: fixed;
+    z-index: 999;
     top: 0;
     width: 100%;
     background-color: lightblue;
@@ -149,8 +142,11 @@ body, #root {
 }
 
 .list-days ul li {
-    height: 50px;
+    min-height: 50px;
     border-top: 1px solid gray;
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
 }
 
 .list-days .business-day {
@@ -171,7 +167,7 @@ body, #root {
 }
 
 .list-days .day-of-week {
-    height: 30%;
+    height: calc(50px * 0.3);
     font-size: 0.7em;
 }
 
@@ -180,6 +176,88 @@ body, #root {
 }
 
 .list-days .day-of-month {
-    height: 70%;
+    height: calc(50px * 0.7);
     font-size: 1.5em;
+}
+
+.day-data {
+    border-left: 1px dotted lightgray;
+    width: 100%;
+}
+
+.day-data section {
+    position: relative;
+    padding: 0.5em 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    border-bottom: 1px dotted lightgray;
+}
+
+.day-data section:last-of-type {
+    border-bottom: none;
+}
+
+.day-data time {
+    margin: 0 1em;
+}
+
+.day-data h4 {
+    margin: 0;
+    width: 7em;
+    text-align: left
+}
+
+.day-data button {
+    position: absolute;
+    top: 0.5em;
+    right: 1em;
+    padding: 0;
+    height: 20px;
+    background: none;
+    border: none;
+    border-bottom: 1px dashed gray;
+    outline: none;
+    color: gray;
+    font-style: italic;
+    text-decoration: 1px solid red;
+}
+
+.day-data button:active {
+    color: black;
+}
+
+.day-data .details {
+    height: 0;
+    margin: 0;
+    text-align: left;
+    hyphens: auto;
+    overflow: hidden;
+    width: 100%;
+}
+
+.day-data .details.shown {
+    height: auto;
+    max-height: 100px;
+    margin: 0.5em 1em 0;
+    padding: 0.75em;
+    border-radius: 1em;
+    background: white;
+    box-shadow: inset 0 0 6px gray;
+}
+
+.day-data .details.shown p {
+    margin: 0;
+    max-height: inherit;
+    overflow: auto;
+}
+
+section.add-task {
+    margin-top: 65px;
+}
+
+section.add-task form {
+    display: flex;
+    flex-direction: column;
 }

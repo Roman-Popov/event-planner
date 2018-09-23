@@ -8,7 +8,7 @@ class Header extends Component {
 
         return (
             <header className="control-panel">
-                <button className="btn btn-add">+</button>
+                <Link to="/add-task" className="btn btn-add">+</Link>
 
                 {window.location.pathname === '/select-month' ?
                     <div className="btn btn-select-month disabled">Select month</div> :
