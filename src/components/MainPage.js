@@ -67,6 +67,12 @@ class MainPage extends Component {
         };
     }
 
+    toggleDetails = (targetBtn) => {
+        const details = targetBtn.parentNode.querySelector('.details');
+        details.classList.toggle('shown')
+        details.classList.contains('shown') ? targetBtn.innerHTML = 'Hide notes' : targetBtn.innerHTML = 'Show notes';
+    }
+
     createList = () => {
         const { months, currentMonth, currentYear } = this.props,
             listDays = [],
@@ -95,7 +101,7 @@ class MainPage extends Component {
                             <section key={task.time}>
                                 <time>{task.time}</time>
                                 <h4>{task.name}</h4>
-                                {task.notes && <button>
+                                {task.notes && <button onClick={e => this.toggleDetails(e.target)}>
                                     Show notes
                                 </button>}
                                 <div className="details">
