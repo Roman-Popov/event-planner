@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class AddTaskPage extends Component {
     render() {
@@ -8,7 +9,7 @@ class AddTaskPage extends Component {
             <section className="add-task">
                 <form>
                     <label>
-                        Date
+                        <span>Date</span>
                         <input
                             type="date"
                             min={`${years[years.length - 1]}-01-01`}
@@ -17,15 +18,28 @@ class AddTaskPage extends Component {
                     </label>
 
                     <label>
-                        Time
+                        <span>Working day</span>
+                        <input type="checkbox" id="working-day" defaultChecked="true" />
+                    </label>
+
+                    <label>
+                        <span>Time</span>
                         <input type="time" />
                     </label>
 
                     <label>
-                        Working day
-                        <input type="checkbox" id="working-day" defaultChecked="true"/>
+                        <span>Task Name</span>
+                        <input type="text" />
+                    </label>
+
+                    <label>
+                        <span>Notes</span>
+                        <input type="text" />
                     </label>
                 </form>
+
+                <Link to="/" className="btn btn-cancel">Cancel</Link>
+                <Link to="/" className="btn btn-submit" onClick={() => console.log('submit')}>Add</Link>
             </section>
         )
     }
