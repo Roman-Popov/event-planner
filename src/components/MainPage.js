@@ -5,7 +5,9 @@ class MainPage extends Component {
         daysInMonth: (() => {
             const { months, currentMonth, currentYear} = this.props;
             return new Date(currentYear, months.indexOf(currentMonth) + 1, 0).getDate()
-        })()
+        })(),
+
+        openedDetails: []
     }
 
     componentWillMount() {
@@ -71,6 +73,26 @@ class MainPage extends Component {
         const details = targetBtn.parentNode.querySelector('.details');
         details.classList.toggle('shown')
         details.classList.contains('shown') ? targetBtn.innerHTML = 'Hide notes' : targetBtn.innerHTML = 'Show notes';
+        this.showOnlyFewDetails(details)
+    }
+
+    showOnlyFewDetails = (detailItem) => {
+        let openedDetails = this.state.openedDetails.map(detail => detail);
+
+        if (detailItem.classList.contains('shown')) {
+            if (openedDetails.indexOf(detailItem) !== -1) {
+                // Delete detailItem from stack
+                openedDetails = openedDetails.filter(item => item !== detailItem)
+            } else if (openedDetails.length > 3) {
+                const closedItem = openedDetails.splice(0, 1);
+                closedItem[0].classList.remove('shown');
+                closedItem[0].parentNode.querySelector('button').innerHTML = 'Show notes'
+            }
+
+            // Add detailItem to stack
+            openedDetails.push(detailItem)
+            this.setState({ openedDetails: openedDetails })
+        }
     }
 
     createList = () => {
