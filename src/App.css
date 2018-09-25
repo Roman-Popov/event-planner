@@ -306,4 +306,19 @@ section.select-month {
 section.add-task form {
     display: flex;
     flex-direction: column;
+    height: 100%;
+}
+
+section.add-task label {
+    position: relative;
+    margin: 1em 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+section.add-task label input{
+    width: auto;
+    width: 10em;
+    text-align: center;
 }

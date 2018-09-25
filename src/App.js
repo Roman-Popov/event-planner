@@ -20,13 +20,16 @@ class App extends Component {
         years: [],
         currentMonth: '',
         currentYear: '',
-        currentTasks: []
+        daysInMonth: ''
     }
 
     componentWillMount() {
         const currentDate = new Date(),
             currentMonth = this.state.months[currentDate.getMonth()],
             currentYear = currentDate.getFullYear(),
+            daysInMonth = (() => {
+                return new Date(currentYear, currentDate.getMonth() + 1, 0).getDate()
+            })(),
             years = [];
         for (let i = 0; i < 5; i++) {
             years.push(currentYear + 1 - i)
@@ -35,7 +38,8 @@ class App extends Component {
         this.setState({
             years: years,
             currentMonth: currentMonth,
-            currentYear: currentYear
+            currentYear: currentYear,
+            daysInMonth: daysInMonth
         })
     }
 
@@ -51,8 +55,28 @@ class App extends Component {
         })
     }
 
+    initLocalData = (month, year) => {
+        const { currentMonth, currentYear } = this.state,
+            localDataName = (month || currentMonth) + (year || currentYear),
+            storedData = localStorage.getItem(localDataName),
+            initialData = [];
+
+        if (!storedData) {
+            for (let i = 0; i < this.state.daysInMonth; i++) {
+                const day = {
+                    date: '',
+                    work: true,
+                    tasks: []
+                };
+                initialData.push(day)
+            }
+            localStorage.setItem(localDataName, JSON.stringify(initialData));
+        }
+        return initialData.length ? initialData : JSON.parse(storedData)
+    }
+
     render() {
-        const { months, currentMonth, years, currentYear } = this.state;
+        const { months, currentMonth, years, currentYear, daysInMonth } = this.state;
 
         return (
             <div className="App">
@@ -76,6 +100,8 @@ class App extends Component {
                         months={months}
                         currentMonth={currentMonth}
                         currentYear={currentYear}
+                        daysInMonth={daysInMonth}
+                        initLocalData={this.initLocalData}
                     />
                 )} />
 
@@ -85,6 +111,7 @@ class App extends Component {
                         currentMonth={currentMonth}
                         years={years}
                         currentYear={currentYear}
+                        initLocalData={this.initLocalData}
                     />
                 )} />
 
