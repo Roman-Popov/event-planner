@@ -86,18 +86,16 @@ class MainPage extends Component {
                 dayTasks = dayData.tasks;
 
             listDays.push(
-                <li key={i}>
+                <li key={i} data-holiday={weekend.indexOf(dayName) !== -1}>
                     <div className="business-day">
-                        <span
-                            className="day-of-week"
-                            data-holiday={weekend.indexOf(dayName) !== -1}>
+                        <span className="day-of-week">
                             {dayName}
                         </span>
                         <span className="day-of-month">{i + 1}</span>
                     </div>
 
                     <div className="day-data">
-                        {dayTasks.map(task => (
+                        {dayTasks.length ? dayTasks.map(task => (
                             <section key={task.time}>
                                 <time>{task.time}</time>
                                 <h4>{task.name}</h4>
@@ -108,7 +106,7 @@ class MainPage extends Component {
                                     <p>{task.notes}</p>
                                 </div>
                             </section>
-                        ))}
+                        )) : <span className="no-tasks">There is no tasks yet</span>}
                     </div>
                 </li>
             )
