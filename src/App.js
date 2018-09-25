@@ -43,6 +43,8 @@ class App extends Component {
         const selectedMonth = document.querySelector('input[name="radio-month"]:checked').value,
             selectedYear = document.querySelector('input[name="radio-year"]:checked').value;
 
+        window.scrollTo(0, 0);
+
         this.setState({
             currentMonth: selectedMonth,
             currentYear: selectedYear
