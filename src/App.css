@@ -236,6 +236,12 @@ body, #root, .App {
     border-bottom: none;
 }
 
+.day-data .main-info {
+    display: flex;
+    align-items: center;
+    min-height: 40px;
+}
+
 .day-data time {
     margin: 0 1em;
 }
@@ -243,12 +249,12 @@ body, #root, .App {
 .day-data h4 {
     margin: 0;
     width: 7em;
-    text-align: left
+    text-align: left;
+    hyphens: auto;
 }
 
 .day-data button {
     position: absolute;
-    top: 0.5em;
     right: 1em;
     padding: 0;
     height: 20px;

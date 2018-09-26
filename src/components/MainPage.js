@@ -10,7 +10,7 @@ class MainPage extends Component {
     }
 
     toggleDetails = (targetBtn) => {
-        const details = targetBtn.parentNode.querySelector('.details');
+        const details = targetBtn.parentNode.nextElementSibling;
         details.classList.toggle('shown')
         details.classList.contains('shown') ? targetBtn.innerHTML = 'Hide notes' : targetBtn.innerHTML = 'Show notes';
         this.showOnlyFewDetails(details)
@@ -59,11 +59,13 @@ class MainPage extends Component {
                     <div className="day-data">
                         {dayTasks.length ? dayTasks.map(task => (
                             <section key={task.time}>
-                                <time>{task.time}</time>
-                                <h4>{task.name}</h4>
-                                {task.notes && <button onClick={e => this.toggleDetails(e.target)}>
-                                    Show notes
-                                </button>}
+                                <div className="main-info">
+                                    <time>{task.time}</time>
+                                    <h4>{task.name}</h4>
+                                    {task.notes && <button onClick={e => this.toggleDetails(e.target)}>
+                                        Show notes
+                                    </button>}
+                                </div>
                                 <div className="details">
                                     <p>{task.notes}</p>
                                 </div>
