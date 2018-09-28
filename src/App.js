@@ -55,6 +55,15 @@ class App extends Component {
         })
     }
 
+    updateDate = (month, year) => {
+        if (month !== this.state.currentMonth || year !== this.state.currentYear) {
+            this.setState({
+                currentMonth: month,
+                currentYear: year
+            })
+        }
+    }
+
     initLocalData = (month, year) => {
         const { months, currentMonth, currentYear } = this.state,
             localMonth = (month || currentMonth),
@@ -131,6 +140,7 @@ class App extends Component {
                 <Route path="/day-details" render={() => (
                     <DayDetailsPage
                         dayData={dayData}
+                        updateDate={this.updateDate}
                     />
                 )} />
 

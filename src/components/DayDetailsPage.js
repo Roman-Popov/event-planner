@@ -3,19 +3,30 @@ import { Link } from 'react-router-dom';
 
 class DayDetailsPage extends Component {
 
+    state = {
+        dayData: ''
+    }
+
+    componentWillMount() {
+        this.getDayData();
+    }
+
     getDayData = () => {
-        const { dayData } = this.props
+        const { dayData, updateDate } = this.props
 
         if (dayData.day) {
             // Day Data is in props
-            return dayData
+            this.setState({ dayData: dayData })
         } else {
             // Get info from URL (in case of page reload)
             const dateFromURL = document.location.pathname.split('/day-details/').pop().split('-'),
-                storedData = localStorage.getItem(dateFromURL[1] + dateFromURL[2]),
+                monthURL = dateFromURL[1],
+                yearURL = dateFromURL[2],
+                storedData = localStorage.getItem(monthURL + yearURL),
                 storedDay = dateFromURL[0] - 1;
                 if (storedData) {
-                    return JSON.parse(storedData)[storedDay]
+                    updateDate(monthURL, yearURL)
+                    this.setState({ dayData: JSON.parse(storedData)[storedDay]})
                 } else {
                     // Go to the main page if stored data was not found (or in case of invalid URL)
                     window.location.replace("/");
@@ -24,7 +35,7 @@ class DayDetailsPage extends Component {
     }
 
     render() {
-        const dayData = this.getDayData(),
+        const dayData = this.state.dayData,
             dayTasks = dayData.tasks,
             dayName = dayData.wdName,
             weekend = ['Saturday', 'Sunday'];
