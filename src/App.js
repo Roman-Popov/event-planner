@@ -8,8 +8,7 @@ import MainPage from './components/MainPage';
 import SearchPage from './components/SearchPage';
 import SelectMonthPage from './components/SelectMonthPage';
 import AddTaskPage from './components/AddTaskPage';
-
-
+import DayDetailsPage from './components/DayDetailsPage'
 
 class App extends Component {
     state = {
@@ -20,7 +19,8 @@ class App extends Component {
         years: [],
         currentMonth: '',
         currentYear: '',
-        daysInMonth: ''
+        daysInMonth: '',
+        dayData: {}
     }
 
     componentWillMount() {
@@ -56,27 +56,35 @@ class App extends Component {
     }
 
     initLocalData = (month, year) => {
-        const { currentMonth, currentYear } = this.state,
-            localDataName = (month || currentMonth) + (year || currentYear),
+        const { months, currentMonth, currentYear } = this.state,
+            localMonth = (month || currentMonth),
+            localYear = (year || currentYear),
+            localDataName = localMonth + localYear,
             storedData = localStorage.getItem(localDataName),
             initialData = [];
 
         if (!storedData) {
             for (let i = 0; i < this.state.daysInMonth; i++) {
-                const day = {
-                    date: '',
-                    work: true,
-                    tasks: []
-                };
-                initialData.push(day)
+                const weekdayName = new Date(localYear, months.indexOf(localMonth), i + 1).toLocaleString('en-GB', {weekday: 'long'}),
+                    dayData = {
+                        day: i + 1,
+                        wdName: weekdayName,
+                        work: true,
+                        tasks: []
+                    };
+                initialData.push(dayData)
             }
             localStorage.setItem(localDataName, JSON.stringify(initialData));
         }
         return initialData.length ? initialData : JSON.parse(storedData)
     }
 
+    dayDataToState = (dayData) => {
+        this.setState({ dayData: dayData })
+    }
+
     render() {
-        const { months, currentMonth, years, currentYear, daysInMonth } = this.state;
+        const { months, currentMonth, years, currentYear, daysInMonth, dayData } = this.state;
 
         return (
             <div className="App">
@@ -102,6 +110,7 @@ class App extends Component {
                         currentYear={currentYear}
                         daysInMonth={daysInMonth}
                         initLocalData={this.initLocalData}
+                        dayDataToState={this.dayDataToState}
                     />
                 )} />
 
@@ -117,6 +126,12 @@ class App extends Component {
 
                 <Route path="/search" render={() => (
                     <SearchPage />
+                )} />
+
+                <Route path="/day-details" render={() => (
+                    <DayDetailsPage
+                        dayData={dayData}
+                    />
                 )} />
 
             </div>

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom'
 
 class MainPage extends Component {
     state = {
@@ -36,29 +37,34 @@ class MainPage extends Component {
     }
 
     createList = () => {
-        const { months, currentMonth, currentYear, daysInMonth } = this.props,
+        const { currentMonth, currentYear, daysInMonth, dayDataToState } = this.props,
             listDays = [],
             weekend = ['Sat', 'Sun'],
             monthData = JSON.parse(localStorage.getItem(currentMonth + currentYear));
 
 
         for (let i = 0; i < daysInMonth; i++) {
-            const dayName = new Date(currentYear, months.indexOf(currentMonth), i+1).toDateString().split(' ')[0],
-                dayData = monthData[i],
+            const dayData = monthData[i],
+                day = dayData.day,
+                weekdayName = dayData.wdName.slice(0,3),
                 dayTasks = dayData.tasks;
 
             listDays.push(
-                <li key={i} data-holiday={weekend.indexOf(dayName) !== -1}>
-                    <div className="business-day">
+                <li key={day} data-weekend={weekend.indexOf(weekdayName) !== -1}>
+                    <Link
+                        to={`/day-details/${ day }-${ currentMonth }-${ currentYear }`}
+                        className="business-day"
+                        onClick={() => dayDataToState(dayData)}
+                    >
                         <span className="day-of-week">
-                            {dayName}
+                            {weekdayName}
                         </span>
-                        <span className="day-of-month">{i + 1}</span>
-                    </div>
+                        <span className="day-of-month">{day}</span>
+                    </Link>
 
                     <div className="day-data">
                         {dayTasks.length ? dayTasks.map(task => (
-                            <section key={task.time}>
+                            <section key={`${task.time}-${task.name}`}>
                                 <div className="main-info">
                                     <time>{task.time}</time>
                                     <h4>{task.name}</h4>

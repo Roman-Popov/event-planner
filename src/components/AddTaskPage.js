@@ -20,18 +20,17 @@ class AddTaskPage extends Component {
 
     submitTask = () => {
         const taskDate = document.getElementById('task-date').value,
+            taskYear = taskDate.split('-')[0],
+            taskMonth = this.props.months[parseInt(taskDate.split('-')[1], 10) - 1],
+            taskDay = parseInt(taskDate.split('-')[2], 10) - 1,
             workingDay = document.getElementById('working-day').checked,
             taskTime = document.getElementById('task-time').value,
             taskName = document.getElementById('task-name').value,
             taskNotes = document.getElementById('task-notes').value;
 
-        const taskYear = taskDate.split('-')[0],
-            taskMonth = this.props.months[parseInt(taskDate.split('-')[1], 10) - 1],
-            taskDay = parseInt(taskDate.split('-')[2], 10) - 1;
-
         const listOfDays = this.props.initLocalData(taskMonth, taskYear)
 
-        listOfDays[taskDay].date = taskDate;
+        listOfDays[taskDay].day = taskDay + 1;
         listOfDays[taskDay].work = workingDay;
         listOfDays[taskDay].tasks.push({
             time: taskTime,

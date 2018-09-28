@@ -15,7 +15,7 @@ body, #root, .App {
     position: fixed;
     z-index: 999;
     top: 0;
-    width: 100%;
+    width: 100vw;
     background-color: lightblue;
     height: 60px;
     display: flex;
@@ -52,6 +52,7 @@ body, #root, .App {
     border-radius: 0px;
     background-color: inherit;
     font-size: 1em;
+    width: 10em;
 }
 
 .btn.disabled:active {
@@ -63,7 +64,9 @@ body, #root, .App {
 }
 
 .btn-add,
-.btn-open-search {
+.btn-open-search,
+.btn-back,
+.btn-delete {
     position: absolute;
     font-size: 0;
     width: 40px;
@@ -104,8 +107,7 @@ body, #root, .App {
 
 .select-month fieldset {
     box-sizing: border-box;
-    margin: 0;
-    padding-top: 0;
+    margin: 5px 0 0;
     width: 50%;
     display: flex;
     flex-direction: column;
@@ -137,7 +139,7 @@ body, #root, .App {
 }
 
 .list-days {
-    margin-top: 80px;
+    padding-top: 65px;
     overflow: hidden;
 }
 
@@ -155,11 +157,11 @@ body, #root, .App {
     flex-wrap: wrap;
 }
 
-.list-days li[data-holiday='true'] + li[data-holiday='false'] {
+.list-days li[data-weekend='true'] + li[data-weekend='false'] {
     padding-top: 7px;
 }
 
-.list-days li[data-holiday='true'] + li[data-holiday='false']::before {
+.list-days li[data-weekend='true'] + li[data-weekend='false']::before {
     content: '';
     position: absolute;
     left: -20px;
@@ -180,14 +182,16 @@ body, #root, .App {
     min-height: 50px;
     width: 50px;
     border-right: 1px dotted lightgray;
+    text-decoration: none;
+    color: black;
 }
 
-.list-days li[data-holiday='true'] .business-day {
+.list-days li[data-weekend='true'] .business-day {
     background: rgb(248, 235, 235);
 }
 
-.list-days .day-of-week,
-.list-days .day-of-month {
+.day-of-week,
+.day-of-month {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -200,7 +204,8 @@ body, #root, .App {
     font-size: 0.7em;
 }
 
-.list-days li[data-holiday='true'] .day-of-week {
+.list-days li[data-weekend='true'] .day-of-week,
+.header-wrapper[data-weekend='true'] .day-of-week {
     color: red;
 }
 
@@ -217,7 +222,7 @@ body, #root, .App {
     width: calc(100% - 50px);
 }
 
-.day-data .no-tasks {
+.no-tasks {
     color: gainsboro;
     font-style: italic;
 }
@@ -264,7 +269,6 @@ body, #root, .App {
     outline: none;
     color: gray;
     font-style: italic;
-    text-decoration: 1px solid red;
 }
 
 .day-data button:active {
@@ -301,12 +305,14 @@ body, #root, .App {
 }
 
 section.add-task,
-section.select-month {
-    padding-top: 65px;
+section.select-month,
+section.day-details {
+    padding-top: 60px;
     padding-bottom: 50px;
     min-height: 100%;
     box-sizing: border-box;
     position: relative;
+    overflow-x: hidden;
 }
 
 section.add-task form {
@@ -327,4 +333,146 @@ section.add-task label input{
     width: auto;
     width: 10em;
     text-align: center;
+}
+
+section.day-details {
+    padding-bottom: 0;
+    background: rgb(254, 252, 250);
+    height: 100%;
+    overflow: hidden;
+}
+
+.day-details .header-wrapper {
+    position: fixed;
+    z-index: 999;
+    left: -20px;
+    width: calc(100% + 40px);
+    background: snow;
+    box-shadow: inset 0 -3px 6px rgba(0,0,0,0.16),
+                inset 0 -3px 6px rgba(0,0,0,0.23),
+                0 10px 10px whitesmoke;
+}
+
+.day-details .tasks-wrapper {
+    margin-top: 70px;
+    height: calc(100% - 70px);
+    box-sizing: border-box;
+    overflow: auto;
+    position: relative;
+}
+
+.day-details .header-wrapper[data-weekend='true'] header {
+    background: radial-gradient(at top, rgb(248, 198, 198), transparent 75%);
+}
+
+.day-details .header-wrapper header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 70px;
+    box-sizing: border-box;
+    background: radial-gradient(at top, lightblue, transparent 75%);
+}
+
+.day-details h1,
+.day-details .day-of-week {
+    margin: 0;
+    height: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.btn-back {
+    left: 30px;
+    background-image: url('./icons/arrow-back.svg');
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.btn-delete {
+    right: 30px;
+    background-image: url('./icons/delete.svg');
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.day-details .task {
+    position: relative;
+    min-height: 50px;
+    display: flex;
+    flex-wrap: nowrap;
+    margin-bottom: 7px;
+    background: whitesmoke;
+    border: 1px solid gray;
+    border-left: 1px dashed lightgray;
+    border-right: none;
+    box-shadow: 0 0 3px grey;
+}
+
+.day-details .task:last-of-type {
+    margin-bottom: 0;
+}
+
+.task .task-time {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-height: 50px;
+    width: 50px;
+    position: sticky;
+    top: 20px;
+    margin: 1em -1px;
+    height: 2em;
+    background: linear-gradient(whitesmoke 5%,
+                                rgb(228, 228, 228),
+                                rgb(254, 252, 250) 20%, rgb(254, 252, 250) 80%,
+                                rgb(228, 228, 228),
+                                whitesmoke 95%);
+    border: 1px solid silver;
+    border-top: none;
+    border-bottom: none;
+}
+
+.task .task-info {
+    width: calc(100% - 50px);
+    border-left: 1px dashed lightgray;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.task-info h2 {
+    margin-bottom: 0;
+}
+
+.task-info h2:only-child {
+    margin: initial;
+}
+
+.task-info .details {
+    background: rgb(254, 252, 250);
+    margin: 1em;
+    padding: 1em;
+    border-radius: 1em;
+    text-align: left;
+    hyphens: auto;
+    box-shadow: inset 0 0 6px grey;
+}
+
+.end-of-tasks {
+    display: inline-block;
+    margin: 0.5em 0;
+    color: gainsboro;
+}
+
+.end-of-tasks:only-child {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    margin-top: -0.5em;
 }
