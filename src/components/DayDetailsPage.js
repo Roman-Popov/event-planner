@@ -47,7 +47,7 @@ class DayDetailsPage extends Component {
                         <Link to="/" className="btn btn-back">Back</Link>
                         <h1>{dayData.day}</h1>
                         <span className="day-of-week">{dayName}</span>
-                        <button className="btn btn-delete">Clear tasks</button>
+                        <button className="btn btn-delete-day">Clear tasks</button>
                     </header>
                 </div>
                 <div className="tasks-wrapper">
@@ -57,6 +57,11 @@ class DayDetailsPage extends Component {
                             <article className="task-info">
                                 <h2>{task.name}</h2>
                                 {task.notes && <p className="details">{task.notes}</p>}
+                                <button
+                                    className="btn btn-delete-task"
+                                >
+                                    {`Clear task "${task.name}"`}
+                                </button>
                             </article>
                         </div>
                         )) : ''
