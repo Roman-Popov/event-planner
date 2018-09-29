@@ -337,6 +337,7 @@ section.add-task label input{
 }
 
 section.day-details {
+    position: relative;
     padding-bottom: 0;
     background: rgb(254, 252, 250);
     height: 100%;
@@ -527,4 +528,38 @@ section.day-details {
     right: 0;
     top: 50%;
     margin-top: -0.5em;
+}
+
+.modal-window {
+    position: absolute;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    margin-top: 60px;
+    visibility: hidden;
+    opacity: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.5s ease-in-out;
+}
+
+.modal-window.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-window .message {
+    background: red;
+    transform: scale(0);
+    visibility: hidden;
+    transition: 0.5s ease-in-out;
+}
+
+.modal-window.visible .message {
+    visibility: visible;
+    transform: scale(1);
 }

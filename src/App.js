@@ -139,6 +139,8 @@ class App extends Component {
 
                 <Route path="/day-details" render={() => (
                     <DayDetailsPage
+                        currentMonth={currentMonth}
+                        currentYear={currentYear}
                         dayData={dayData}
                         updateDate={this.updateDate}
                     />

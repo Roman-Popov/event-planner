@@ -1,10 +1,15 @@
+
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 class DayDetailsPage extends Component {
 
     state = {
-        dayData: ''
+        dayData: '',
+        currentMonth: this.props.currentMonth,
+        currentYear: this.props.currentYear,
+        showModal: false,
+        deleteObject: '',
     }
 
     componentWillMount() {
@@ -12,7 +17,7 @@ class DayDetailsPage extends Component {
     }
 
     getDayData = () => {
-        const { dayData, updateDate } = this.props
+        const { dayData, updateDate } = this.props;
 
         if (dayData.day) {
             // Day Data is in props
@@ -24,18 +29,43 @@ class DayDetailsPage extends Component {
                 yearURL = dateFromURL[2],
                 storedData = localStorage.getItem(monthURL + yearURL),
                 storedDay = dateFromURL[0] - 1;
-                if (storedData) {
-                    updateDate(monthURL, yearURL)
-                    this.setState({ dayData: JSON.parse(storedData)[storedDay]})
-                } else {
-                    // Go to the main page if stored data was not found (or in case of invalid URL)
-                    window.location.replace("/");
-                }
+            if (storedData) {
+                updateDate(monthURL, yearURL)
+                this.setState({ dayData: JSON.parse(storedData)[storedDay] })
+            } else {
+                // Go to the main page if stored data was not found (or in case of invalid URL)
+                window.location.replace("/");
+            }
         }
     }
 
+    confirmDeletion = (task) => {
+        this.setState({
+            showModal: true,
+            deleteObject: task || '',
+        })
+    }
+
+    clearData = (task) => {
+        const { dayData, currentMonth, currentYear } = this.state,
+            storedData = JSON.parse(localStorage.getItem(currentMonth + currentYear));
+
+        if (task) {
+            storedData[dayData.day - 1].tasks = storedData[dayData.day - 1].tasks.filter(storedTask => storedTask.name !== task.name)
+        } else {
+            storedData[dayData.day - 1].tasks = [];
+        }
+
+        localStorage.setItem(currentMonth + currentYear, JSON.stringify(storedData))
+        this.setState({
+            dayData: storedData[dayData.day - 1],
+            showModal: false,
+            deleteObject: ''
+        })
+    }
+
     render() {
-        const dayData = this.state.dayData,
+        const { dayData, showModal, deleteObject } = this.state,
             dayTasks = dayData.tasks,
             dayName = dayData.wdName,
             weekend = ['Saturday', 'Sunday'];
@@ -47,7 +77,12 @@ class DayDetailsPage extends Component {
                         <Link to="/" className="btn btn-back">Back</Link>
                         <h1>{dayData.day}</h1>
                         <span className="day-of-week">{dayName}</span>
-                        <button className="btn btn-delete-day">Clear tasks</button>
+                        {dayTasks.length ? <button
+                            className="btn btn-delete-day"
+                            onClick={() => this.confirmDeletion()}
+                        >
+                            Clear all tasks for this day
+                        </button> : ''}
                     </header>
                 </div>
                 <div className="tasks-wrapper">
@@ -59,12 +94,13 @@ class DayDetailsPage extends Component {
                                 {task.notes && <p className="details">{task.notes}</p>}
                                 <button
                                     className="btn btn-delete-task"
+                                    onClick={() => this.confirmDeletion(task)}
                                 >
                                     {`Clear task "${task.name}"`}
                                 </button>
                             </article>
                         </div>
-                        )) : ''
+                    )) : ''
                     }
 
                     <span className="end-of-tasks">
@@ -73,6 +109,19 @@ class DayDetailsPage extends Component {
                     </span>
                 </div>
 
+                <div className={`modal-window ${showModal ? 'visible' : ''}`}>
+                    <div className="message">
+                        <h2>Attention!</h2>
+                        <p>Deleted data can not be restored.</p>
+                        <p>
+                            Do you really want to delete
+                            {deleteObject ? ` the task "${deleteObject.name}" (at ${deleteObject.time})` :
+                            ' all tasks for today'}?
+                        </p>
+                        <button onClick={() => this.setState({ showModal: false, deleteObject: '' })}>No, keep</button>
+                        <button onClick={() => this.clearData(deleteObject)}>Yes, delete</button>
+                    </div>
+                </div>
 
             </section>
         )
