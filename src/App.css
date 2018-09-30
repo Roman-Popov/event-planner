@@ -25,6 +25,7 @@ body, #root, .App {
 }
 
 .btn {
+    position: relative;
     height: 40px;
     border-radius: 20px;
     background-color: lightskyblue;
@@ -41,18 +42,22 @@ body, #root, .App {
     text-decoration: none;
     font-size: 0.8em;
     user-select: none;
+    cursor: pointer;
 }
 
 .btn:active {
-    background-color: red;
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.23);
+    transform: scale(0.97) translateY(1px);
 }
 
 .btn.disabled {
     box-shadow: none;
+    transform: none;
     border-radius: 0px;
     background-color: inherit;
     font-size: 1em;
     width: 10em;
+    cursor: default;
 }
 
 .btn.disabled:active {
@@ -185,6 +190,7 @@ body, #root, .App {
     border-right: 1px dotted lightgray;
     text-decoration: none;
     color: black;
+    box-shadow: 1px 0px 10px -2px lightgrey;
 }
 
 .list-days li[data-weekend='true'] .business-day {
@@ -486,7 +492,7 @@ section.day-details {
 
 .task-info h2 {
     margin-bottom: 0;
-    max-width: 90%;
+    max-width: 80%;
 }
 
 .task-info h2:only-child {
@@ -553,13 +559,50 @@ section.day-details {
 }
 
 .modal-window .message {
-    background: red;
-    transform: scale(0);
+    position: relative;
+    background: whitesmoke;
+    box-shadow: inset 0 0 0.5em 0.2em coral, 0 0 0.5em 0.2em whitesmoke;
+    transform: scale(0) rotate(-90deg);
     visibility: hidden;
-    transition: 0.5s ease-in-out;
+    margin-top: -60px;
+    width: 85%;
+    max-width: 400px;
+    padding: 0 30px 30px;
+    box-sizing: border-box;
+    border-radius: 2em;
+    overflow: hidden;
+    transition: 0.25s ease-in-out;
 }
 
 .modal-window.visible .message {
     visibility: visible;
-    transform: scale(1);
+    transform: scale(1) rotate(0deg);
+}
+
+.message .modal-header {
+    box-shadow: 0 -1px 0 0.2em whitesmoke, 0 0.2em 0.2em 0 coral;
+    padding: 0 0.5em;
+}
+
+.message .btn-wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.btn-wrapper .btn {
+    width: 7em;
+}
+
+.btn-wrapper .btn-yes {
+    background-color: bisque;
+    border: 2px solid coral;
+    color: black;
+    transition: opacity 0.5s;
+}
+
+.btn-wrapper .btn-no {
+    background-color: rgb(193, 239, 193);
+    border: 2px solid lightseagreen;
+    color: black;
 }

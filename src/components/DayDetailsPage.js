@@ -111,15 +111,17 @@ class DayDetailsPage extends Component {
 
                 <div className={`modal-window ${showModal ? 'visible' : ''}`}>
                     <div className="message">
-                        <h2>Attention!</h2>
+                        <h2><span className="modal-header">Attention!</span></h2>
                         <p>Deleted data can not be restored.</p>
                         <p>
                             Do you really want to delete
                             {deleteObject ? ` the task "${deleteObject.name}" (at ${deleteObject.time})` :
                             ' all tasks for today'}?
                         </p>
-                        <button onClick={() => this.setState({ showModal: false, deleteObject: '' })}>No, keep</button>
-                        <button onClick={() => this.clearData(deleteObject)}>Yes, delete</button>
+                        <div className="btn-wrapper">
+                            <button className="btn btn-no" onClick={() => this.setState({ showModal: false, deleteObject: '' })}>No, keep</button>
+                            <button className="btn btn-yes" onClick={() => this.clearData(deleteObject)}>Yes, delete</button>
+                        </div>
                     </div>
                 </div>
 
