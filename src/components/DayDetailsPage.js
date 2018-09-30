@@ -75,14 +75,15 @@ class DayDetailsPage extends Component {
                 <div className="header-wrapper" data-weekend={weekend.indexOf(dayName) !== -1}>
                     <header>
                         <Link to="/" className="btn btn-back">Back</Link>
-                        <h1>{dayData.day}</h1>
-                        <span className="day-of-week">{dayName}</span>
-                        {dayTasks.length ? <button
-                            className="btn btn-delete-day"
+                        <div>
+                            <h1>{dayData.day}</h1>
+                            <span className="day-of-week">{dayName}</span>
+                        </div>
+                        <button className={`btn btn-delete-day ${dayTasks.length ? 'visible' : '' }`}
                             onClick={() => this.confirmDeletion()}
                         >
                             Clear all tasks for this day
-                        </button> : ''}
+                        </button>
                     </header>
                 </div>
                 <div className="tasks-wrapper">

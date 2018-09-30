@@ -15,11 +15,13 @@ body, #root, .App {
     position: fixed;
     z-index: 999;
     top: 0;
-    width: 100vw;
+    width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
     background-color: lightblue;
     height: 60px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
@@ -73,20 +75,16 @@ body, #root, .App {
 .btn-back,
 .btn-delete-task,
 .btn-delete-day {
-    position: absolute;
     font-size: 0;
     width: 40px;
 }
 
 .btn-add {
-    left: 10px;
     background-image: url('./icons/add.svg');
     background-size: 35px;
 }
 
 .btn-open-search {
-    right: 10px;
-    display: block;
     background-image: url('./icons/search.svg');
     background-size: 28px;
 }
@@ -276,6 +274,7 @@ body, #root, .App {
     outline: none;
     color: gray;
     font-style: italic;
+    cursor: pointer;
 }
 
 .day-data button:active {
@@ -308,6 +307,10 @@ body, #root, .App {
     padding: 0 0.75em;
     margin: 0.75em 0;
     max-height: inherit;
+    overflow: hidden;
+}
+
+.day-data .details.shown p {
     overflow: auto;
 }
 
@@ -380,11 +383,11 @@ section.day-details {
 
 .day-details .header-wrapper header {
     display: flex;
-    justify-content: center;
     align-items: center;
-    flex-direction: column;
+    justify-content: space-between;
     width: 100%;
     height: 70px;
+    padding: 0 30px;
     box-sizing: border-box;
     border: 1px solid silver;
 }
@@ -421,22 +424,23 @@ section.day-details {
 .day-details .day-of-week {
     margin: 0;
     height: 30px;
-    display: flex;
-    align-items: center;
 }
 
 .btn-back {
-    left: 30px;
     background-image: url('./icons/arrow-back.svg');
     background-color: transparent;
     box-shadow: none;
 }
 
 .btn-delete-day {
-    right: 30px;
     background-image: url('./icons/delete.svg');
     background-color: transparent;
     box-shadow: none;
+    visibility: hidden;
+}
+
+.btn-delete-day.visible {
+    visibility: visible;
 }
 
 .day-details .task {
@@ -512,6 +516,7 @@ section.day-details {
 }
 
 .btn-delete-task {
+    position: absolute;
     right: 0.5rem;
     top: 0.5rem;
     padding: 0;
