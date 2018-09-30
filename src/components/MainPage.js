@@ -68,7 +68,7 @@ class MainPage extends Component {
                                 <div className="main-info">
                                     <time>{task.time}</time>
                                     <h4>{task.name}</h4>
-                                    {task.notes && <button onClick={e => this.toggleDetails(e.target)}>
+                                    {task.notes && <button className="summary" onClick={e => this.toggleDetails(e.target)}>
                                         Show notes
                                     </button>}
                                 </div>

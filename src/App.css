@@ -11,6 +11,24 @@ body, #root, .App {
     position: relative;
 }
 
+.focused::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: inherit;
+    box-shadow: 0 0 5px 2px coral;
+}
+
+a, button {
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
 .control-panel {
     position: fixed;
     z-index: 999;
@@ -123,6 +141,7 @@ body, #root, .App {
 }
 
 .select-month fieldset label {
+    position: relative;
     background: white;
     height: 30px;
     margin: 5px 0;
@@ -130,6 +149,15 @@ body, #root, .App {
     justify-content: center;
     align-items: center;
     border-radius: 15px;
+    cursor: pointer;
+    transition: background 0.25s;
+    user-select: none;
+    outline: none;
+}
+
+.select-month .radio-selected {
+    background: lightskyblue;
+    color: white;
 }
 
 .select-month fieldset input {
@@ -138,8 +166,8 @@ body, #root, .App {
     margin: 0;
 }
 
-.select-month .radio-selected {
-    background: lightskyblue;
+.select-month fieldset input:focus::after {
+    border-radius: 15px;
 }
 
 .list-days {
@@ -178,6 +206,7 @@ body, #root, .App {
 }
 
 .list-days .business-day {
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -263,7 +292,7 @@ body, #root, .App {
     hyphens: auto;
 }
 
-.day-data button {
+.day-data .summary {
     position: absolute;
     right: 1em;
     padding: 0;
@@ -277,7 +306,14 @@ body, #root, .App {
     cursor: pointer;
 }
 
-.day-data button:active {
+.day-data .summary::after {
+    padding: 5px;
+    top: -4px;
+    left: -5px;
+    border-radius: 10px;
+}
+
+.day-data .summary:active {
     color: black;
 }
 
@@ -610,4 +646,9 @@ section.day-details {
     background-color: rgb(193, 239, 193);
     border: 2px solid lightseagreen;
     color: black;
+}
+
+.btn-yes::after,
+.btn-no::after {
+    box-shadow: 0 0 5px 5px coral;
 }

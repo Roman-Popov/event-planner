@@ -10,3 +10,27 @@ ReactDOM.render(
     document.getElementById('root')
 );
 registerServiceWorker();
+
+let clickedElemPath = [];
+
+document.addEventListener('focusin', e => {
+    if (clickedElemPath.indexOf(e.target) === -1) e.target.classList.add('focused')
+})
+
+document.addEventListener('focusout', e => {
+    e.target.classList.remove('focused')
+})
+
+document.addEventListener('mousedown', e => {
+    clickedElemPath = e.path || [];
+    if (e.target.classList.contains('focused')) e.target.classList.remove('focused')
+})
+
+// For labeled elements in case of click on label
+document.addEventListener('click', e => {
+    if (e.target.classList.contains('focused')) e.target.classList.remove('focused')
+})
+
+document.addEventListener('mouseup', () => {
+    clickedElemPath = [];
+})
