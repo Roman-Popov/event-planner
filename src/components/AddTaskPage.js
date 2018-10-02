@@ -3,19 +3,19 @@ import { Link } from 'react-router-dom';
 
 class AddTaskPage extends Component {
 
-    getTodayDate = () => {
-        const dateNow = new Date(),
-            yearNow = dateNow.getFullYear(),
-            dayNow = dateNow.getDate();
-        let monthNow = (dateNow.getMonth() + 1).toString();
-        if (monthNow.length === 1) monthNow = '0' + monthNow;
-        return `${yearNow}-${monthNow}-${dayNow}`
+    state = {
+        dateValue: '',
+        timeValue: ''
     }
 
-    state = {
-        dateValue: this.getTodayDate(),
-        // Note: 'en-GB' was selected because it matches to time input format
-        timeValue: new Date().toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric' })
+    componentWillMount () {
+        const date = new Date();
+
+        this.setState({
+            // Note: 'en-GB' was selected because it matches to time input format
+            dateValue: date.toLocaleDateString('en-GB').split('/').reverse().join('-'),
+            timeValue: date.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric' })
+        })
     }
 
     submitTask = () => {
