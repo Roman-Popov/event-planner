@@ -27,9 +27,7 @@ class App extends Component {
         const currentDate = new Date(),
             currentMonth = this.state.months[currentDate.getMonth()],
             currentYear = currentDate.getFullYear(),
-            daysInMonth = (() => {
-                return new Date(currentYear, currentDate.getMonth() + 1, 0).getDate()
-            })(),
+            daysInMonth = this.GetDaysInMonth(currentDate.getMonth(), currentYear),
             years = [];
         for (let i = 0; i < 5; i++) {
             years.push(currentYear + 1 - i)
@@ -45,14 +43,20 @@ class App extends Component {
 
     submitMonth = () => {
         const selectedMonth = document.querySelector('input[name="radio-month"]:checked').value,
-            selectedYear = document.querySelector('input[name="radio-year"]:checked').value;
+            selectedYear = document.querySelector('input[name="radio-year"]:checked').value,
+            daysInSelectedMonth = this.GetDaysInMonth(this.state.months.indexOf(selectedMonth), selectedYear);
 
         window.scrollTo(0, 0);
 
         this.setState({
             currentMonth: selectedMonth,
-            currentYear: selectedYear
+            currentYear: selectedYear,
+            daysInMonth: daysInSelectedMonth
         })
+    }
+
+    GetDaysInMonth = (month, year) => {
+        return new Date(year, month + 1, 0).getDate()
     }
 
     updateDate = (month, year) => {

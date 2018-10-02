@@ -8,6 +8,13 @@ html {
 body, #root, .App {
     width: 100%;
     height: 100%;
+}
+
+#root {
+    transition: height 0.25s;
+}
+
+.App {
     position: relative;
 }
 
@@ -323,7 +330,6 @@ a, button {
     margin: 0 1em;
     text-align: left;
     hyphens: auto;
-    overflow: hidden;
     width: 100%;
     border-radius: 1em;
     box-shadow: none;
@@ -358,7 +364,6 @@ section.day-details {
     min-height: 100%;
     box-sizing: border-box;
     position: relative;
-    overflow-x: hidden;
 }
 
 section.add-task form {
@@ -385,8 +390,11 @@ section.day-details {
     position: relative;
     padding-bottom: 0;
     background: rgb(254, 252, 250);
-    height: 100%;
+}
+
+section.day-details.modal-shown {
     overflow: hidden;
+    height: 100%;
 }
 
 .day-details .header-wrapper {
@@ -412,9 +420,6 @@ section.day-details {
 
 .day-details .tasks-wrapper {
     margin-top: 70px;
-    height: calc(100% - 70px);
-    box-sizing: border-box;
-    overflow: auto;
 }
 
 .day-details .header-wrapper header {
@@ -507,7 +512,7 @@ section.day-details {
     min-height: 50px;
     width: 50px;
     position: sticky;
-    top: 20px;
+    top: 150px;
     margin: 1em -1px;
     height: 2em;
     background: linear-gradient(whitesmoke 5%,
@@ -573,19 +578,18 @@ section.day-details {
     position: absolute;
     left: 0;
     right: 0;
-    top: 50%;
+    top: calc(50% + 35px);
     margin-top: -0.5em;
 }
 
 .modal-window {
-    position: absolute;
+    position: fixed;
     z-index: 9999;
-    top: 0;
+    top: 60px;
     left: 0;
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.8);
-    margin-top: 60px;
     visibility: hidden;
     opacity: 0;
     display: flex;

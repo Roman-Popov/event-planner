@@ -71,7 +71,7 @@ class DayDetailsPage extends Component {
             weekend = ['Saturday', 'Sunday'];
 
         return (
-            <section className="day-details">
+            <section className={`day-details ${showModal ? 'modal-shown' : ''}`} >
                 <div className="header-wrapper" data-weekend={weekend.indexOf(dayName) !== -1}>
                     <header>
                         <Link to="/" className="btn btn-back">Back</Link>
@@ -79,7 +79,7 @@ class DayDetailsPage extends Component {
                             <h1>{dayData.day}</h1>
                             <span className="day-of-week">{dayName}</span>
                         </div>
-                        <button className={`btn btn-delete-day ${dayTasks.length ? 'visible' : '' }`}
+                        <button className={`btn btn-delete-day ${dayTasks.length ? 'visible' : ''}`}
                             onClick={() => this.confirmDeletion()}
                         >
                             Clear all tasks for this day
@@ -90,15 +90,15 @@ class DayDetailsPage extends Component {
                     {dayTasks.length ? dayTasks.map(task => (
                         <div key={`${task.time}-${task.name}`} className="task">
                             <time className="task-time">{task.time}</time>
+                            <button
+                                className="btn btn-delete-task"
+                                onClick={() => this.confirmDeletion(task)}
+                            >
+                                {`Clear task "${task.name}"`}
+                            </button>
                             <article className="task-info">
                                 <h2>{task.name}</h2>
                                 {task.notes && <p className="details">{task.notes}</p>}
-                                <button
-                                    className="btn btn-delete-task"
-                                    onClick={() => this.confirmDeletion(task)}
-                                >
-                                    {`Clear task "${task.name}"`}
-                                </button>
                             </article>
                         </div>
                     )) : ''
@@ -117,7 +117,7 @@ class DayDetailsPage extends Component {
                         <p>
                             Do you really want to delete
                             {deleteObject ? ` the task "${deleteObject.name}" (at ${deleteObject.time})` :
-                            ' all tasks for today'}?
+                                ' all tasks for today'}?
                         </p>
                         <div className="btn-wrapper">
                             <button className="btn btn-no" onClick={() => this.setState({ showModal: false, deleteObject: '' })}>No, keep</button>

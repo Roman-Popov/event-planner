@@ -34,3 +34,5 @@ document.addEventListener('click', e => {
 document.addEventListener('mouseup', () => {
     clickedElemPath = [];
 })
+
+window.addEventListener('resize', () => document.getElementById('root').style.height = window.innerHeight + 'px')
