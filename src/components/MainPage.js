@@ -62,7 +62,7 @@ class MainPage extends Component {
                         <span className="day-of-month">{day}</span>
                     </Link>
 
-                    <div className="day-data">
+                    <div className={`day-data ${dayData.work ? '' : 'day-off'}`}>
                         {dayTasks.length ? dayTasks.map(task => (
                             <section key={`${task.time}-${task.name}`}>
                                 <div className="main-info">

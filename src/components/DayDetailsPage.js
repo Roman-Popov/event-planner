@@ -48,17 +48,20 @@ class DayDetailsPage extends Component {
 
     clearData = (task) => {
         const { dayData, currentMonth, currentYear } = this.state,
-            storedData = JSON.parse(localStorage.getItem(currentMonth + currentYear));
+            storedMonthData = JSON.parse(localStorage.getItem(currentMonth + currentYear)),
+            storedDayData = storedMonthData[dayData.day - 1];
 
         if (task) {
-            storedData[dayData.day - 1].tasks = storedData[dayData.day - 1].tasks.filter(storedTask => storedTask.name !== task.name)
+            storedDayData.tasks = storedDayData.tasks.filter(storedTask => storedTask.name !== task.name)
+            if (task.name === 'Day off') storedDayData.work = true;
         } else {
-            storedData[dayData.day - 1].tasks = [];
+            storedDayData.tasks = [];
+            storedDayData.work = true;
         }
 
-        localStorage.setItem(currentMonth + currentYear, JSON.stringify(storedData))
+        localStorage.setItem(currentMonth + currentYear, JSON.stringify(storedMonthData))
         this.setState({
-            dayData: storedData[dayData.day - 1],
+            dayData: storedDayData,
             showModal: false,
             deleteObject: ''
         })
@@ -88,8 +91,8 @@ class DayDetailsPage extends Component {
                 </div>
                 <div className="tasks-wrapper">
                     {dayTasks.length ? dayTasks.map(task => (
-                        <div key={`${task.time}-${task.name}`} className="task">
-                            <time className="task-time">{task.time}</time>
+                        <div key={`${task.time}-${task.name}`} className={`task ${task.time ? '' : 'no-time'}`}>
+                            {task.time && <time className="task-time">{task.time}</time>}
                             <button
                                 className="btn btn-delete-task"
                                 onClick={() => this.confirmDeletion(task)}
@@ -116,8 +119,8 @@ class DayDetailsPage extends Component {
                         <p>Deleted data can not be restored.</p>
                         <p>
                             Do you really want to delete
-                            {deleteObject ? ` the task "${deleteObject.name}" (at ${deleteObject.time})` :
-                                ' all tasks for today'}?
+                            { deleteObject ? ` the task «${ deleteObject.name }»${ deleteObject.time ? ` (at ${ deleteObject.time })` : '' }` :
+                                ' all tasks for today' }?
                         </p>
                         <div className="btn-wrapper">
                             <button className="btn btn-no" onClick={() => this.setState({ showModal: false, deleteObject: '' })}>No, keep</button>

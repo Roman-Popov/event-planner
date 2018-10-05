@@ -19,39 +19,45 @@ class AddTaskPage extends Component {
         })
     }
 
-    submitTask = () => {
-        const taskDate = document.getElementById('task-date').value,
-            taskYear = taskDate.split('-')[0],
-            taskMonth = this.props.months[parseInt(taskDate.split('-')[1], 10) - 1],
-            taskDay = parseInt(taskDate.split('-')[2], 10) - 1,
-            workingDay = document.getElementById('working-day').checked,
-            taskTime = document.getElementById('task-time').value,
-            taskName = document.getElementById('task-name').value,
-            taskNotes = document.getElementById('task-notes').value;
+    submitTask = (e) => {
+        const taskDate = document.getElementById('task-date').value;
 
-        const listOfDays = this.props.initLocalData(taskMonth, taskYear)
+        if (taskDate) {
+            const workingDay = this.state.workingDay,
+                taskName = document.getElementById('task-name').value;
 
-        listOfDays[taskDay].day = taskDay + 1;
-        listOfDays[taskDay].work = workingDay;
-        listOfDays[taskDay].tasks.push({
-            time: taskTime,
-            name: taskName,
-            notes: taskNotes
-        })
-        listOfDays[taskDay].tasks.sort((a, b) => {
-            if (a.time > b.time) {
-                return 1
+            if (workingDay && !taskName) {
+                e.preventDefault();
+                document.getElementById('submit-task').click()
             } else {
-                return -1
+                const taskYear = taskDate.split('-')[0],
+                    taskMonth = this.props.months[parseInt(taskDate.split('-')[1], 10) - 1],
+                    taskDay = parseInt(taskDate.split('-')[2], 10) - 1,
+                    taskTime = document.getElementById('task-time').value,
+                    taskNotes = document.getElementById('task-notes').value,
+                    listOfDays = this.props.initLocalData(taskMonth, taskYear);
+
+                if (!workingDay) listOfDays[taskDay].work = workingDay;
+
+                listOfDays[taskDay].tasks.push({
+                    time: workingDay ? taskTime : '',
+                    name: workingDay ? taskName : 'Day off',
+                    notes: workingDay ? taskNotes : '',
+                })
+
+                listOfDays[taskDay].tasks.sort((a, b) => {
+                    // "Day off" task will always be on top position
+                    if (a.name === 'Day off') { return -1 } else if (b.name === 'Day off') { return 1 }
+                    if (a.time > b.time) { return 1 } else { return -1 }
+                })
+
+                localStorage.setItem(taskMonth + taskYear, JSON.stringify(listOfDays));
             }
-        })
 
-        localStorage.setItem(taskMonth + taskYear, JSON.stringify(listOfDays));
-
-        this.setState({
-            dateValue: taskDate,
-            timeValue: taskTime
-        })
+        } else {
+            e.preventDefault();
+            document.getElementById('submit-task').click()
+        }
     }
 
     render() {
@@ -60,7 +66,7 @@ class AddTaskPage extends Component {
 
         return (
             <section className="add-task">
-                <form>
+                <form onSubmit={(e) => e.preventDefault()}>
                     <label>
                         <span>Date</span>
                         <input
@@ -90,6 +96,7 @@ class AddTaskPage extends Component {
                             id="task-name"
                             required={workingDay}
                             placeholder={workingDay ? "Task name (required)" : "Day off"}
+                            autoComplete="off"
                             disabled={!workingDay}
                         />
                     </label>
@@ -99,7 +106,6 @@ class AddTaskPage extends Component {
                         <input
                             type="time"
                             id="task-time"
-                            required={true}
                             defaultValue={timeValue}
                             disabled={!workingDay}
                         />
@@ -114,8 +120,11 @@ class AddTaskPage extends Component {
                         </textarea>
                     </label>
 
+                    {/* Fake hidden button to trigger form's .submit() event and validate input */}
+                    <input type="submit" id="submit-task"/>
+
                     <Link to="/" className="btn btn-cancel">Cancel</Link>
-                    <Link to="/" className="btn btn-submit" onClick={() => this.submitTask()}>Add</Link>
+                    <Link to="/" className="btn btn-submit" onClick={(e) => this.submitTask(e)}>Add</Link>
                 </form>
             </section>
         )
