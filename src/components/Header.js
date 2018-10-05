@@ -13,9 +13,11 @@ class Header extends Component {
 
                 {(pathNames.indexOf('select-month') !== -1) ?
                         <div className="btn btn-select-month disabled">Select month</div> :
-                    (pathNames.indexOf('day-details') !== -1) ?
-                        <div className="btn btn-select-month disabled">{buttonText}</div> :
-                    <Link to="/select-month" className="btn btn-select-month">{buttonText}</Link>
+                        (pathNames.indexOf('day-details') !== -1) ?
+                            <div className="btn btn-select-month disabled">{buttonText}</div> :
+                            (pathNames.indexOf('add-task') !== -1) ?
+                                <div className="btn btn-select-month disabled">Add new task</div> :
+                                <Link to="/select-month" className="btn btn-select-month">{buttonText}</Link>
                 }
 
                 <Link to="/search" className="btn btn-open-search">Open search</Link>

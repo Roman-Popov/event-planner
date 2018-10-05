@@ -5,7 +5,8 @@ class AddTaskPage extends Component {
 
     state = {
         dateValue: '',
-        timeValue: ''
+        timeValue: '',
+        workingDay: true
     }
 
     componentWillMount () {
@@ -55,7 +56,7 @@ class AddTaskPage extends Component {
 
     render() {
         const { years } = this.props,
-            { timeValue, dateValue } = this.state;
+            { timeValue, dateValue, workingDay } = this.state;
 
         return (
             <section className="add-task">
@@ -65,6 +66,7 @@ class AddTaskPage extends Component {
                         <input
                             type="date"
                             id="task-date"
+                            required={true}
                             min={`${years[years.length - 1]}-01-01`}
                             max={`${years[0]}-12-31`}
                             defaultValue={dateValue}
@@ -73,27 +75,48 @@ class AddTaskPage extends Component {
 
                     <label>
                         <span>Working day</span>
-                        <input type="checkbox" id="working-day" defaultChecked="true" />
-                    </label>
-
-                    <label>
-                        <span>Time</span>
-                        <input type="time" id="task-time" defaultValue={timeValue} />
+                        <input
+                            type="checkbox"
+                            id="working-day"
+                            defaultChecked={workingDay}
+                            onChange={(e) => this.setState({workingDay: e.target.checked})}/>
+                        <span className="checkmark"></span>
                     </label>
 
                     <label>
                         <span>Task Name</span>
-                        <input type="text" id="task-name"/>
+                        <input
+                            type="text"
+                            id="task-name"
+                            required={workingDay}
+                            placeholder={workingDay ? "Task name (required)" : "Day off"}
+                            disabled={!workingDay}
+                        />
+                    </label>
+
+                    <label>
+                        <span>Time</span>
+                        <input
+                            type="time"
+                            id="task-time"
+                            required={true}
+                            defaultValue={timeValue}
+                            disabled={!workingDay}
+                        />
                     </label>
 
                     <label>
                         <span>Notes</span>
-                        <input type="text" id="task-notes"/>
+                        <textarea
+                            id="task-notes"
+                            placeholder={workingDay ? "Write your notes here... (optional)" : "Day off"}
+                            disabled={!workingDay}>
+                        </textarea>
                     </label>
-                </form>
 
-                <Link to="/" className="btn btn-cancel">Cancel</Link>
-                <Link to="/" className="btn btn-submit" onClick={() => this.submitTask()}>Add</Link>
+                    <Link to="/" className="btn btn-cancel">Cancel</Link>
+                    <Link to="/" className="btn btn-submit" onClick={() => this.submitTask()}>Add</Link>
+                </form>
             </section>
         )
     }

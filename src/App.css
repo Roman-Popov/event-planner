@@ -31,7 +31,7 @@ body, #root, .App {
     box-shadow: 0 0 5px 2px coral;
 }
 
-a, button {
+a, button, label {
     outline: none;
     -webkit-tap-highlight-color: transparent;
 }
@@ -87,10 +87,6 @@ a, button {
     cursor: default;
 }
 
-.btn.disabled:active {
-    background-color: inherit;
-}
-
 .btn-select-month {
     width: 7.5rem;
 }
@@ -122,11 +118,11 @@ a, button {
 }
 
 .btn-cancel {
-    left: 10px;
+    left: 0;
 }
 
 .btn-submit {
-    right: 10px;
+    right: 0;
 }
 
 .select-month form{
@@ -140,8 +136,7 @@ a, button {
     width: 50%;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
+    align-items: center;
     border-bottom: none;
     border-left: none;
     border-right: none;
@@ -151,6 +146,7 @@ a, button {
     position: relative;
     background: white;
     height: 30px;
+    width: 100%;
     margin: 5px 0;
     display: flex;
     justify-content: center;
@@ -171,6 +167,7 @@ a, button {
     width: 0;
     height: 0;
     margin: 0;
+    z-index: -1;
 }
 
 .select-month fieldset input:focus::after {
@@ -360,7 +357,6 @@ section.add-task,
 section.select-month,
 section.day-details {
     padding-top: 60px;
-    padding-bottom: 50px;
     min-height: 100%;
     box-sizing: border-box;
     position: relative;
@@ -369,21 +365,25 @@ section.day-details {
 section.add-task form {
     display: flex;
     flex-direction: column;
+    align-items: center;
     height: 100%;
+    width: 80%;
+    max-width: 450px;
+    position: relative;
+    padding-bottom: 65px;
 }
 
 section.add-task label {
-    position: relative;
-    margin: 1em 0;
+    margin: 0.8em 0;
     display: flex;
     flex-direction: column;
     align-items: center;
+    user-select: none;
+    cursor: pointer;
 }
 
-section.add-task label input{
-    width: auto;
-    width: 10em;
-    text-align: center;
+section.add-task label:last-of-type {
+    width: 100%;
 }
 
 section.day-details {
@@ -566,6 +566,7 @@ section.day-details.modal-shown {
     box-shadow: none;
     background-image: url('./icons/X.svg');
     background-color: transparent;
+    z-index: 1;
 }
 
 .end-of-tasks {
@@ -655,4 +656,127 @@ section.day-details.modal-shown {
 .btn-yes::after,
 .btn-no::after {
     box-shadow: 0 0 5px 5px coral;
+}
+
+section.add-task {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+input,
+textarea {
+    outline: none;
+}
+
+input.focused,
+textarea.focused {
+    box-shadow: 0 0 2px 1px coral;
+}
+
+.add-task input,
+.add-task textarea {
+    margin-top: 0.5em;
+    box-sizing: border-box;
+    height: 2em;
+    width: auto;
+    background: white;
+    outline: none;
+    border: 1px solid gray;
+    border-radius: 10px;
+    transition: background-color 0.5s;
+}
+
+.add-task input:disabled,
+.add-task textarea:disabled {
+    background: silver !important;
+    text-align: center !important;
+}
+
+#task-date,
+#task-time {
+    padding: 3px 0 3px 14px;
+    position: relative;
+    height: 2em;
+    background: white;
+    outline: none;
+    border: 1px solid gray;
+    border-radius: 10px;
+}
+
+#task-name {
+    text-align: center;
+}
+
+#task-notes {
+    padding: 0.5em;
+    resize: none;
+    width: 100%;
+    height: 5em;
+}
+
+#working-day {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    z-index: -1;
+    width: 1px;
+}
+
+#working-day ~ .checkmark {
+    position: relative;
+    margin-top: 0.5em;
+    height: 22px;
+    width: 22px;
+    background-color: gainsboro;
+    border: 1px solid gray;
+    border-radius: 3px;
+    transition: transform 0.5s, color 0.5s, border-radius 0.5s;
+    transition: 0.5s;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+#working-day:hover ~ .checkmark {
+    background-color: #ccc;
+    box-shadow: none;
+}
+
+#working-day:checked ~ .checkmark {
+    background-color: green;
+    box-shadow: 0 -3px 6px rgba(0,0,0,0.16), 0 -3px 6px rgba(0,0,0,0.23);
+    border-radius: 100%;
+    transform: rotate(180deg);
+}
+
+#working-day:checked:hover ~ .checkmark {
+    background-color: mediumseagreen;
+    box-shadow: none;
+}
+
+#working-day ~ .checkmark:after {
+    content: '';
+    position: absolute;
+    transform: rotate(45deg);
+    top: calc(50% - 0.5em);
+    box-sizing: border-box;
+    left: calc(50% - 0.25em);
+    width: 0.5em;
+    height: 0.8em;
+    border: solid gray;
+    border-width: 0 3px 3px 0;
+}
+
+#working-day:checked ~ .checkmark:after {
+    border-color: white;
+    transform: rotate(-135deg);
+    top: calc(50% - 0.3em);
+}
+
+#working-day.focused ~ .checkmark {
+    transition: box-shadow 0s 0.05s;
+    box-shadow: 0 0 5px 2px coral;
 }
