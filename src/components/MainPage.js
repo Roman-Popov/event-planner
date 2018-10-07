@@ -40,7 +40,7 @@ class MainPage extends Component {
         const { currentMonth, currentYear, daysInMonth, dayDataToState } = this.props,
             listDays = [],
             weekend = ['Sat', 'Sun'],
-            monthData = JSON.parse(localStorage.getItem(currentMonth + currentYear));
+            monthData = JSON.parse(localStorage.getItem(`${currentMonth}-${currentYear}`));
 
 
         for (let i = 0; i < daysInMonth; i++) {

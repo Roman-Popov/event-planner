@@ -80,7 +80,7 @@ class App extends Component {
         const { months, currentMonth, currentYear } = this.state,
             localMonth = (month || currentMonth),
             localYear = (year || currentYear),
-            localDataName = localMonth + localYear,
+            localDataName = `${localMonth}-${localYear}`,
             storedData = localStorage.getItem(localDataName),
             initialData = [];
 

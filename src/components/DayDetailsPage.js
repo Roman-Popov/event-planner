@@ -27,7 +27,7 @@ class DayDetailsPage extends Component {
             const dateFromURL = document.location.pathname.split('/day-details/').pop().split('-'),
                 monthURL = dateFromURL[1],
                 yearURL = dateFromURL[2],
-                storedData = localStorage.getItem(monthURL + yearURL),
+                storedData = localStorage.getItem(`${monthURL}-${yearURL}`),
                 storedDay = dateFromURL[0] - 1;
             if (storedData) {
                 updateDate(monthURL, yearURL)

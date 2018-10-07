@@ -39,7 +39,7 @@ class AddTaskPage extends Component {
                     if (a.time > b.time) { return 1 } else { return -1 }
                 })
 
-                localStorage.setItem(taskMonth + taskYear, JSON.stringify(listOfDays));
+                localStorage.setItem(`${taskMonth}-${taskYear}`, JSON.stringify(listOfDays));
             }
 
             this.props.dateTimeValueToState(taskDate, taskTime)
