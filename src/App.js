@@ -20,7 +20,9 @@ class App extends Component {
         currentMonth: '',
         currentYear: '',
         daysInMonth: '',
-        dayData: {}
+        dayData: {},
+        addTaskDateValue: '',
+        addTaskTimeValue: ''
     }
 
     componentWillMount() {
@@ -28,7 +30,11 @@ class App extends Component {
             currentMonth = this.state.months[currentDate.getMonth()],
             currentYear = currentDate.getFullYear(),
             daysInMonth = this.GetDaysInMonth(currentDate.getMonth(), currentYear),
-            years = [];
+            years = [],
+            // Note: 'en-GB' was selected because it matches to time input format
+            addTaskDateValue = currentDate.toLocaleDateString('en-GB').split('/').reverse().join('-'),
+            addTaskTimeValue = currentDate.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric' })
+
         for (let i = 0; i < 5; i++) {
             years.push(currentYear + 1 - i)
         }
@@ -37,7 +43,9 @@ class App extends Component {
             years: years,
             currentMonth: currentMonth,
             currentYear: currentYear,
-            daysInMonth: daysInMonth
+            daysInMonth: daysInMonth,
+            addTaskDateValue: addTaskDateValue,
+            addTaskTimeValue: addTaskTimeValue
         })
     }
 
@@ -92,12 +100,20 @@ class App extends Component {
         return initialData.length ? initialData : JSON.parse(storedData)
     }
 
+    dateTimeValueToState = (date, time) => {
+
+        this.setState((state) => ({
+            addTaskDateValue: date ? date : state.addTaskDateValue,
+            addTaskTimeValue: time ? time: state.addTaskTimeValue
+        }))
+    }
+
     dayDataToState = (dayData) => {
         this.setState({ dayData: dayData })
     }
 
     render() {
-        const { months, currentMonth, years, currentYear, daysInMonth, dayData } = this.state;
+        const { months, currentMonth, years, currentYear, daysInMonth, dayData, addTaskDateValue, addTaskTimeValue } = this.state;
 
         return (
             <div className="App">
@@ -134,6 +150,9 @@ class App extends Component {
                         years={years}
                         currentYear={currentYear}
                         initLocalData={this.initLocalData}
+                        initialTaskDate={addTaskDateValue}
+                        initialTaskTime={addTaskTimeValue}
+                        dateTimeValueToState={this.dateTimeValueToState}
                     />
                 )} />
 

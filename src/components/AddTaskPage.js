@@ -4,23 +4,12 @@ import { Link } from 'react-router-dom';
 class AddTaskPage extends Component {
 
     state = {
-        dateValue: '',
-        timeValue: '',
         workingDay: true
     }
 
-    componentWillMount () {
-        const date = new Date();
-
-        this.setState({
-            // Note: 'en-GB' was selected because it matches to time input format
-            dateValue: date.toLocaleDateString('en-GB').split('/').reverse().join('-'),
-            timeValue: date.toLocaleTimeString('en-GB', { hour: 'numeric', minute: 'numeric' })
-        })
-    }
-
     submitTask = (e) => {
-        const taskDate = document.getElementById('task-date').value;
+        const taskDate = document.getElementById('task-date').value,
+            taskTime = document.getElementById('task-time').value;
 
         if (taskDate) {
             const workingDay = this.state.workingDay,
@@ -33,7 +22,6 @@ class AddTaskPage extends Component {
                 const taskYear = taskDate.split('-')[0],
                     taskMonth = this.props.months[parseInt(taskDate.split('-')[1], 10) - 1],
                     taskDay = parseInt(taskDate.split('-')[2], 10) - 1,
-                    taskTime = document.getElementById('task-time').value,
                     taskNotes = document.getElementById('task-notes').value,
                     listOfDays = this.props.initLocalData(taskMonth, taskYear);
 
@@ -54,6 +42,8 @@ class AddTaskPage extends Component {
                 localStorage.setItem(taskMonth + taskYear, JSON.stringify(listOfDays));
             }
 
+            this.props.dateTimeValueToState(taskDate, taskTime)
+
         } else {
             e.preventDefault();
             document.getElementById('submit-task').click()
@@ -61,8 +51,8 @@ class AddTaskPage extends Component {
     }
 
     render() {
-        const { years } = this.props,
-            { timeValue, dateValue, workingDay } = this.state;
+        const { years, initialTaskDate, initialTaskTime } = this.props,
+            workingDay = this.state.workingDay;
 
         return (
             <section className="add-task">
@@ -75,7 +65,7 @@ class AddTaskPage extends Component {
                             required={true}
                             min={`${years[years.length - 1]}-01-01`}
                             max={`${years[0]}-12-31`}
-                            defaultValue={dateValue}
+                            defaultValue={initialTaskDate}
                         />
                     </label>
 
@@ -106,7 +96,7 @@ class AddTaskPage extends Component {
                         <input
                             type="time"
                             id="task-time"
-                            defaultValue={timeValue}
+                            defaultValue={initialTaskTime}
                             disabled={!workingDay}
                         />
                     </label>
