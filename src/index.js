@@ -13,13 +13,13 @@ registerServiceWorker();
 
 let clickedElemPath = [];
 
-document.addEventListener('focusin', e => {
-    if (clickedElemPath.indexOf(e.target) === -1) e.target.classList.add('focused')
-})
+document.addEventListener('focus', e => {
+    if (e.target !== document && clickedElemPath.indexOf(e.target) === -1) e.target.classList.add('focused')
+}, true)
 
-document.addEventListener('focusout', e => {
-    e.target.classList.remove('focused')
-})
+document.addEventListener('blur', e => {
+    if (e.target !== document) e.target.classList.remove('focused')
+}, true)
 
 document.addEventListener('mousedown', e => {
     clickedElemPath = e.path || [];
