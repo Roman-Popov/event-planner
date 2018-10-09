@@ -18,8 +18,10 @@ class SearchPage extends Component {
     }
 
 
-    searchByKeyword = (keyword) => {
-        const localData = this.state.localData,
+    getSearchResults = (searchString) => {
+        const query = searchString.toLowerCase(),
+            localData = this.state.localData,
+            keywords = query.split(' '),
             results = [];
 
         for (let key in localData) {
@@ -30,21 +32,23 @@ class SearchPage extends Component {
                     const tasks = elem['tasks'];
 
                     tasks.forEach(task => {
-                        const name = task.name,
-                            notes = task.notes || '';
+                        const name = task.name.toLowerCase(),
+                            notes = task.notes.toLowerCase() || '';
 
-                        if ((name.indexOf(keyword) !== -1) || (notes.indexOf(keyword) !== -1)) {
+                        if (keywords.some(keyword => name.includes(keyword) || notes.includes(keyword))) {
                             const day = elem.day,
                                 month = key.split('-')[0],
-                                year= key.split('-')[1],
-                                unixTime = Date.parse(`${year} ${month} ${day}`);
+                                year = key.split('-')[1],
+                                time = task.time || '',
+                                unixTime = Date.parse(`${year} ${month} ${day} ${time}`);
 
                             results.push({
                                 day: elem.day,
                                 month: key.split('-')[0],
                                 year: key.split('-')[1],
                                 unixTime: unixTime,
-                                task: task
+                                task: task,
+                                exactMatch: name.includes(query) || notes === query.includes(query)
                             })
                         }
 
@@ -54,7 +58,8 @@ class SearchPage extends Component {
         }
 
         results.sort((a, b) => {
-            if (a.unixTime > b.unixTime) { return 1 } else { return -1 }
+            return (b.exactMatch === true) - (a.exactMatch === true) ||
+                (a.unixTime < b.unixTime) - (b.unixTime < a.unixTime);
         })
 
         return results
