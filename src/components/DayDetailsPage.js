@@ -48,7 +48,7 @@ class DayDetailsPage extends Component {
 
     clearData = (task) => {
         const { dayData, currentMonth, currentYear } = this.state,
-            storedMonthData = JSON.parse(localStorage.getItem(currentMonth + currentYear)),
+            storedMonthData = JSON.parse(localStorage.getItem(`${currentMonth}-${currentYear}`)),
             storedDayData = storedMonthData[dayData.day - 1];
 
         if (task) {
@@ -59,7 +59,7 @@ class DayDetailsPage extends Component {
             storedDayData.work = true;
         }
 
-        localStorage.setItem(currentMonth + currentYear, JSON.stringify(storedMonthData))
+        localStorage.setItem(`${currentMonth}-${currentYear}`, JSON.stringify(storedMonthData))
         this.setState({
             dayData: storedDayData,
             showModal: false,
