@@ -22,7 +22,9 @@ class App extends Component {
         daysInMonth: '',
         dayData: {},
         addTaskDateValue: '',
-        addTaskTimeValue: ''
+        addTaskTimeValue: '',
+        lastSearchString: '',
+        lastSearchResults: []
     }
 
     componentWillMount() {
@@ -76,6 +78,13 @@ class App extends Component {
         }
     }
 
+    updateLastSearch = (query, results) => {
+        this.setState({
+            lastSearchString: query,
+            lastSearchResults: results
+        })
+    }
+
     initLocalData = (month, year) => {
         const { months, currentMonth, currentYear } = this.state,
             localMonth = (month || currentMonth),
@@ -113,7 +122,8 @@ class App extends Component {
     }
 
     render() {
-        const { months, currentMonth, years, currentYear, daysInMonth, dayData, addTaskDateValue, addTaskTimeValue } = this.state;
+        const { months, currentMonth, years, currentYear, daysInMonth, dayData,
+            addTaskDateValue, addTaskTimeValue, lastSearchString, lastSearchResults } = this.state;
 
         return (
             <div className="App">
@@ -157,7 +167,11 @@ class App extends Component {
                 )} />
 
                 <Route path="/search" render={() => (
-                    <SearchPage />
+                    <SearchPage
+                        lastSearchString={lastSearchString}
+                        lastSearchResults={lastSearchResults}
+                        updateLastSearch={this.updateLastSearch}
+                    />
                 )} />
 
                 <Route path="/day-details" render={() => (

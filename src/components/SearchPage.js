@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class SearchPage extends Component {
 
@@ -14,7 +15,10 @@ class SearchPage extends Component {
             }
 
             return localData
-        })()
+        })(),
+
+        searchString: this.props.lastSearchString,
+        searchResults: this.props.lastSearchResults
     }
 
 
@@ -66,10 +70,79 @@ class SearchPage extends Component {
     }
 
     render() {
-        return (
-            <div>
+        const { searchString, searchResults } = this.state;
 
-            </div>
+        return (
+            <section className="search-page">
+                <header className="search-bar">
+                    <Link to="/" className="btn btn-back">Back</Link>
+                    <div className="search-input-wrapper">
+                        <input
+                            type="text"
+                            placeholder="Please enter text to search..."
+                            value={searchString}
+                            onChange={(e) => {
+                                const inputValue = e.target.value;
+                                this.setState({
+                                    searchString: inputValue,
+                                    searchResults: inputValue.trim().length > 2 ? this.getSearchResults(inputValue.trim()) : []
+                                })
+                            }}
+                        />
+                    </div>
+                </header>
+
+                <section className="search-results">
+                    {searchResults.length > 0 ?
+
+                        <nav className="list-of-results">
+                            <ul>
+                                {searchResults.map((foundElem, index) => (
+                                    <li key={index}>
+                                        <div className="date-info">
+                                            <time>
+                                                {new Date(foundElem.unixTime).toLocaleDateString([], { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' })}
+                                                {foundElem.task.time ? ` at ${new Date(foundElem.unixTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : ''}
+                                            </time>
+
+                                            <Link
+                                                to={`day-details/${foundElem.day}-${foundElem.month}-${foundElem.year}`}
+                                                className="show-day"
+                                                onClick={() => this.props.updateLastSearch(searchString, searchResults)}
+                                            >
+                                                Show this day
+                                            </Link>
+                                        </div>
+                                        <article>
+                                            {searchResults.length > 1 && <span className="result-counter">{index + 1}/{searchResults.length}</span>}
+                                            <h2>{foundElem.task.name}</h2>
+                                            {foundElem.task.notes && <div className="details">
+                                                <p>{foundElem.task.notes}</p>
+                                            </div>}
+                                        </article>
+
+                                    </li>
+                                ))}
+                            </ul>
+                            <span className="end-of-search">There is no more results</span>
+                        </nav> :
+
+                        searchString.trim().length > 2 ?
+
+                             <div className="message">
+                                <p>Sorry...</p>
+                                <p>No results found</p>
+                            </div> :
+
+                            searchString.trim().length > 0 ?
+
+                                <div className="message">
+                                    <p>The search request is too short.</p>
+                                    <p>Please enter at least three characters.</p>
+                                </div> : ''
+                    }
+                </section>
+            </section>
         )
     }
 }
