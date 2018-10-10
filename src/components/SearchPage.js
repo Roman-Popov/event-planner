@@ -45,19 +45,24 @@ class SearchPage extends Component {
                             notes = task.notes.toLowerCase() || '';
 
                         if (keywords.some(keyword => name.includes(keyword) || notes.includes(keyword))) {
-                            const day = elem.day,
+                            const copiedTask = JSON.parse(JSON.stringify(task)),
+                                day = elem.day,
                                 month = key.split('-')[0],
                                 year = key.split('-')[1],
                                 time = task.time || '',
                                 unixTime = Date.parse(`${year} ${month} ${day} ${time}`);
+
+                            // To highlight found words in search results
+                            copiedTask.name = task.name.replace(new RegExp(keywords.join('|'), "gi"), match => `<i class="highlighted">${match}</i>` )
+                            copiedTask.notes = task.notes.replace(new RegExp(keywords.join('|'), "gi"), match => `<i class="highlighted">${match}</i>`)
 
                             results.push({
                                 day: elem.day,
                                 month: key.split('-')[0],
                                 year: key.split('-')[1],
                                 unixTime: unixTime,
-                                task: task,
-                                exactMatch: name.includes(query) || notes === query
+                                task: copiedTask,
+                                exactMatch: name === 'day off' ? (name === query) : (name.includes(query) || notes.includes(query))
                             })
                         }
                     })
@@ -120,9 +125,9 @@ class SearchPage extends Component {
                                         </div>
                                         <article>
                                             {searchResults.length > 1 && <span className="result-counter">{index + 1}/{searchResults.length}</span>}
-                                            <h2>{foundElem.task.name}</h2>
+                                            <h2 dangerouslySetInnerHTML={{ __html: foundElem.task.name }}></h2>
                                             {foundElem.task.notes && <div className="details">
-                                                <p>{foundElem.task.notes}</p>
+                                                <p dangerouslySetInnerHTML={{ __html: foundElem.task.notes }}></p>
                                             </div>}
                                         </article>
 

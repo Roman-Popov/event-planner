@@ -865,6 +865,10 @@ section.search-page {
     background: rgb(254, 252, 250);
 }
 
+.search-results .list-of-results {
+    width: 100%;
+}
+
 .search-results ul {
     padding: 0;
     margin: 0;
@@ -929,6 +933,11 @@ section.search-page {
 .search-results .details {
     width: 100%;
     margin: 0;
+}
+
+.search-results .highlighted {
+    font-style: normal;
+    background: moccasin;
 }
 
 .search-results .message {
