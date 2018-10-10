@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 class DayDetailsPage extends Component {
 
     state = {
-        dayData: '',
+        dayData: {},
         currentMonth: this.props.currentMonth,
         currentYear: this.props.currentYear,
         showModal: false,

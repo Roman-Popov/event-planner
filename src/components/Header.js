@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 class Header extends Component {
     render() {
-        const { currentMonth, currentYear } = this.props,
+        const { currentMonth, currentYear, updateLastSearch } = this.props,
             buttonText = `${currentMonth}, ${currentYear}`,
             pathNames = window.location.href.split('/')
 
@@ -20,7 +20,7 @@ class Header extends Component {
                                 <Link to="/select-month" className="btn btn-select-month">{buttonText}</Link>
                 }
 
-                <Link to="/search" className="btn btn-open-search">Open search</Link>
+                <Link to="/search" className="btn btn-open-search" onClick={() => updateLastSearch('')}>Open search</Link>
             </header>
         )
     }

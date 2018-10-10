@@ -18,15 +18,20 @@ class SearchPage extends Component {
         })(),
 
         searchString: this.props.lastSearchString,
-        searchResults: this.props.lastSearchResults
+        searchResults: []
     }
 
+    componentDidMount() {
+        this.setState({ searchResults: this.getSearchResults(this.state.searchString) })
+    }
 
     getSearchResults = (searchString) => {
-        const query = searchString.toLowerCase(),
+        const query = searchString.trim().toLowerCase(),
             localData = this.state.localData,
-            keywords = query.split(' '),
+            keywords = query.split(' ').filter(word => word.length > 2),
             results = [];
+
+        if (query.length === 0) return []
 
         for (let key in localData) {
             const value = localData[key];
@@ -52,10 +57,9 @@ class SearchPage extends Component {
                                 year: key.split('-')[1],
                                 unixTime: unixTime,
                                 task: task,
-                                exactMatch: name.includes(query) || notes === query.includes(query)
+                                exactMatch: name.includes(query) || notes === query
                             })
                         }
-
                     })
                 }
             })
@@ -70,7 +74,8 @@ class SearchPage extends Component {
     }
 
     render() {
-        const { searchString, searchResults } = this.state;
+        const { searchString, searchResults } = this.state,
+            { updateLastSearch } = this.props;
 
         return (
             <section className="search-page">
@@ -85,7 +90,7 @@ class SearchPage extends Component {
                                 const inputValue = e.target.value;
                                 this.setState({
                                     searchString: inputValue,
-                                    searchResults: inputValue.trim().length > 2 ? this.getSearchResults(inputValue.trim()) : []
+                                    searchResults: inputValue.trim().length > 2 && this.getSearchResults(inputValue)
                                 })
                             }}
                         />
@@ -108,7 +113,7 @@ class SearchPage extends Component {
                                             <Link
                                                 to={`day-details/${foundElem.day}-${foundElem.month}-${foundElem.year}`}
                                                 className="show-day"
-                                                onClick={() => this.props.updateLastSearch(searchString, searchResults)}
+                                                onClick={() => updateLastSearch(searchString)}
                                             >
                                                 Show this day
                                             </Link>
