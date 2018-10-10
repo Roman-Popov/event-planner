@@ -14,7 +14,7 @@ registerServiceWorker();
 let clickedElemPath = [];
 
 document.addEventListener('focus', e => {
-    if (e.target !== document && clickedElemPath.indexOf(e.target) === -1) e.target.classList.add('focused')
+    if (e.target !== document && !clickedElemPath.includes(e.target)) e.target.classList.add('focused')
 }, true)
 
 document.addEventListener('blur', e => {

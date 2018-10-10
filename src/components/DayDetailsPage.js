@@ -75,7 +75,7 @@ class DayDetailsPage extends Component {
 
         return (
             <section className={`day-details ${showModal ? 'modal-shown' : ''}`} >
-                <div className="header-wrapper" data-weekend={weekend.indexOf(dayName) !== -1}>
+                <div className="header-wrapper" data-weekend={weekend.includes(dayName)}>
                     <header>
                         <Link to="/" className="btn btn-back">Back</Link>
                         <div>

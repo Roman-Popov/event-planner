@@ -11,11 +11,11 @@ class Header extends Component {
             <header className="control-panel">
                 <Link to="/add-task" className="btn btn-add">+</Link>
 
-                {(pathNames.indexOf('select-month') !== -1) ?
+                {(pathNames.includes('select-month')) ?
                         <div className="btn btn-select-month disabled">Select month</div> :
-                        (pathNames.indexOf('day-details') !== -1) ?
+                        (pathNames.includes('day-details')) ?
                             <div className="btn btn-select-month disabled">{buttonText}</div> :
-                            (pathNames.indexOf('add-task') !== -1) ?
+                            (pathNames.includes('add-task')) ?
                                 <div className="btn btn-select-month disabled">Add new task</div> :
                                 <Link to="/select-month" className="btn btn-select-month">{buttonText}</Link>
                 }

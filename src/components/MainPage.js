@@ -21,7 +21,7 @@ class MainPage extends Component {
         let openedDetails = this.state.openedDetails.map(detail => detail);
 
         if (detailItem.classList.contains('shown')) {
-            if (openedDetails.indexOf(detailItem) !== -1) {
+            if (openedDetails.includes(detailItem)) {
                 // Delete detailItem from stack
                 openedDetails = openedDetails.filter(item => item !== detailItem)
             } else if (openedDetails.length > 3) {
@@ -50,7 +50,7 @@ class MainPage extends Component {
                 dayTasks = dayData.tasks;
 
             listDays.push(
-                <li key={day} data-weekend={weekend.indexOf(weekdayName) !== -1}>
+                <li key={day} data-weekend={weekend.includes(weekdayName)}>
                     <Link
                         to={`/day-details/${ day }-${ currentMonth }-${ currentYear }`}
                         className="business-day"
