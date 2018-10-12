@@ -84,15 +84,23 @@ a, button, label {
 .btn.disabled {
     box-shadow: none;
     transform: none;
-    border-radius: 0px;
-    background-color: inherit;
-    font-size: 1em;
-    width: 10em;
     cursor: default;
+    background-size: 85%;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.568);
+    background-color: rgba(135, 206, 250, 0.5);
 }
 
 .btn-select-month {
-    width: 7.5rem;
+    width: 8rem;
+}
+
+.btn-select-month.disabled {
+    background-color: inherit;
+    font-size: 1em;
+    width: auto;
+    padding: 0 1em;
+    opacity: 1;
+    box-shadow: none;
 }
 
 .btn-add,
@@ -106,12 +114,10 @@ a, button, label {
 
 .btn-add {
     background-image: url('./icons/add.svg');
-    background-size: 35px;
 }
 
 .btn-open-search {
     background-image: url('./icons/search.svg');
-    background-size: 28px;
 }
 
 .btn-cancel,
@@ -819,19 +825,33 @@ section.search-page {
     z-index: 999;
     left: -20px;
     width: calc(100% + 40px);
-    height: 60px;
+    height: 70px;
     display: flex;
     align-items: center;
-    padding: 10px 30px;
+    padding: 0 30px;
     box-sizing: border-box;
-    background: linear-gradient(lightblue, rgb(234, 234, 234));
+    background: linear-gradient(lightblue 30%, rgb(234, 234, 234));
     box-shadow: 0 4px 6px -3px rgba(0, 0, 0, 0.16), 0 4px 6px -3px rgba(0, 0, 0, 0.23);
-    border-bottom: 1px solid lightblue;
+    border: 1px solid lightblue;
+    max-height: 0;
+    overflow: hidden;
+    animation: search-bar-slide 0.25s linear forwards;
+}
+
+@keyframes search-bar-slide {
+    from {
+        max-height: 0;
+    }
+    to {
+        padding: 15px 30px;
+        max-height: 100px;
+    }
 }
 
 .search-bar .search-input-wrapper {
     width: calc(100% - 60px);
     height: 100%;
+    max-height: 2.4em;
     margin-left: 10px;
     background: linear-gradient(90deg, transparent 5px,
         rgba(128, 128, 128, 0.15),
@@ -843,7 +863,6 @@ section.search-page {
     border-left: none;
     border-right: none;
     box-sizing: border-box;
-
 }
 
 .search-bar input {
@@ -857,7 +876,7 @@ section.search-page {
 }
 
 .search-page .search-results {
-    padding-top: 55px;
+    padding-top: 60px;
     box-sizing: border-box;
     min-height: 100%;
     display: flex;
