@@ -48,10 +48,10 @@ class SelectMonthPage extends Component {
                         ))}
 
                     </fieldset>
-                </form>
 
-                <Link to="/" className="btn btn-cancel">Cancel</Link>
-                <Link to="/" className="btn btn-submit" onClick={e => submitMonth(e)}>Apply</Link>
+                    <Link to="/" className="btn btn-cancel">Cancel</Link>
+                    <Link to="/" className="btn btn-submit" onClick={e => submitMonth(e)}>Apply</Link>
+                </form>
             </section>
 
         )

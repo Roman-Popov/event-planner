@@ -135,21 +135,35 @@ a, button, label {
     right: 0;
 }
 
-.select-month form{
+.select-month form {
     display: flex;
     flex-wrap: wrap;
+    padding-bottom: 65px;
+    position: relative;
+    width: 90%;
+    max-width: 450px;
+    box-sizing: border-box;
 }
 
 .select-month fieldset {
     box-sizing: border-box;
     margin: 5px 0 0;
     width: 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border-bottom: none;
-    border-left: none;
-    border-right: none;
+    border: 2px ridge lightskyblue;
+    border-width: 2px 0 0 0;
+}
+
+.select-month fieldset:first-of-type {
+    border-radius: 30px 0 0 0;
+}
+
+.select-month fieldset:last-of-type {
+    border-radius: 0 30px 0 0;
+}
+
+.select-month fieldset legend {
+    margin: auto;
+    box-shadow: 0 0 5px 10px whitesmoke
 }
 
 .select-month fieldset label {
@@ -157,7 +171,8 @@ a, button, label {
     background: white;
     height: 30px;
     width: 100%;
-    margin: 5px 0;
+    max-width: 175px;
+    margin: 5px auto;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -166,6 +181,8 @@ a, button, label {
     transition: background 0.25s;
     user-select: none;
     outline: none;
+    min-height: 25px;
+    max-height: calc((100vh - 300px) / 12);
 }
 
 .select-month .radio-selected {
@@ -379,6 +396,9 @@ section.day-details {
     min-height: 100%;
     box-sizing: border-box;
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 section.add-task form {
@@ -386,10 +406,11 @@ section.add-task form {
     flex-direction: column;
     align-items: center;
     height: 100%;
-    width: 80%;
+    width: 90%;
     max-width: 450px;
     position: relative;
-    padding-bottom: 65px;
+    padding: 0 15px 65px;
+    box-sizing: border-box;
 }
 
 section.add-task label {
@@ -406,6 +427,7 @@ section.add-task label:last-of-type {
 }
 
 section.day-details {
+    display: block;
     position: relative;
     padding-bottom: 0;
     background: rgb(254, 252, 250);
@@ -685,12 +707,6 @@ section.day-details.modal-shown {
 .btn-yes::after,
 .btn-no::after {
     box-shadow: 0 0 5px 5px coral;
-}
-
-section.add-task {
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 input,

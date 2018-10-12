@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom'
 
 class Header extends Component {
     render() {
-        console.log('render cp')
-
         const { currentMonth, currentYear, updateLastSearch } = this.props,
             pathName = window.location.pathname,
             pages = [
