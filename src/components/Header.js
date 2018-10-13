@@ -22,6 +22,11 @@ class Header extends Component {
                     text: `${currentMonth}, ${currentYear}`,
                 },
                 {
+                    name: 'Edit task',
+                    here: pathName.includes('edit-task'),
+                    text: `Edit task`,
+                },
+                {
                     name: 'Search',
                     here: pathName.includes('search'),
                     text: 'Search by keywords',

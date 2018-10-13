@@ -116,7 +116,7 @@ class SearchPage extends Component {
                                             </time>
 
                                             <Link
-                                                to={`day-details/${foundElem.day}-${foundElem.month}-${foundElem.year}`}
+                                                to={`/day-details/${foundElem.day}-${foundElem.month}-${foundElem.year}`}
                                                 className="show-day"
                                                 onClick={() => updateLastSearch(searchString)}
                                             >

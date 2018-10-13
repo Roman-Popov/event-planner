@@ -7,7 +7,7 @@ import Header from './components/Header';
 import MainPage from './components/MainPage';
 import SearchPage from './components/SearchPage';
 import SelectMonthPage from './components/SelectMonthPage';
-import AddTaskPage from './components/AddTaskPage';
+import ManageTaskPage from './components/AddTaskPage';
 import DayDetailsPage from './components/DayDetailsPage'
 
 class App extends Component {
@@ -20,7 +20,8 @@ class App extends Component {
         currentMonth: '',
         currentYear: '',
         daysInMonth: '',
-        dayData: {},
+        dayData: null,
+        editableTask: null,
         addTaskDateValue: '',
         addTaskTimeValue: '',
         lastSearchString: ''
@@ -80,12 +81,12 @@ class App extends Component {
     updateLastSearch = (query) => {
         this.setState({
             lastSearchString: query,
-            dayData: {}
+            dayData: null
         })
     }
 
     initLocalData = (month, year) => {
-        const { months, currentMonth, currentYear } = this.state,
+        const { currentYear, months, currentMonth, daysInMonth } = this.state,
             localMonth = (month || currentMonth),
             localYear = (year || currentYear),
             localDataName = `${localMonth}-${localYear}`,
@@ -93,7 +94,7 @@ class App extends Component {
             initialData = [];
 
         if (!storedData) {
-            for (let i = 0; i < this.state.daysInMonth; i++) {
+            for (let i = 0; i < daysInMonth; i++) {
                 const weekdayName = new Date(localYear, months.indexOf(localMonth), i + 1).toLocaleString('en-GB', {weekday: 'long'}),
                     dayData = {
                         day: i + 1,
@@ -119,9 +120,13 @@ class App extends Component {
         this.setState({ dayData: dayData })
     }
 
+    editableTaskToState = (task) => {
+        this.setState({ editableTask: task })
+    }
+
     render() {
-        const { months, currentMonth, years, currentYear, daysInMonth, dayData,
-            addTaskDateValue, addTaskTimeValue, lastSearchString } = this.state;
+        const { months, currentMonth, years, currentYear, daysInMonth,
+            dayData, addTaskDateValue, addTaskTimeValue, lastSearchString, editableTask } = this.state;
 
         return (
             <div className="App">
@@ -152,8 +157,8 @@ class App extends Component {
                     />
                 )} />
 
-                <Route path="/add-task" render={() => (
-                    <AddTaskPage
+                <Route path={`${editableTask ? /(add-task|edit-task)/ : '/add-task'}`} render={() => (
+                    <ManageTaskPage
                         months={months}
                         currentMonth={currentMonth}
                         years={years}
@@ -162,6 +167,10 @@ class App extends Component {
                         initialTaskDate={addTaskDateValue}
                         initialTaskTime={addTaskTimeValue}
                         dateTimeValueToState={this.dateTimeValueToState}
+                        editMode={dayData && editableTask}
+                        editData={{ dayData: dayData, task: editableTask}}
+                        dayDataToState={this.dayDataToState}
+                        editableTaskToState={this.editableTaskToState}
                     />
                 )} />
 
@@ -177,6 +186,8 @@ class App extends Component {
                         currentMonth={currentMonth}
                         currentYear={currentYear}
                         dayData={dayData}
+                        dayDataToState={this.dayDataToState}
+                        editableTaskToState={this.editableTaskToState}
                         updateDate={this.updateDate}
                     />
                 )} />
