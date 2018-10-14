@@ -103,19 +103,21 @@ class DayDetailsPage extends Component {
                     {dayTasks.length ? dayTasks.map(task => (
                         <div key={`${task.time}-${task.name}`} className={`task ${task.time ? '' : 'no-time'}`}>
                             {task.time && <time className="task-time">{task.time}</time>}
-                            <Link
-                                to={`/edit-task/${ dayData.day }-${ currentMonth }-${ currentYear }/${task.name}~${task.time.replace(':', '-')}`}
-                                onClick={() => editableTaskToState(task)}
-                            >
-                                Edit task
-                            </Link>
-                            <button
-                                className="btn btn-delete-task"
-                                onClick={() => this.confirmDeletion(task)}
-                            >
-                                {`Clear task "${task.name}"`}
-                            </button>
                             <article className="task-info">
+                                <Link
+                                    to={`/edit-task/${dayData.day}-${currentMonth}-${currentYear}/${task.name}~${task.time.replace(':', '-')}`}
+                                    className="btn btn-edit-task"
+                                    onClick={() => editableTaskToState(task)}
+                                >
+                                    {`Edit task "${task.name}"`}
+                                </Link>
+                                <button
+                                    className="btn btn-delete-task"
+                                    onClick={() => this.confirmDeletion(task)}
+                                >
+                                    {`Clear task "${task.name}"`}
+                                </button>
+
                                 <h2>{task.name}</h2>
                                 {task.notes && <p className="details">{task.notes}</p>}
                             </article>

@@ -7,7 +7,7 @@ import Header from './components/Header';
 import MainPage from './components/MainPage';
 import SearchPage from './components/SearchPage';
 import SelectMonthPage from './components/SelectMonthPage';
-import ManageTaskPage from './components/AddTaskPage';
+import ManageTaskPage from './components/ManageTaskPage';
 import DayDetailsPage from './components/DayDetailsPage'
 
 class App extends Component {

@@ -106,6 +106,7 @@ a, button, label {
 .btn-add,
 .btn-open-search,
 .btn-back,
+.btn-edit-task,
 .btn-delete-task,
 .btn-delete-day {
     font-size: 0;
@@ -590,7 +591,7 @@ section.day-details.modal-shown {
     max-width: 80%;
 }
 
-.task-info h2:only-child {
+.task-info h2:last-child {
     margin: initial;
 }
 
@@ -606,17 +607,26 @@ section.day-details.modal-shown {
     box-shadow: inset 0 0 6px grey;
 }
 
-.btn-delete-task {
+.btn-delete-task,
+.btn-edit-task {
     position: absolute;
-    right: 0.5rem;
     top: 0.5rem;
     padding: 0;
     width: 20px;
     height: 20px;
     box-shadow: none;
-    background-image: url('./icons/X.svg');
     background-color: transparent;
     z-index: 1;
+}
+
+.btn-edit-task {
+    background-image: url('./icons/edit.svg');
+    left: 0.5rem;
+}
+
+.btn-delete-task {
+    right: 0.5rem;
+    background-image: url('./icons/X.svg');
 }
 
 .end-of-tasks,
@@ -735,7 +745,6 @@ textarea.focused {
 .add-task input:disabled,
 .add-task textarea:disabled {
     background: silver !important;
-    text-align: center !important;
 }
 
 .add-task #submit-task {
