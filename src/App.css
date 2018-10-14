@@ -316,6 +316,7 @@ a, button, label {
     display: flex;
     align-items: center;
     min-height: 40px;
+    width: 100%;
 }
 
 .day-data time {
@@ -324,9 +325,22 @@ a, button, label {
 
 .day-data h4 {
     margin: 0;
-    width: 7em;
+    max-width: calc(100% - 10em);
     text-align: left;
     hyphens: auto;
+    display: flex;
+    align-items: center;
+}
+
+.day-data h4[data-tasks="true"]::after {
+    content: '';
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    background-image: url('./icons/warning.svg');
+    background-repeat: no-repeat;
+    margin-left: 1em;
+    cursor: help;
 }
 
 .day-data .summary {

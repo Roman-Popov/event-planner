@@ -69,19 +69,22 @@ class ManageTaskPage extends Component {
                     }
                 }
 
-                if (!workingDay) listOfDays[taskDay].work = false;
+                // Do not add new "Day off" day if it's already exist
+                if (workingDay || listOfDays[taskDay].work) {
+                    if (!workingDay) listOfDays[taskDay].work = false;
 
-                listOfDays[taskDay].tasks.push({
-                    time: workingDay ? taskTime : '',
-                    name: workingDay ? taskName : 'Day off',
-                    notes: workingDay ? taskNotes : '',
-                })
+                    listOfDays[taskDay].tasks.push({
+                        time: workingDay ? taskTime : '',
+                        name: workingDay ? taskName : 'Day off',
+                        notes: workingDay ? taskNotes : '',
+                    })
 
-                listOfDays[taskDay].tasks.sort((a, b) => {
-                    // "Day off" task will always be on top position
-                    if (a.name === 'Day off') { return -1 } else if (b.name === 'Day off') { return 1 }
-                    if (a.time > b.time) { return 1 } else { return -1 }
-                })
+                    listOfDays[taskDay].tasks.sort((a, b) => {
+                        // "Day off" task will always be on top position
+                        if (a.name === 'Day off') { return -1 } else if (b.name === 'Day off') { return 1 }
+                        if (a.time > b.time) { return 1 } else { return -1 }
+                    })
+                }
 
                 localStorage.setItem(`${taskMonth}-${taskYear}`, JSON.stringify(listOfDays));
                 dateTimeValueToState(taskDate, taskTime);

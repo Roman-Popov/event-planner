@@ -67,7 +67,10 @@ class MainPage extends Component {
                             <section key={`${task.time}-${task.name}`}>
                                 <div className="main-info">
                                     <time>{task.time}</time>
-                                    <h4>{task.name}</h4>
+                                    {task.name === 'Day off' ?
+                                        <h4 data-tasks={dayTasks.length > 1} title="Attention! You have weekend tasks!">{task.name}</h4> :
+                                        <h4>{task.name}</h4>
+                                    }
                                     {task.notes && <button className="summary" onClick={e => this.toggleDetails(e.target)}>
                                         Show notes
                                     </button>}
