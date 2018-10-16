@@ -12,6 +12,7 @@ import DayDetailsPage from './components/DayDetailsPage'
 
 class App extends Component {
     state = {
+        lsSpaceInfo: JSON.parse(localStorage.getItem('localStorageSpaceInfo')),
         months: ['January', 'February', 'March',
             'April', 'May', 'June',
             'July', 'August', 'September',
@@ -49,6 +50,70 @@ class App extends Component {
             addTaskDateValue: addTaskDateValue,
             addTaskTimeValue: addTaskTimeValue
         })
+    }
+
+    componentDidMount() {
+        if (!('localStorage' in window)) {
+            alert('Sorry :( \nThis app will not work with this browser because it has no localStorage support.')
+        }
+
+        setTimeout(() => {
+            const lsSpaceInfo = JSON.parse(localStorage.getItem('localStorageSpaceInfo')),
+                usedLocalSpace = this.testLocalStorageSize.getUsedSpaceInBytes();
+            let localStorageQuota = lsSpaceInfo ? lsSpaceInfo.total : undefined;
+
+            if (!localStorageQuota) {
+                const unusedLocalSpace = this.testLocalStorageSize.getUnusedSpaceInBytes();
+                localStorageQuota = Math.round((usedLocalSpace + unusedLocalSpace) * 0.95); // 5% - reserved space
+            }
+
+            const localStorageSpaceInfo = {
+                total: localStorageQuota,
+                used: usedLocalSpace,
+            }
+
+            localStorage.setItem('localStorageSpaceInfo', JSON.stringify(localStorageSpaceInfo))
+            this.setState({ lsSpaceInfo: localStorageSpaceInfo })
+        }, 1000);
+    }
+
+    testLocalStorageSize = {
+        getUsedSpaceInBytes: () => {
+            return new Blob([JSON.stringify(localStorage)]).size;
+        },
+
+        getUnusedSpaceInBytes: () => {
+            const testQuotaKey = 'testQuota',
+                startTime = new Date(),
+                timeout = 20000;
+            let maxByteSize = 10485760, // 10MiB
+                minByteSize = 0,
+                tryByteSize = 0,
+                runtime = 0,
+                unusedSpace = 0;
+
+            do {
+                runtime = new Date() - startTime;
+                try {
+                    tryByteSize = Math.floor((maxByteSize + minByteSize) / 2);
+                    localStorage.setItem(testQuotaKey, new Array(tryByteSize).join('1'));
+                    minByteSize = tryByteSize;
+                } catch (e) {
+                    maxByteSize = tryByteSize - 1;
+                }
+            } while ((maxByteSize - minByteSize > 1) && runtime < timeout);
+
+            localStorage.removeItem(testQuotaKey);
+
+            if (runtime >= timeout) {
+                alert("Calculation of LocalStorage's free space was off due to timeout.");
+            }
+
+            // Compensate for the byte size of the key that was used,
+            // then subtract 1 byte because the last value of the tryByteSize threw the exception
+            unusedSpace = tryByteSize + testQuotaKey.length - 1;
+            return unusedSpace;
+        }
     }
 
     submitMonth = () => {
@@ -95,7 +160,7 @@ class App extends Component {
 
         if (!storedData) {
             for (let i = 0; i < daysInMonth; i++) {
-                const weekdayName = new Date(localYear, months.indexOf(localMonth), i + 1).toLocaleString('en-GB', {weekday: 'long'}),
+                const weekdayName = new Date(localYear, months.indexOf(localMonth), i + 1).toLocaleString('en-GB', { weekday: 'long' }),
                     dayData = {
                         day: i + 1,
                         wdName: weekdayName,
@@ -112,7 +177,7 @@ class App extends Component {
     dateTimeValueToState = (date, time) => {
         this.setState((state) => ({
             addTaskDateValue: date ? date : state.addTaskDateValue,
-            addTaskTimeValue: time ? time: state.addTaskTimeValue
+            addTaskTimeValue: time ? time : state.addTaskTimeValue
         }))
     }
 
@@ -125,11 +190,17 @@ class App extends Component {
     }
 
     render() {
-        const { months, currentMonth, years, currentYear, daysInMonth,
+        const { lsSpaceInfo, months, currentMonth, years, currentYear, daysInMonth,
             dayData, addTaskDateValue, addTaskTimeValue, lastSearchString, editableTask } = this.state;
 
         return (
             <div className="App">
+                {!lsSpaceInfo && <aside className="loading">
+                    <div className="spinner"></div>
+                    <p>Loading...</p>
+                    <p>Please wait</p>
+                </aside>}
+
                 <Header
                     currentMonth={currentMonth}
                     currentYear={currentYear}
@@ -168,7 +239,7 @@ class App extends Component {
                         initialTaskTime={addTaskTimeValue}
                         dateTimeValueToState={this.dateTimeValueToState}
                         editMode={dayData && editableTask}
-                        editData={{ dayData: dayData, task: editableTask}}
+                        editData={{ dayData: dayData, task: editableTask }}
                         dayDataToState={this.dayDataToState}
                         editableTaskToState={this.editableTaskToState}
                     />

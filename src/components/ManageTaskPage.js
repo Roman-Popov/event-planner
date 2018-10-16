@@ -134,6 +134,7 @@ class ManageTaskPage extends Component {
                             placeholder={workingDay ? "Task name (required)" : "Day off"}
                             defaultValue={editMode ? editData.task.name : '' }
                             autoComplete="off"
+                            maxLength="50"
                             disabled={!workingDay}
                         />
                     </label>
@@ -154,6 +155,7 @@ class ManageTaskPage extends Component {
                             id="task-notes"
                             placeholder={workingDay ? "Write your notes here... (optional)" : "Day off"}
                             defaultValue={editMode ? editData.task.notes : ''}
+                            maxLength="500"
                             disabled={!workingDay}>
                         </textarea>
                     </label>
