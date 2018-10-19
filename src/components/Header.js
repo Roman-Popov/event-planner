@@ -2,6 +2,13 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 
 class Header extends Component {
+
+    historyBack = () => {
+        const { history, location } = window;
+
+        history.length > 2 ? history.back() : location.assign(process.env.PUBLIC_URL || '/')
+    }
+
     render() {
         const { currentMonth, currentYear, updateLastSearch } = this.props,
             pathName = window.location.pathname,
@@ -38,8 +45,10 @@ class Header extends Component {
         return (
             <header className="control-panel">
                 {currentPage.name === 'Add task' ?
-                    <div className='btn btn-add disabled'></div> :
-                    <Link to="/add-task" className='btn btn-add'>Add new task</Link>
+                    <button className='btn btn-add activated' onClick={this.historyBack}>Back</button> :
+                    currentPage.name === 'Edit task' ?
+                        <button className='btn btn-edit-task activated' onClick={this.historyBack}>Back</button> :
+                        <Link to="/add-task" className='btn btn-add'>Add new task</Link>
                 }
 
                 {currentPage ? // !== Main page
@@ -48,7 +57,7 @@ class Header extends Component {
                 }
 
                 {currentPage.name === 'Search' ?
-                    <div className="btn btn-open-search disabled"></div> :
+                    <button className="btn btn-open-search activated" onClick={this.historyBack}>Back</button> :
                     <Link to="/search" className="btn btn-open-search" onClick={() => updateLastSearch('')}>Open search</Link>
                 }
             </header>

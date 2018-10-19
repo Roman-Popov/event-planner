@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom'
 
 class SelectMonthPage extends Component {
 
+    componentDidMount() {
+        window.scrollTo(0, 0);
+    }
+
     displayUserSelect() {
         document.querySelectorAll('.select-month label').forEach(elem => elem.classList.remove('radio-selected'));
         document.querySelectorAll('input:checked').forEach(elem => elem.parentElement.classList.add('radio-selected'))

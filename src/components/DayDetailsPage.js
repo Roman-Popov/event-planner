@@ -16,6 +16,10 @@ class DayDetailsPage extends Component {
         this.getDayData();
     }
 
+    componentDidMount() {
+        window.scrollTo(0, 0);
+    }
+
     getDayData = () => {
         const { dayData, updateDate, dayDataToState } = this.props;
 
@@ -75,7 +79,7 @@ class DayDetailsPage extends Component {
     }
 
     render() {
-        const { editableTaskToState } =this.props,
+        const { editableTaskToState } = this.props,
             { dayData, showModal, deleteObject, currentMonth, currentYear } = this.state,
             dayTasks = dayData.tasks,
             dayName = dayData.wdName,

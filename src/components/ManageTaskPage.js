@@ -20,6 +20,10 @@ class ManageTaskPage extends Component {
         })()
     }
 
+    componentDidMount() {
+        window.scrollTo(0, 0);
+    }
+
     componentWillUnmount() {
         this.props.editableTaskToState(null);
         this.props.dayDataToState(null);
@@ -161,7 +165,7 @@ class ManageTaskPage extends Component {
                     </label>
 
                     {/* Fake hidden button to trigger form's .submit() event and validate input */}
-                    <input type="submit" id="submit-task"/>
+                    <input type="submit" id="submit-task" />
 
                     <Link to="/" className="btn btn-cancel">Cancel</Link>
                     <Link to="/" className="btn btn-submit" onClick={(e) => this.submitTask(e)}>{ editMode ? 'Apply' : 'Add' }</Link>

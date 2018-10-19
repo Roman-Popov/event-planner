@@ -81,13 +81,18 @@ a, button, label {
     transform: scale(0.97) translateY(1px);
 }
 
-.btn.disabled {
-    box-shadow: none;
+.btn.activated {
     transform: none;
-    cursor: default;
     background-size: 85%;
     box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.568);
     background-color: rgba(135, 206, 250, 0.5);
+}
+
+.btn.disabled {
+    opacity: 0.6;
+    transform: none;
+    box-shadow: none;
+    cursor: default;
 }
 
 .btn-select-month {
@@ -642,8 +647,9 @@ section.day-details.modal-shown {
     box-shadow: inset 0 0 6px grey;
 }
 
-.btn-delete-task,
-.btn-edit-task {
+.task-info .btn-delete-task,
+.task-info .btn-edit-task {
+    filter: brightness(0.75);
     position: absolute;
     top: 0.5rem;
     padding: 0;
@@ -654,9 +660,23 @@ section.day-details.modal-shown {
     z-index: 1;
 }
 
+.task-info .btn-delete-task.focused,
+.task-info .btn-edit-task.focused {
+    filter: invert(100%);
+}
+
+.task-info .btn-delete-task::before,
+.task-info .btn-edit-task::before {
+    filter: invert(100%);
+}
+
+.task-info .btn-edit-task {
+    left: 0.5rem;
+    background-size: 120%;
+}
+
 .btn-edit-task {
     background-image: url('./icons/edit.svg');
-    left: 0.5rem;
 }
 
 .btn-delete-task {

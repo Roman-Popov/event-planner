@@ -10,6 +10,10 @@ class MainPage extends Component {
         this.props.initLocalData()
     }
 
+    componentDidMount() {
+        window.scrollTo(0, 0);
+    }
+
     toggleDetails = (targetBtn) => {
         const details = targetBtn.parentNode.nextElementSibling;
         details.classList.toggle('shown')

@@ -122,8 +122,6 @@ class App extends Component {
             selectedYear = document.querySelector('input[name="radio-year"]:checked').value,
             daysInSelectedMonth = this.GetDaysInMonth(this.state.months.indexOf(selectedMonth), selectedYear);
 
-        window.scrollTo(0, 0);
-
         this.setState({
             currentMonth: selectedMonth,
             currentYear: selectedYear,
