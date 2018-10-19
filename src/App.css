@@ -22,7 +22,7 @@ body, #root, .App {
     z-index: 1;
 }
 
-.focused::after {
+.focused::before {
     content: '';
     display: block;
     width: 100%;
