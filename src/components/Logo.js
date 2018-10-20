@@ -1,24 +1,32 @@
 import React, { Component } from 'react'
-import '../logo.css';
+import s from '../logo.css';
 
 class Logo extends Component {
     render() {
         const { style, href, type } = this.props,
             logoStyle = style ? {
-                '--initialColor': '#000b80',
+                '--initialColor': '#1d0066',
                 '--width': style.width,
                 '--bgColor': style.bgColor,
                 '--logoColor': style.logoColor,
-                '--shadowColor': style.shadowColor
+                '--shadowColor': style.shadowColor,
+                'margin': style.margin
             } : {}
 
         return (
-            <a href={href ? href: '/'} className={`logo ${type ? type : ''}`} style={logoStyle}>
-                <p className="letter">R <span>OMAN</span></p>
-                <p className="letter">P <span>OPOV</span></p>
-                <div className="hex-corner hex-pt1"></div>
-                <div className="hex-corner hex-pt2"></div>
-            </a>
+            <custom-div class={s['wrapper']} style={logoStyle}>
+                <a href={href ? href : '/'} className={`${s['logo']} ${type ? s[type] : ''}`}>
+                    <custom-div class={`${s['hex-corner']} ${s['hex-pt1']}`}></custom-div>
+                    <custom-div class={`${s['hex-corner']} ${s['hex-pt2']}`}></custom-div>
+
+                    <custom-p class={s['letter']}>
+                        R <custom-span class={s['name']}>OMAN</custom-span>
+                    </custom-p>
+                    <custom-p class={s['letter']}>
+                        P <custom-span class={s['name']}>OPOV</custom-span>
+                    </custom-p>
+                </a>
+            </custom-div>
         )
     }
 }
