@@ -143,7 +143,7 @@ a, button, label {
 
 .loading {
     position: fixed;
-    background: rgba(255, 255, 255, 0.8);
+    background-color: rgba(255, 255, 255, 0.8);
     width: 100%;
     height: 100%;
     z-index: 1000;
@@ -195,7 +195,7 @@ a, button, label {
 
 .select-month fieldset label {
     position: relative;
-    background: white;
+    background-color: white;
     height: 30px;
     width: 100%;
     max-width: 175px;
@@ -213,7 +213,7 @@ a, button, label {
 }
 
 .select-month .radio-selected {
-    background: lightskyblue;
+    background-color: lightskyblue;
     color: white;
 }
 
@@ -229,11 +229,14 @@ a, button, label {
 }
 
 .list-days {
-    padding-top: 65px;
+    width: 100%;
+    padding-top: 5px;
     overflow: hidden;
+    background-color: rgb(254, 252, 250);
 }
 
-.list-days ul {
+.list-days ul,
+.footer ul {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -245,22 +248,35 @@ a, button, label {
     border-top: 1px solid gray;
     display: flex;
     flex-wrap: wrap;
+    background-color: whitesmoke;
 }
 
 .list-days li[data-weekend='true'] + li[data-weekend='false'] {
     padding-top: 7px;
 }
 
-.list-days li[data-weekend='true'] + li[data-weekend='false']::before {
+.list-days li[data-weekend='true'] + li[data-weekend='false']::before,
+.list-days li:last-of-type::after {
     content: '';
     position: absolute;
     left: -20px;
     right: -20px;
     top: 0;
     height: 7px;
-    background: rgb(254, 252, 250);
+    background-color: rgb(254, 252, 250);
     border-bottom: 1px solid gray;
     box-shadow: inset 0 0 3px gray;
+}
+
+.list-days li:last-of-type {
+    padding-bottom: 7px;
+}
+
+.list-days li:last-of-type::after {
+    top: unset;
+    bottom: 0;
+    border-top: 1px solid gray;
+    border-bottom: none;
 }
 
 .list-days .business-day {
@@ -279,7 +295,7 @@ a, button, label {
 }
 
 .list-days li[data-weekend='true'] .business-day {
-    background: rgb(248, 235, 235);
+    background-color: rgb(248, 235, 235);
 }
 
 .day-of-week,
@@ -315,7 +331,7 @@ a, button, label {
 }
 
 .day-data.day-off {
-    background: rgb(248, 235, 235)
+    background-color: rgb(248, 235, 235)
 }
 
 .no-tasks,
@@ -383,7 +399,7 @@ a, button, label {
     cursor: pointer;
 }
 
-.day-data .summary::after {
+.day-data .summary.focused::before {
     padding: 5px;
     top: -4px;
     left: -5px;
@@ -404,7 +420,7 @@ a, button, label {
     width: 100%;
     border-radius: 1em;
     box-shadow: none;
-    background: rgb(254, 252, 250);
+    background-color: rgb(254, 252, 250);
     transition: 0.35s max-height, 0.5s margin, 0.35s box-shadow;
 }
 
@@ -432,12 +448,14 @@ a, button, label {
 
 section.add-task,
 section.select-month,
+section.month-overview,
 section.day-details {
     padding-top: 60px;
     min-height: 100%;
     box-sizing: border-box;
     position: relative;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
@@ -471,7 +489,7 @@ section.day-details {
     display: block;
     position: relative;
     padding-bottom: 0;
-    background: rgb(254, 252, 250);
+    background-color: rgb(254, 252, 250);
 }
 
 section.day-details.modal-shown {
@@ -484,7 +502,7 @@ section.day-details.modal-shown {
     z-index: 999;
     left: -20px;
     width: calc(100% + 40px);
-    background: whitesmoke;
+    background-color: whitesmoke;
     box-shadow: inset 0 3px 6px whitesmoke,
                     inset 0 -3px 6px whitesmoke,
                     0 10px 10px whitesmoke;
@@ -493,7 +511,7 @@ section.day-details.modal-shown {
 
 @keyframes day-details-shadow {
     to {
-        background: white;
+        background-color: white;
         box-shadow: inset 0 3px 6px silver,
                     inset 0 -3px 6px silver,
                     0 10px 10px whitesmoke;
@@ -572,7 +590,7 @@ section.day-details.modal-shown {
     display: flex;
     flex-wrap: nowrap;
     margin-bottom: 7px;
-    background: whitesmoke;
+    background-color: whitesmoke;
     border-left: 1px dashed lightgray;
     box-shadow: 0 0 3px grey;
 }
@@ -636,7 +654,7 @@ section.day-details.modal-shown {
 }
 
 .task-info .details {
-    background: rgb(254, 252, 250);
+    background-color: rgb(254, 252, 250);
     margin: 1em 0;
     width: 90%;
     box-sizing: border-box;
@@ -706,7 +724,7 @@ section.day-details.modal-shown {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.8);
     visibility: hidden;
     opacity: 0;
     display: flex;
@@ -722,7 +740,7 @@ section.day-details.modal-shown {
 
 .modal-window .message {
     position: relative;
-    background: whitesmoke;
+    background-color: whitesmoke;
     box-shadow: inset 0 0 0.5em 0.2em coral, 0 0 0.5em 0.2em whitesmoke;
     transform: scale(0) rotate(-90deg);
     visibility: hidden;
@@ -790,7 +808,7 @@ textarea.focused {
     box-sizing: border-box;
     height: 2em;
     width: auto;
-    background: white;
+    background-color: white;
     outline: none;
     border: 1px solid gray;
     border-radius: 10px;
@@ -799,7 +817,7 @@ textarea.focused {
 
 .add-task input:disabled,
 .add-task textarea:disabled {
-    background: silver !important;
+    background-color: silver !important;
 }
 
 .add-task #submit-task {
@@ -811,7 +829,7 @@ textarea.focused {
     padding: 3px 0 3px 14px;
     position: relative;
     height: 2em;
-    background: white;
+    background-color: white;
     outline: none;
     border: 1px solid gray;
     border-radius: 10px;
@@ -951,7 +969,7 @@ section.search-page {
     width: 100%;
     padding: 0 30px;
     border: none;
-    background: transparent;
+    background-color: transparent;
 
 }
 
@@ -961,7 +979,7 @@ section.search-page {
     min-height: 100%;
     display: flex;
     justify-content: center;
-    background: rgb(254, 252, 250);
+    background-color: rgb(254, 252, 250);
 }
 
 .search-results .list-of-results {
@@ -982,7 +1000,7 @@ section.search-page {
     flex-direction: column;
     flex-wrap: nowrap;
     align-items: flex-start;
-    background: whitesmoke;
+    background-color: whitesmoke;
     box-shadow: 0 1px 3px gray;
 }
 
@@ -1036,10 +1054,185 @@ section.search-page {
 
 .search-results .highlighted {
     font-style: normal;
-    background: moccasin;
+    background-color: moccasin;
 }
 
 .search-results .message {
     align-self: center;
     font-size: 1.5em;
+}
+
+.footer {
+    width: 100%;
+    padding: 2em 5% 4em;
+    box-sizing: border-box;
+    background-color: lightblue;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: inset 0 25px 30px -20px rgba(0, 0, 0, 0.5);
+}
+
+.footer nav {
+    text-align: left;
+    max-width: calc(100% - 20vw);
+}
+
+.footer nav a {
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 0.25em 1em;
+    font-weight: bold;
+    border-radius: inherit;
+}
+
+.footer nav a::after {
+    content: '';
+    position: absolute;
+    left: -1px;
+    bottom: -1px;
+    width: 100%;
+    height: 100%;
+    max-width: 0;
+    max-height: 0;
+    border: 2px solid white;
+    border-top: none;
+    border-right: none;
+    border-width: 0;
+    transform-origin: right;
+    transform: scaleX(0);
+    transition: max-height 0.1s, max-width 0s 0.35s,
+                border-width 0s 0.35s, transform 0.25s 0.1s;
+}
+
+.footer nav a:not(.focused):hover::after {
+    top: -1px;
+    max-width: 100%;
+    max-height: 100%;
+    border-width: 2px;
+    transform: scaleX(1);
+    transition: max-height 0.1s 0.15s, max-width 0.25s 0.25s,
+                border-width 0s 0.15s;
+}
+
+.footer ul {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.footer li {
+    position: relative;
+    min-height: 30px;
+    width: 13em;
+    max-width: 60vw;
+    margin: 0.3em 1.2em 0.3em 0;
+    display: flex;
+    align-items: center;
+    background-color: lightskyblue;
+    border-radius: 0.5em;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    box-sizing: border-box;
+    text-shadow: 0 0 1px black, 0 0 1px black;
+    border: 1px solid #a6a6a68f;
+    transition: 0.5s;
+}
+
+.footer li:hover {
+    border-radius: 0 0.5em 0em 0;
+    background-color: #076cab;
+    box-shadow: none;
+    text-shadow: none;
+}
+
+.footer .logo {
+    position: absolute;
+    right: 5%;
+    padding: 1em 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer aside {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 0 5%;
+    box-sizing: border-box;
+    margin: 0.65em 0;
+    font-size: 0.8em;
+}
+
+.footer .copyright {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    font-weight: bold;
+    color: #076cab;
+    background-color: rgb(254, 252, 250);
+    border-radius: 5rem;
+    box-shadow: 0 0 3px black;
+    height: 1.7rem;
+    width: 10rem;
+}
+
+.footer .contacts {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.footer .contacts a {
+    position: relative;
+    font-size: 0;
+    height: 1.7rem;
+    width: 1.7rem;
+    margin: 0 0.5rem;
+    border-radius: 5rem;
+    box-shadow: 0 0 3px black;
+    background-color: rgb(254, 252, 250);
+    transition: 0.25s;
+}
+
+.footer .contacts a img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.footer .contacts a:hover {
+    background-color: #076cab;
+}
+
+.footer .contacts a:hover img {
+    filter: brightness(100);
+}
+
+@media screen and (max-width: 380px) {
+    .footer {
+        padding-bottom: 6em;
+    }
+
+    .footer aside {
+        flex-direction: column-reverse;
+    }
+
+    .footer .contacts {
+        margin-bottom: 1em;
+    }
 }

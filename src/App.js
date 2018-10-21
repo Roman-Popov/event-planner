@@ -3,7 +3,6 @@ import { Route } from 'react-router-dom';
 
 import './App.css';
 
-import Logo from './components/Logo';
 import Header from './components/Header';
 import MainPage from './components/MainPage';
 import SearchPage from './components/SearchPage';

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+
+import Footer from '../components/Footer';
 
 class MainPage extends Component {
     state = {
@@ -92,12 +94,22 @@ class MainPage extends Component {
     }
 
     render() {
+        const { currentMonth, currentYear } = this.props;
+
         return (
-            <nav className="list-days">
-                <ul>
-                    {this.createList()}
-                </ul>
-            </nav>
+            <section className="month-overview">
+
+                <nav className="list-days">
+                    <ul>
+                        {this.createList()}
+                    </ul>
+                </nav>
+
+                <Footer
+                    currentMonth={currentMonth}
+                    currentYear={currentYear}
+                />
+            </section>
         )
     }
 }
