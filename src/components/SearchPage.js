@@ -99,6 +99,7 @@ class SearchPage extends Component {
                                 })
                             }}
                         />
+                        <button className="btn btn-clear" onClick={() => this.setState({ searchString: '', searchResults: [] })}>Clear query</button>
                     </div>
                 </header>
 

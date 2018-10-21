@@ -65,6 +65,7 @@ a, button, label {
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     border: none;
     outline: none;
+    padding: 0;
     background-repeat: no-repeat;
     background-position: center;
     display: flex;
@@ -113,7 +114,8 @@ a, button, label {
 .btn-back,
 .btn-edit-task,
 .btn-delete-task,
-.btn-delete-day {
+.btn-delete-day,
+.btn-clear {
     font-size: 0;
     width: 40px;
 }
@@ -697,9 +699,13 @@ section.day-details.modal-shown {
     background-image: url('./icons/edit.svg');
 }
 
+.btn-clear,
+.btn-delete-task {
+    background-image: url('./icons/X.svg');
+}
+
 .btn-delete-task {
     right: 0.5rem;
-    background-image: url('./icons/X.svg');
 }
 
 .end-of-tasks,
@@ -947,6 +953,9 @@ section.search-page {
 }
 
 .search-bar .search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
     width: calc(100% - 60px);
     height: 100%;
     max-height: 2.4em;
@@ -971,6 +980,26 @@ section.search-page {
     border: none;
     background-color: transparent;
 
+}
+
+.search-bar .btn-clear {
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    right: 25px;
+    background-color: unset;
+    background-size: 75%;
+    box-shadow: none;
+    filter: brightness(0.75);
+}
+
+.search-bar .btn-clear.focused,
+.search-bar .btn-clear:hover {
+    filter: invert(100%);
+}
+
+.search-bar .btn-clear.focused::before {
+    filter: invert(100%);
 }
 
 .search-page .search-results {
