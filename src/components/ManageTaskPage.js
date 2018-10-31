@@ -29,7 +29,7 @@ class ManageTaskPage extends Component {
         this.props.dayDataToState(null);
     }
 
-    submitTask = (e) => {
+    submitTask = () => {
         const taskDate = document.getElementById('task-date').value,
             taskTime = document.getElementById('task-time').value;
 
@@ -37,10 +37,7 @@ class ManageTaskPage extends Component {
             const workingDay = this.state.workingDay,
                 taskName = document.getElementById('task-name').value;
 
-            if (workingDay && !taskName) {
-                e.preventDefault();
-                document.getElementById('submit-task').click()
-            } else {
+            if (!workingDay || taskName) {
                 const { months, currentMonth, currentYear,
                     editMode, editData,
                     initLocalData, dateTimeValueToState } = this.props,
@@ -92,12 +89,12 @@ class ManageTaskPage extends Component {
 
                 localStorage.setItem(`${taskMonth}-${taskYear}`, JSON.stringify(listOfDays));
                 dateTimeValueToState(taskDate, taskTime);
+
+                document.getElementById('submit-task').click();
             }
 
-        } else {
-            e.preventDefault();
-            document.getElementById('submit-task').click()
         }
+
     }
 
     render() {
@@ -106,20 +103,20 @@ class ManageTaskPage extends Component {
 
         return (
             <section className="add-task">
-                <form onSubmit={(e) => e.preventDefault()}>
-                    <label>
+                <form onSubmit={(e) => { e.preventDefault(); this.submitTask(); }}>
+                    <label title="Task date">
                         <span>Date</span>
                         <input
                             type="date"
                             id="task-date"
                             required={true}
-                            min={`${years[years.length - 1]}-01-01`}
-                            max={`${years[0]}-12-31`}
+                            min={`${Math.min(...years)}-01-01`}
+                            max={`${Math.max(...years)}-12-31`}
                             defaultValue={editDate.date || initialTaskDate}
                         />
                     </label>
 
-                    <label>
+                    <label title={`Click here to set the selected day as a ${workingDay ? "day off" : "working day"}`}>
                         <span>Working day</span>
                         <input
                             type="checkbox"
@@ -129,7 +126,7 @@ class ManageTaskPage extends Component {
                         <span className="checkmark"></span>
                     </label>
 
-                    <label>
+                    <label title={workingDay ? "Task name (required, 50 symbols max)" : "Day off"}>
                         <span>Task Name</span>
                         <input
                             type="text"
@@ -143,7 +140,7 @@ class ManageTaskPage extends Component {
                         />
                     </label>
 
-                    <label>
+                    <label title={workingDay ? "Task time" : "Day off"}>
                         <span>Time</span>
                         <input
                             type="time"
@@ -153,22 +150,22 @@ class ManageTaskPage extends Component {
                         />
                     </label>
 
-                    <label>
+                    <label title={workingDay ? "Write your notes here... (optional, 500 symbols max)" : "Day off"}>
                         <span>Notes</span>
                         <textarea
                             id="task-notes"
-                            placeholder={workingDay ? "Write your notes here... (optional)" : "Day off"}
+                            placeholder={workingDay ? "Write your notes here... (optional, 500 symbols max)" : "Day off"}
                             defaultValue={editMode ? editData.task.notes : ''}
                             maxLength="500"
                             disabled={!workingDay}>
                         </textarea>
                     </label>
 
-                    {/* Fake hidden button to trigger form's .submit() event and validate input */}
-                    <input type="submit" id="submit-task" />
+                    {/* Fake hidden button to go back if task was added successfully */}
+                    <Link to="/" id="submit-task">{editMode ? 'Apply' : 'Add'}</Link>
 
                     <Link to="/" className="btn btn-cancel">Cancel</Link>
-                    <Link to="/" className="btn btn-submit" onClick={(e) => this.submitTask(e)}>{ editMode ? 'Apply' : 'Add' }</Link>
+                    <button className="btn btn-submit">{editMode ? 'Apply' : 'Add'}</button>
                 </form>
             </section>
         )
