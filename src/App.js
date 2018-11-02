@@ -8,7 +8,8 @@ import MainPage from './components/MainPage';
 import SearchPage from './components/SearchPage';
 import SelectMonthPage from './components/SelectMonthPage';
 import ManageTaskPage from './components/ManageTaskPage';
-import DayDetailsPage from './components/DayDetailsPage'
+import DayDetailsPage from './components/DayDetailsPage';
+import MemoryPage from './components/MemoryPage';
 
 class App extends Component {
     state = {
@@ -78,8 +79,8 @@ class App extends Component {
     }
 
     testLocalStorageSize = {
-        getUsedSpaceInBytes: () => {
-            return new Blob([JSON.stringify(localStorage)]).size;
+        getUsedSpaceInBytes: (elem) => {
+            return new Blob([JSON.stringify(elem || localStorage)]).size;
         },
 
         getUnusedSpaceInBytes: () => {
@@ -258,6 +259,13 @@ class App extends Component {
                         dayDataToState={this.dayDataToState}
                         editableTaskToState={this.editableTaskToState}
                         updateDate={this.updateDate}
+                    />
+                )} />
+
+                <Route path="/memory-management" render={() => (
+                    <MemoryPage
+                        getUsedSpace={this.testLocalStorageSize.getUsedSpaceInBytes}
+                        lsSpaceInfo={lsSpaceInfo}
                     />
                 )} />
 

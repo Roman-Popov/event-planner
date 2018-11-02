@@ -65,7 +65,8 @@ a, button, label {
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     border: none;
     outline: none;
-    padding: 0;
+    padding: 0 1em;
+    box-sizing: border-box;
     background-repeat: no-repeat;
     background-position: center;
     display: flex;
@@ -115,7 +116,8 @@ a, button, label {
 .btn-edit-task,
 .btn-delete-task,
 .btn-delete-day,
-.btn-clear {
+.btn-clear,
+.btn-clear-all-data {
     font-size: 0;
     width: 40px;
 }
@@ -451,7 +453,8 @@ a, button, label {
 section.add-task,
 section.select-month,
 section.month-overview,
-section.day-details {
+section.day-details,
+section.memory-management {
     padding-top: 60px;
     min-height: 100%;
     box-sizing: border-box;
@@ -487,10 +490,15 @@ section.add-task label:last-of-type {
     width: 100%;
 }
 
-section.day-details {
+section.add-task input[type="date"],
+section.add-task input[type="time"] {
+    cursor: pointer;
+}
+
+section.day-details,
+section.memory-management {
     display: block;
     position: relative;
-    padding-bottom: 0;
     background-color: rgb(254, 252, 250);
 }
 
@@ -499,7 +507,8 @@ section.day-details.modal-shown {
     height: 100%;
 }
 
-.day-details .header-wrapper {
+.day-details .header-wrapper,
+.memory-management .header-wrapper {
     position: fixed;
     z-index: 999;
     left: -20px;
@@ -520,11 +529,13 @@ section.day-details.modal-shown {
     }
 }
 
-.day-details .tasks-wrapper {
+.day-details .tasks-wrapper,
+.memory-management .data-wrapper {
     margin-top: 70px;
 }
 
-.day-details .header-wrapper header {
+.day-details .header-wrapper header,
+.memory-management .header-wrapper header {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1264,4 +1275,68 @@ section.search-page {
     .footer .contacts {
         margin-bottom: 1em;
     }
+}
+
+.btn-clear-all-data {
+    background-image: url('./icons/delete.svg');
+    background-color: #ffcccc;
+    box-shadow: inset 0 0 5px red;
+}
+
+.memory-management .progress-bar {
+    background: linear-gradient(90deg, #0ac20a 29%, #ffc233 75%, red);
+    width: 50vw;
+    height: 15px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    border: 1px solid gray;
+    animation: progress-bar-shadow 0.5s ease-out 0.25s forwards;
+}
+
+@keyframes progress-bar-shadow {
+    to {
+        box-shadow: 0 0 3px silver;
+    }
+}
+
+.memory-management .progress-bar-title  {
+    position: absolute;
+    font-size: 80%;
+    top: -130%;
+    margin: auto;
+}
+
+.progress-bar .filler {
+    --usedSpace: 0%;
+    width: calc(100% - var(--usedSpace));
+    max-width: 100%;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    background-color: whitesmoke;
+}
+
+.progress-bar .tick[data-percent] {
+    height: 125%;
+    border-left: 1px dashed gray;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 0;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.progress-bar .tick[data-percent="0%"] {
+    margin-left: -1px;
+}
+
+
+.progress-bar .tick[data-percent]::after {
+    content: attr(data-percent);
+    font-size: 70%;
+    position: relative;
+    bottom: -90%;
 }
