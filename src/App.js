@@ -119,14 +119,9 @@ class App extends Component {
 
     submitMonth = () => {
         const selectedMonth = document.querySelector('input[name="radio-month"]:checked').value,
-            selectedYear = document.querySelector('input[name="radio-year"]:checked').value,
-            daysInSelectedMonth = this.GetDaysInMonth(this.state.months.indexOf(selectedMonth), selectedYear);
+            selectedYear = document.querySelector('input[name="radio-year"]:checked').value;
 
-        this.setState({
-            currentMonth: selectedMonth,
-            currentYear: selectedYear,
-            daysInMonth: daysInSelectedMonth
-        })
+        this.updateDate(selectedMonth, selectedYear);
     }
 
     GetDaysInMonth = (month, year) => {
@@ -137,7 +132,8 @@ class App extends Component {
         if (month !== this.state.currentMonth || year !== this.state.currentYear) {
             this.setState({
                 currentMonth: month,
-                currentYear: year
+                currentYear: year,
+                daysInMonth: this.GetDaysInMonth(this.state.months.indexOf(month), year)
             })
         }
     }
@@ -266,6 +262,7 @@ class App extends Component {
                     <MemoryPage
                         getUsedSpace={this.testLocalStorageSize.getUsedSpaceInBytes}
                         lsSpaceInfo={lsSpaceInfo}
+                        updateDate={this.updateDate}
                     />
                 )} />
 

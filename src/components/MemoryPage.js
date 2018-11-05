@@ -6,17 +6,23 @@ class MemoryPage extends Component {
     state = {
         usedSpace: this.props.getUsedSpace(),
         totalSpace: this.props.lsSpaceInfo.total,
-        monthSizeInfo: []
+        monthSizeInfo: [],
+        showModal: false,
+        deleteObject: '',
+        confirmed: false
     }
 
     componentWillMount() {
         this.setState({ monthSizeInfo: this.getMonthSizeInfo() })
     }
 
+    componentDidMount() {
+        window.scrollTo(0, 0);
+    }
+
     getMonthSizeInfo = () => {
         const { getUsedSpace, lsSpaceInfo } = this.props,
-            storedKeys = Object.keys(localStorage),
-            monthDataKeys = storedKeys.filter(key => /^[A-Z]+-20\d\d$/i.test(key));
+            monthDataKeys = Object.keys(localStorage).filter(key => /^[A-Z]+-20\d\d$/i.test(key));
 
         const tmp = monthDataKeys.reduce((acc, curr) => {
             const month = curr.split('-')[0],
@@ -49,25 +55,83 @@ class MemoryPage extends Component {
 
         const result = Object.keys(tmp).map(key => {
             tmp[key].months.sort((a, b) => a.monthNum - b.monthNum)
-            console.log(tmp[key])
+
             return tmp[key]
         });
 
         return result.sort((a, b) => a.year - b.year)
     }
 
+    confirmDeletion = (obj) => {
+        this.setState({
+            showModal: true,
+            deleteObject: obj || '',
+        })
+
+        setTimeout(() => {
+            document.getElementById('confirm-deletion').focus()
+        }, 500);
+    }
+
+    clearData = (e, obj) => {
+        e.preventDefault();
+
+        const { getUsedSpace } = this.props,
+            monthDataKeys = Object.keys(localStorage).filter(key => /^[A-Z]+-20\d\d$/i.test(key)),
+            localStorageSpaceInfo = JSON.parse(localStorage.getItem('localStorageSpaceInfo'));
+
+        let arrayToRemove = [];
+
+        if (obj) {
+            if (obj.month) {
+                arrayToRemove.push(`${obj.month}-${obj.year}`);
+            } else {
+                arrayToRemove = monthDataKeys.filter(key => key.includes(obj.year));
+            }
+        } else {
+            arrayToRemove = monthDataKeys;
+        }
+
+        arrayToRemove.forEach(key => localStorage.removeItem(key));
+
+        localStorageSpaceInfo.used = getUsedSpace();
+        localStorage.setItem('localStorageSpaceInfo', JSON.stringify(localStorageSpaceInfo));
+
+        this.setState({
+            usedSpace: localStorageSpaceInfo.used,
+            monthSizeInfo: this.getMonthSizeInfo(),
+            showModal: false,
+            deleteObject: '',
+            confirmed: false
+        })
+
+        document.getElementById('confirm-deletion').value = '';
+    }
+
+    getDelText = (obj) => {
+        let text = 'Delete';
+
+        if (obj) {
+            text += obj.month ? ` ${obj.month} ${obj.year}` : ` ${obj.year} year`
+        } else {
+            text += ' application data for all time'
+        }
+
+        return text
+    }
+
+
     render() {
-        const { usedSpace, totalSpace, monthSizeInfo } = this.state,
+        const { usedSpace, totalSpace, monthSizeInfo, showModal, deleteObject, confirmed } = this.state,
+            { updateDate } = this.props,
             usedPercentage = (usedSpace / totalSpace * 100).toFixed(2),
             serviceInfoPercentage = Number(usedPercentage) - monthSizeInfo.reduce((acc, curr) => acc + curr.sizePercentage, 0)
 
-        console.log('12312312 ', serviceInfoPercentage)
-        console.log('render')
         return (
-            <section className="memory-management">
+            <section className={`memory-management ${showModal ? 'modal-shown' : ''}`}>
                 <div className="header-wrapper">
                     <header>
-                        <Link to="/" className="btn btn-back">Back</Link>
+                        <Link to="/" className="btn btn-back" title="Back to main page">Back</Link>
                         <div className="progress-bar">
                             <span className="progress-bar-title">
                                 Space usage: {usedPercentage}%
@@ -77,11 +141,16 @@ class MemoryPage extends Component {
                                 <div key={i} className="tick" data-percent={i * 25 + '%'} style={{ left: i * 25 + '%'}}></div>
                             )}
                         </div>
-                        <button className={`btn btn-clear-all-data`}>
+                        <button
+                            className={`btn btn-clear-all-data`}
+                            onClick={() => this.confirmDeletion()}
+                            title="DANGER! Delete all application data"
+                        >
                             DANGER! Delete all application data
                         </button>
                     </header>
                 </div>
+
 
                 <div className="data-wrapper">
                     {monthSizeInfo.map(elem => (
@@ -91,16 +160,36 @@ class MemoryPage extends Component {
                             </p>
                             <ul>
                                 {elem.months.map(month => (
-                                    <li key={month.name}>
-                                        <p>{month.name}</p>
-                                        <p>
-                                            Size: {month.sizePercentage > 0.1 ? month.sizePercentage + '%' : 'less than 0.1%'}
-                                        </p>
-                                        <button className="btn btn-delete-task">Clear {month.name} {elem.year} data</button>
+                                    <li key={month.name} className="month-size-info">
+                                        <Link
+                                            to="/"
+                                            className="month-link"
+                                            title={`Go to ${month.name} ${elem.year}`}
+                                            onClick={() => updateDate(month.name, elem.year)}
+                                        >
+                                            <h3 className="month">{month.name}</h3>
+                                            <p className="size">
+                                                Size: {month.sizePercentage > 0.1 ? month.sizePercentage + '%' : 'less than 0.1%'}
+                                            </p>
+                                        </Link>
+
+                                        <button
+                                            className="btn btn-delete-month"
+                                            onClick={() => this.confirmDeletion({month: month.name, year: elem.year})}
+                                            title={`Clear ${month.name} ${elem.year} data`}
+                                        >
+                                            Clear {month.name} {elem.year} data
+                                        </button>
                                     </li>
                                 ))}
                             </ul>
-                            <button className="btn">Clear all year data</button>
+                            <button
+                                className="btn btn-delete-year"
+                                onClick={() => this.confirmDeletion({ year: elem.year })}
+                                title={`Clear all ${elem.year} year data`}
+                            >
+                                {`Clear all ${elem.year} year data`}
+                            </button>
                         </section>
                     ))}
                     <section className="group-year">
@@ -108,13 +197,71 @@ class MemoryPage extends Component {
                             Other
                         </p>
                         <ul>
-                            <li>
-                                <p>Service information</p>
-                                <p>Size: {serviceInfoPercentage > 0.1 ? serviceInfoPercentage + '%' : 'less than 0.1%'}</p>
+                            <li className="month-size-info service-info">
+                                <div className="month-link">
+                                    <h3 className="month">Service information</h3>
+                                    <p className="size">Size: {serviceInfoPercentage > 0.1 ? Number(serviceInfoPercentage.toFixed(2)) + '%' : 'less than 0.1%'}</p>
+                                </div>
                             </li>
                         </ul>
                     </section>
+
+                    <span className="end-of-storage">There is no more stored items</span>
                 </div>
+
+
+                <div className={`modal-window ${showModal ? 'visible' : ''}`}>
+                    <div className="message">
+                        <h2><span className="modal-header">Attention!</span></h2>
+                        <p>Deleted data can not be restored.</p>
+                        <p>
+                            Do you really want to delete all
+                            {deleteObject ? ` data for ${deleteObject.month || ''} ${deleteObject.year}${(!deleteObject.month && ' year') || ''}` :
+                                ' application data for all time'}?
+                        </p>
+                        <p>
+                            Please type in the following text to confirm:
+                            <br/>
+                            «{this.getDelText(deleteObject)}»
+                        </p>
+                        <form className="btn-wrapper" onSubmit={(e) => this.clearData(e, deleteObject)}>
+                            <div className="input-wrapper">
+                                <input
+                                    type="text"
+                                    id="confirm-deletion"
+                                    autoComplete="off"
+                                    placeholder={this.getDelText(deleteObject)}
+                                    maxLength="40"
+                                    onChange={(e) => {
+                                        if (e.target.value === this.getDelText(deleteObject)) {
+                                            this.setState({confirmed: true})
+                                        } else {
+                                            this.setState({ confirmed: false })
+                                        }
+                                    }}
+                                />
+                            </div>
+
+                            <button
+                                className="btn btn-no"
+                                type="button"
+                                onClick={() => this.setState({ showModal: false, deleteObject: '' })}
+                            >
+                                No, keep
+                            </button>
+                            <button
+                                className={`btn btn-yes ${confirmed ? '' : 'disabled'}`}
+                                type="submit"
+                                disabled={!confirmed}
+                            >
+                                Yes, delete
+                            </button>
+
+                        </form>
+
+                    </div>
+                </div>
+
             </section>
         )
     }

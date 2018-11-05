@@ -69,8 +69,8 @@ class MainPage extends Component {
                     </Link>
 
                     <div className={`day-data ${dayData.work ? '' : 'day-off'}`}>
-                        {dayTasks.length ? dayTasks.map(task => (
-                            <section key={`${task.time}-${task.name}`}>
+                        {dayTasks.length ? dayTasks.map((task, index) => (
+                            <section key={index}>
                                 <div className="main-info">
                                     <time>{task.time}</time>
                                     {task.name === 'Day off' ?

@@ -63,9 +63,10 @@ a, button, label {
     color: white;
     font-weight: bold;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    text-shadow: 0 0 1px black, 0 0 1px black;
     border: none;
     outline: none;
-    padding: 0 1em;
+    padding: 0;
     box-sizing: border-box;
     background-repeat: no-repeat;
     background-position: center;
@@ -115,6 +116,7 @@ a, button, label {
 .btn-back,
 .btn-edit-task,
 .btn-delete-task,
+.btn-delete-month,
 .btn-delete-day,
 .btn-clear,
 .btn-clear-all-data {
@@ -218,7 +220,13 @@ a, button, label {
 
 .select-month .radio-selected {
     background-color: lightskyblue;
+    font-weight: bold;
     color: white;
+    text-shadow: 0 0 1px black, 0 0 1px black;
+}
+
+.select-month input[type="radio"].focused::before {
+    border-radius: 100em;
 }
 
 .select-month fieldset input {
@@ -240,7 +248,8 @@ a, button, label {
 }
 
 .list-days ul,
-.footer ul {
+.footer ul,
+.memory-management ul {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -498,11 +507,11 @@ section.add-task input[type="time"] {
 section.day-details,
 section.memory-management {
     display: block;
-    position: relative;
     background-color: rgb(254, 252, 250);
 }
 
-section.day-details.modal-shown {
+section.day-details.modal-shown,
+section.memory-management.modal-shown {
     overflow: hidden;
     height: 100%;
 }
@@ -679,7 +688,8 @@ section.day-details.modal-shown {
 }
 
 .task-info .btn-delete-task,
-.task-info .btn-edit-task {
+.task-info .btn-edit-task,
+.month-size-info .btn-delete-month {
     filter: brightness(0.75);
     position: absolute;
     top: 0.5rem;
@@ -692,12 +702,14 @@ section.day-details.modal-shown {
 }
 
 .task-info .btn-delete-task.focused,
-.task-info .btn-edit-task.focused {
+.task-info .btn-edit-task.focused,
+.month-size-info .btn-delete-month.focused {
     filter: invert(100%);
 }
 
 .task-info .btn-delete-task::before,
-.task-info .btn-edit-task::before {
+.task-info .btn-edit-task::before,
+.month-size-info .btn-delete-month::before {
     filter: invert(100%);
 }
 
@@ -711,11 +723,13 @@ section.day-details.modal-shown {
 }
 
 .btn-clear,
-.btn-delete-task {
+.btn-delete-task,
+.btn-delete-month {
     background-image: url('./icons/X.svg');
 }
 
-.btn-delete-task {
+.btn-delete-task,
+.btn-delete-month {
     right: 0.5rem;
 }
 
@@ -761,7 +775,6 @@ section.day-details.modal-shown {
     box-shadow: inset 0 0 0.5em 0.2em coral, 0 0 0.5em 0.2em whitesmoke;
     transform: scale(0) rotate(-90deg);
     visibility: hidden;
-    margin-top: -60px;
     width: 85%;
     max-width: 400px;
     padding: 0 30px 30px;
@@ -784,11 +797,35 @@ section.day-details.modal-shown {
 .message .btn-wrapper {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     width: 100%;
 }
 
+.message .input-wrapper {
+    width: 100%;
+    margin-bottom: 1em;
+}
+
+.input-wrapper #confirm-deletion {
+    height: 35px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    border: 1px solid;
+    width: 100%;
+    max-width: 17em;
+    text-align: center;
+    padding: 0 0.5em;
+}
+
+.input-wrapper #confirm-deletion::placeholder {
+    opacity: 1;
+    color: gainsboro;
+}
+
+
 .btn-wrapper .btn {
     width: 7em;
+    text-shadow: none;
 }
 
 .btn-wrapper .btn-yes {
@@ -796,6 +833,10 @@ section.day-details.modal-shown {
     border: 2px solid coral;
     color: black;
     transition: opacity 0.5s;
+}
+
+.btn-wrapper .btn-yes:disabled {
+    filter: grayscale(70%);
 }
 
 .btn-wrapper .btn-no {
@@ -1283,6 +1324,21 @@ section.search-page {
     box-shadow: inset 0 0 5px red;
 }
 
+.memory-management .header-wrapper {
+    background-color: lightblue;
+    box-shadow: none;
+    animation: memory-management-shadow 0.5s ease-out 0.25s forwards;
+}
+
+@keyframes memory-management-shadow {
+    to {
+        background-color: white;
+        box-shadow: inset 0 3px 6px silver,
+                    inset 0 -3px 6px silver,
+                    0 5px 10px lightblue;
+    }
+}
+
 .memory-management .progress-bar {
     background: linear-gradient(90deg, #0ac20a 29%, #ffc233 75%, red);
     width: 50vw;
@@ -1320,7 +1376,6 @@ section.search-page {
 .progress-bar .tick[data-percent] {
     height: 125%;
     border-left: 1px dashed gray;
-    -webkit-box-sizing: border-box;
     box-sizing: border-box;
     width: 0;
     position: absolute;
@@ -1339,4 +1394,86 @@ section.search-page {
     font-size: 70%;
     position: relative;
     bottom: -90%;
+}
+
+.memory-management ul {
+    margin-top: 6px;
+}
+
+.memory-management .end-of-storage {
+    color: gainsboro;
+    position: relative;
+    top: -0.5em;
+}
+
+.memory-management .group-year {
+    display: flex;
+    flex-direction: column;
+
+    margin-bottom: 1em;
+    background-color: whitesmoke;
+    box-shadow: 0 1px 3px grey;
+}
+
+.group-year .year-name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: lightblue;
+    color: white;
+    font-weight: bold;
+    position: sticky;
+    z-index: 2;
+    top: 130px;
+    margin: 0;
+    height: 2.5em;
+    box-shadow: 0 1px 4px 2px rgba(0,0,0,0.16), 0 1px 4px 2px rgba(0,0,0,0.23);
+    text-shadow: 0 0 1px black, 0 0 1px black;
+}
+
+.group-year .year-name span {
+    position: absolute;
+    right: 1rem;
+    font-size: 0.8em;
+    font-style: italic;
+}
+
+.group-year .month-size-info {
+    position: relative;
+    border-bottom: 1px dashed silver;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.group-year .month-size-info.service-info {
+    border-bottom: none;
+}
+
+.group-year .btn-delete-year {
+    width: 14em;
+    margin: 1em auto;
+}
+
+.month-size-info .month-link {
+    color: black;
+    text-decoration: none;
+    margin: 0.7em 4em 0.7em 5%;
+    width: calc(100% - 4em - 5%);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.month-size-info .month,
+.month-size-info .size {
+    margin: 0;
+}
+
+.month-size-info .size {
+    font-size: 0.8em;
+    font-style: italic;
+    margin-top: 0.3em;
+    color: gray;
 }
