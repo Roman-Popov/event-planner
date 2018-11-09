@@ -133,7 +133,7 @@ class ManageTaskPage extends Component {
                             id="task-name"
                             required={workingDay}
                             placeholder={workingDay ? "Task name (required)" : "Day off"}
-                            defaultValue={editMode ? editData.task.name : '' }
+                            defaultValue={!editMode ? '' : editData.task.name !== 'Day off' ? editData.task.name : '' }
                             autoComplete="off"
                             maxLength="50"
                             disabled={!workingDay}
