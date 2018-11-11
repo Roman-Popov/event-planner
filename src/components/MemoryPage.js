@@ -108,7 +108,6 @@ class MemoryPage extends Component {
             usedSpace: localStorageSpaceInfo.used,
             monthSizeInfo: this.getMonthSizeInfo(),
             showModal: false,
-            deleteObject: '',
             confirmed: false
         })
     }
@@ -257,7 +256,7 @@ class MemoryPage extends Component {
                                 className="btn btn-no"
                                 type="button"
                                 onClick={() => {
-                                    this.setState({ showModal: false, deleteObject: '' });
+                                    this.setState({ showModal: false });
                                     document.querySelector('body').classList.remove('modal-shown');
                                 }}
                             >

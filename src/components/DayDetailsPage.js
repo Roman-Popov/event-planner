@@ -75,8 +75,7 @@ class DayDetailsPage extends Component {
 
         this.setState({
             dayData: storedDayData,
-            showModal: false,
-            deleteObject: ''
+            showModal: false
         })
     }
 
@@ -326,7 +325,7 @@ class DayDetailsPage extends Component {
                             <button
                                 className="btn btn-no"
                                 onClick={() => {
-                                    this.setState({ showModal: false, deleteObject: '' });
+                                    this.setState({ showModal: false });
                                     document.querySelector('body').classList.remove('modal-shown');
                                 }}
                             >
