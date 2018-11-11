@@ -263,7 +263,7 @@ a, button, label {
 .list-days ul li {
     position: relative;
     min-height: 50px;
-    border-top: 1px solid gray;
+    border-top: 1px solid darkgray;
     display: flex;
     flex-wrap: wrap;
     background-color: whitesmoke;
@@ -282,8 +282,9 @@ a, button, label {
     top: 0;
     height: 7px;
     background-color: rgb(254, 252, 250);
-    border-bottom: 1px solid gray;
-    box-shadow: inset 0 0 3px gray;
+    border-bottom: 1px solid darkgray;
+    box-shadow: inset 0 0 2px gray;
+    z-index: 1;
 }
 
 .list-days li:last-of-type {
@@ -377,6 +378,35 @@ a, button, label {
 }
 .day-data.day-off section.done {
     background: linear-gradient(240deg, #edf7ed, transparent);
+}
+
+.day-data .total {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 1px 0.5em 1px 0.7em;
+    font-size: 55%;
+    border-radius: 0 0 0 0.75em;
+    background: whitesmoke;
+    box-shadow: inset 3px -2px 6px -5px grey;
+    font-weight: bold;
+}
+
+.day-data .loss {
+    color: #e00000;
+}
+
+.day-data .loss::before {
+    content: '−'
+}
+
+.day-data .profit {
+    color: #008600;
+}
+
+.day-data .profit::before {
+    content: '+'
 }
 
 .day-data .main-info {
@@ -1523,7 +1553,6 @@ section.search-page {
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     box-sizing: border-box;
     text-shadow: 0 0 1px black, 0 0 1px black;
-    border: 1px solid #a6a6a68f;
     transition: 0.5s;
 }
 

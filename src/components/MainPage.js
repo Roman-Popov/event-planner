@@ -71,6 +71,10 @@ class MainPage extends Component {
                     <div className={`day-data ${dayData.work ? '' : 'day-off'}`}>
                         {dayTasks.length ? dayTasks.map((task, index) => (
                             <section key={index} className={task.done ? 'done' : ''}>
+                                {task.res && <aside className={`total ${task.res.tot === 0 ? '' : task.res.tot > 0 ? 'profit' : 'loss'}`}>
+                                    {Math.abs(task.res.tot)}
+                                </aside>}
+
                                 <div className="main-info">
                                     <time>{task.time}</time>
                                     {task.name === 'Day off' ?
