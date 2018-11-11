@@ -176,8 +176,8 @@ class App extends Component {
         }))
     }
 
-    dayDataToState = (dayData) => {
-        this.setState({ dayData: dayData })
+    dayDataToState = (dayData, callback) => {
+        this.setState({ dayData: dayData }, callback)
     }
 
     editableTaskToState = (task) => {

@@ -48,6 +48,8 @@ class DayDetailsPage extends Component {
     }
 
     confirmDeletion = (task) => {
+        document.querySelector('body').classList.add('modal-shown');
+
         this.setState({
             showModal: true,
             deleteObject: task || '',
@@ -78,6 +80,80 @@ class DayDetailsPage extends Component {
         })
     }
 
+    taskDoneCheckmark = (checkmark, task, index) => {
+        const { dayDataToState } = this.props,
+                { dayData, currentMonth, currentYear } = this.state,
+                storedMonthData = JSON.parse(localStorage.getItem(`${currentMonth}-${currentYear}`)),
+                storedDayData = storedMonthData[dayData.day - 1];
+
+        if (checkmark.checked) {
+            task.done = true;
+        } else {
+            task.done = false;
+            document.querySelector(`.result[data-task="${index}"] .result-form`).classList.remove('visible');
+            delete task.res
+        }
+
+        storedDayData.tasks = dayData.tasks;
+        localStorage.setItem(`${currentMonth}-${currentYear}`, JSON.stringify(storedMonthData));
+        dayDataToState(storedDayData);
+    }
+
+    submitResult = (e, task, index) => {
+        function calc(str) {
+            // Delete spaces, duplicate '+' signs, '+' signs at the beginning and at the end of the string
+            const formatStr = str.replace(/[\s+]+/g, '+').replace(/(?:^\+)|(?:\+$)/g, '');
+            // Summation of all numbers of the string
+            return formatStr.split('+').reduce((a, b) => parseFloat(a) + parseFloat(b), 0) || 0;
+        }
+
+        e.preventDefault();
+
+        const form = e.target;
+
+        let revenue = calc(form.querySelector(`#revenue-task-${index}`).value),
+            expenses = calc(form.querySelector(`#expenses-task-${index}`).value);
+
+        if (revenue === 0 && expenses === 0) {
+            form.parentElement.querySelector('.btn-add-fin-result').classList.add('visible');
+        } else {
+            const { dayDataToState } = this.props,
+                { dayData, currentMonth, currentYear } = this.state,
+                storedMonthData = JSON.parse(localStorage.getItem(`${currentMonth}-${currentYear}`)),
+                storedDayData = storedMonthData[dayData.day - 1];
+
+            task.res = {
+                rev: revenue || 0,
+                exp: expenses || 0,
+                tot: revenue - expenses
+            }
+
+            storedDayData.tasks = dayData.tasks;
+            localStorage.setItem(`${currentMonth}-${currentYear}`, JSON.stringify(storedMonthData));
+            dayDataToState(storedDayData);
+
+            form.parentElement.querySelector('.summary').classList.add('visible');
+        }
+
+        form.classList.remove('visible');
+    }
+
+    clearResult = (task, index) => {
+        const { dayDataToState } = this.props,
+                { dayData, currentMonth, currentYear } = this.state,
+                storedMonthData = JSON.parse(localStorage.getItem(`${currentMonth}-${currentYear}`)),
+                storedDayData = storedMonthData[dayData.day - 1];
+
+        document.querySelector(`.result[data-task="${index}"] .summary`).classList.remove('visible');
+        delete task.res;
+
+        storedDayData.tasks = dayData.tasks;
+        localStorage.setItem(`${currentMonth}-${currentYear}`, JSON.stringify(storedMonthData));
+        dayDataToState(storedDayData, () => {
+            document.querySelector(`.result[data-task="${index}"] .btn-add-fin-result`).classList.remove('initial')
+        });
+    }
+
     render() {
         const { editableTaskToState } = this.props,
             { dayData, showModal, deleteObject, currentMonth, currentYear } = this.state,
@@ -86,17 +162,18 @@ class DayDetailsPage extends Component {
             weekend = ['Saturday', 'Sunday'];
 
         return (
-            <section className={`day-details ${showModal ? 'modal-shown' : ''}`} >
-
+            <section className='day-details' >
                 <div className="header-wrapper" data-weekend={weekend.includes(dayName)}>
                     <header>
-                        <Link to="/" className="btn btn-back">Back</Link>
+                        <Link to="/" className="btn btn-back" title="Back to month page">Back</Link>
                         <div>
                             <h1>{dayData.day}</h1>
                             <span className="day-of-week">{dayName}</span>
                         </div>
-                        <button className={`btn btn-delete-day ${dayTasks.length ? 'visible' : ''}`}
+                        <button
+                            className={`btn btn-delete-day ${dayTasks.length ? 'visible' : ''}`}
                             onClick={() => this.confirmDeletion()}
+                            title="Clear all tasks for this day"
                         >
                             Clear all tasks for this day
                         </button>
@@ -104,19 +181,21 @@ class DayDetailsPage extends Component {
                 </div>
 
                 <div className="tasks-wrapper">
-                    {dayTasks.length ? dayTasks.map(task => (
-                        <div key={`${task.time}-${task.name}`} className={`task ${task.time ? '' : 'no-time'}`}>
+                    {dayTasks.length ? dayTasks.map((task, index) => (
+                        <div key={index} className={`task ${task.time ? '' : 'no-time'}`}>
                             {task.time && <time className="task-time">{task.time}</time>}
-                            <article className="task-info">
+                            <article className={`task-info ${task.done ? 'done' : ''} ${task.name === 'Day off' ? 'day-off' : ''}`}>
                                 <Link
                                     to={`/edit-task/${dayData.day}-${currentMonth}-${currentYear}/${task.name}~${task.time.replace(':', '-')}`}
                                     className="btn btn-edit-task"
+                                    title="Edit task"
                                     onClick={() => editableTaskToState(task)}
                                 >
                                     {`Edit task "${task.name}"`}
                                 </Link>
                                 <button
                                     className="btn btn-delete-task"
+                                    title="Delete task"
                                     onClick={() => this.confirmDeletion(task)}
                                 >
                                     {`Clear task "${task.name}"`}
@@ -124,10 +203,109 @@ class DayDetailsPage extends Component {
 
                                 <h2>{task.name}</h2>
                                 {task.notes && <p className="details">{task.notes}</p>}
+
+                                {task.name !== 'Day off' && <section className="result" data-task={index}>
+                                    <header className="result-header">
+                                        <label title={`Click here to mark this task as ${task.done ? "incomplete" : "completed"}`}>
+                                            <span>Task is<span className='cmplt' data-cmplt={task.done}> not</span> completed</span>
+                                            <input
+                                                type="checkbox"
+                                                className="task-done"
+                                                defaultChecked={task.done}
+                                                onChange={(e) => this.taskDoneCheckmark(e.target, task, index)}
+                                            />
+                                            <span className="checkmark"></span>
+                                        </label>
+
+                                        <button
+                                            className={`btn btn-add-fin-result ${task.done && !task.res ? 'visible initial' : ''}`}
+                                            title="Add financial result"
+                                            onClick={(e) => {
+                                                e.target.classList.remove('visible', 'initial');
+                                                document.querySelector(`.result[data-task="${index}"] .result-form`).classList.add('visible');
+                                            }}
+                                        >
+                                            Add financial result
+                                        </button>
+                                    </header>
+
+                                    <form
+                                        className="result-form"
+                                        onSubmit={(e) => this.submitResult(e, task, index)}
+                                    >
+                                        <h3>Results</h3>
+                                        <label>
+                                            Revenue:
+                                            <input
+                                                type="tel"
+                                                id={`revenue-task-${index}`}
+                                                autoComplete="off"
+                                                pattern="[\s\+]*(?:\d+(?:\.\d)?(?:\s*\++\s*)*)+\s*"
+                                                placeholder="0"
+                                                title='Allowed symbols: "+" (plus), "." (dot), " " (space) and numbers'
+                                            />
+                                        </label>
+                                        <label>
+                                            Expenses:
+                                            <input
+                                                type="tel"
+                                                id={`expenses-task-${index}`}
+                                                autoComplete="off"
+                                                pattern="[\s\+]*(?:\d+(?:\.\d)?(?:\s*\++\s*)*)+\s*"
+                                                placeholder="0"
+                                                title='Allowed symbols: "+" (plus), "." (dot), " " (space) and numbers'
+                                            />
+                                        </label>
+
+                                        <div className="btn-wrapper">
+                                            <button
+                                                className="btn btn-yes"
+                                                type="button"
+                                                title="Cancel"
+                                                onClick={() => {
+                                                    document.querySelector(`.result[data-task="${index}"] .result-form`).classList.remove('visible');
+                                                    document.querySelector(`.result[data-task="${index}"] .btn-add-fin-result`).classList.add('visible')
+                                                }}
+                                            >
+                                                Cancel <i></i><i></i>
+                                            </button>
+                                            <button
+                                                className="btn btn-no"
+                                                type="submit"
+                                                title="Apply"
+                                            >
+                                                Apply <i></i><i></i>
+                                            </button>
+                                        </div>
+                                    </form>
+
+                                    <div className={`summary ${task.res && task.done ? 'visible' : ''}`}>
+                                    <button
+                                        className="btn btn-clear-fin-res"
+                                        title="Clear financial result"
+                                        onClick={(e) => this.clearResult(task, index)}
+                                    >
+                                        {`Clear financial result for task "${task.name}"`}
+                                    </button>
+                                        <ul>
+                                            <li>Revenue: <span>{task.res ? task.res.rev : 0}</span></li>
+                                            <li>Expenses: <span>{task.res ? task.res.exp : 0}</span></li>
+                                            <li className="total">
+                                                Total:
+                                                <span
+                                                    className={!task.res || (task.res && task.res.tot === 0) ? '' :
+                                                        task.res.tot > 0 ? 'profit' : 'loss'}
+                                                >
+                                                    {task.res ? Math.abs(task.res.tot) : 0}
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                </section>}
                             </article>
                         </div>
-                    )) : ''
-                    }
+                    )) : ''}
 
                     <span className="end-of-tasks">
                         {dayTasks.length ? 'There is no more tasks for today' :
@@ -141,12 +319,29 @@ class DayDetailsPage extends Component {
                         <p>Deleted data can not be restored.</p>
                         <p>
                             Do you really want to delete
-                            { deleteObject ? ` the task «${ deleteObject.name }»${ deleteObject.time ? ` (at ${ deleteObject.time })` : '' }` :
+                            { deleteObject ? ` the task "${ deleteObject.name }"${ deleteObject.time ? ` (at ${ deleteObject.time })` : '' }` :
                                 ' all tasks for today' }?
                         </p>
                         <div className="btn-wrapper">
-                            <button className="btn btn-no" onClick={() => this.setState({ showModal: false, deleteObject: '' })}>No, keep</button>
-                            <button className="btn btn-yes" onClick={() => this.clearData(deleteObject)}>Yes, delete</button>
+                            <button
+                                className="btn btn-no"
+                                onClick={() => {
+                                    this.setState({ showModal: false, deleteObject: '' });
+                                    document.querySelector('body').classList.remove('modal-shown');
+                                }}
+                            >
+                                No, keep
+                            </button>
+
+                            <button
+                                className="btn btn-yes"
+                                onClick={() => {
+                                    this.clearData(deleteObject)
+                                    document.querySelector('body').classList.remove('modal-shown');
+                                }}
+                            >
+                                Yes, delete
+                            </button>
                         </div>
                     </div>
                 </div>

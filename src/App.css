@@ -10,6 +10,10 @@ body, #root, .App {
     height: 100%;
 }
 
+body.modal-shown {
+    overflow: hidden;
+}
+
 #root {
     transition: height 0.25s;
 }
@@ -37,6 +41,7 @@ body, #root, .App {
 
 a, button, label {
     outline: none;
+    cursor: pointer;
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -116,6 +121,7 @@ a, button, label {
 .btn-back,
 .btn-edit-task,
 .btn-delete-task,
+.btn-clear-fin-res,
 .btn-delete-month,
 .btn-delete-day,
 .btn-clear,
@@ -210,7 +216,6 @@ a, button, label {
     justify-content: center;
     align-items: center;
     border-radius: 15px;
-    cursor: pointer;
     transition: background 0.25s;
     user-select: none;
     outline: none;
@@ -367,6 +372,13 @@ a, button, label {
     border-bottom: none;
 }
 
+.day-data section.done {
+    background-color: #edf7ed;
+}
+.day-data.day-off section.done {
+    background: linear-gradient(240deg, #edf7ed, transparent);
+}
+
 .day-data .main-info {
     display: flex;
     align-items: center;
@@ -492,7 +504,6 @@ section.add-task label {
     flex-direction: column;
     align-items: center;
     user-select: none;
-    cursor: pointer;
 }
 
 section.add-task label:last-of-type {
@@ -502,6 +513,124 @@ section.add-task label:last-of-type {
 section.add-task input[type="date"],
 section.add-task input[type="time"] {
     cursor: pointer;
+}
+
+.add-task input,
+.add-task textarea,
+.result-form input {
+    margin-top: 0.5em;
+    box-sizing: border-box;
+    height: 2em;
+    width: auto;
+    background-color: white;
+    outline: none;
+    border: 1px solid gray;
+    border-radius: 10px;
+    transition: background-color 0.5s;
+}
+
+.add-task input:disabled,
+.add-task textarea:disabled {
+    background-color: silver !important;
+}
+
+.add-task #submit-task {
+    display: none;
+}
+
+#task-date,
+#task-time {
+    padding: 3px 0 3px 14px;
+    position: relative;
+    height: 2em;
+    background-color: white;
+    outline: none;
+    border: 1px solid gray;
+    border-radius: 10px;
+}
+
+#task-name {
+    text-align: center;
+}
+
+#task-notes {
+    padding: 0.5em;
+    resize: none;
+    width: 100%;
+    height: 5em;
+}
+
+#working-day,
+.task-done {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    z-index: -1;
+    width: 1px;
+}
+
+#working-day ~ .checkmark,
+.task-done ~ .checkmark {
+    position: relative;
+    margin-top: 0.5em;
+    height: 22px;
+    width: 22px;
+    background-color: gainsboro;
+    border: 1px solid gray;
+    border-radius: 3px;
+    transition: 0.5s;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+#working-day:hover ~ .checkmark,
+.task-done:hover ~ .checkmark {
+    background-color: #ccc;
+    box-shadow: none;
+}
+
+#working-day:checked ~ .checkmark,
+.task-done:checked ~ .checkmark {
+    background-color: green;
+    box-shadow: 0 -3px 6px rgba(0,0,0,0.16), 0 -3px 6px rgba(0,0,0,0.23);
+    border-radius: 100%;
+    transform: rotate(180deg);
+}
+
+#working-day:checked:hover ~ .checkmark,
+.task-done:checked:hover ~ .checkmark {
+    background-color: mediumseagreen;
+    box-shadow: none;
+}
+
+#working-day ~ .checkmark:after,
+.task-done ~ .checkmark:after {
+    content: '';
+    position: absolute;
+    transform: rotate(45deg);
+    top: calc(50% - 0.5em);
+    box-sizing: border-box;
+    left: calc(50% - 0.25em);
+    width: 0.5em;
+    height: 0.8em;
+    border: solid gray;
+    border-width: 0 3px 3px 0;
+}
+
+#working-day:checked ~ .checkmark:after,
+.task-done:checked ~ .checkmark:after {
+    border-color: white;
+    transform: rotate(-135deg);
+    top: calc(50% - 0.3em);
+}
+
+#working-day.focused ~ .checkmark,
+.task-done.focused ~ .checkmark {
+    transition: box-shadow 0s 0.05s;
+    box-shadow: 0 0 5px 2px coral;
 }
 
 section.day-details,
@@ -602,8 +731,8 @@ section.memory-management.modal-shown {
     visibility: hidden;
 }
 
-.btn-delete-day.visible {
-    visibility: visible;
+.visible {
+    visibility: visible !important;
 }
 
 .day-details .task {
@@ -658,6 +787,16 @@ section.memory-management.modal-shown {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    transition: background-color 0.5s;
+}
+
+.task .task-info.done {
+    background-color: #edf7ed;
+    box-shadow: inset 0 0 5px silver;
+}
+
+.task .task-info.day-off {
+    background-color: #f8ebeb;
 }
 
 .task.no-time .task-info {
@@ -677,7 +816,7 @@ section.memory-management.modal-shown {
 
 .task-info .details {
     background-color: rgb(254, 252, 250);
-    margin: 1em 0;
+    margin: 1em 0 0;
     width: 90%;
     box-sizing: border-box;
     padding: 1em;
@@ -687,8 +826,277 @@ section.memory-management.modal-shown {
     box-shadow: inset 0 0 6px grey;
 }
 
+
+/* >>> Task result subsection >>> */
+
+.task-info .result {
+    width: 90%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.result label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.result .result-header {
+    user-select: none;
+    width: 100%;
+    margin: 1.5em 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row-reverse;
+}
+
+.result-header span {
+    display: flex;
+    white-space: pre;
+}
+
+.result-header .cmplt {
+    overflow: hidden;
+    max-width: 3em;
+    display: inline-block;
+    transition: 0.25s ease-in-out;
+}
+
+.result-header .cmplt[data-cmplt="true"] {
+    max-width: 0;
+}
+
+.result-header .task-done ~ .checkmark {
+    margin: 0 0 0 1em;
+}
+
+.result-header .btn.btn-add-fin-result {
+    margin: initial;
+    visibility: hidden;
+    max-width: 0;
+    padding: 0;
+    white-space: pre;
+    overflow: hidden;
+    transition-property: max-width, max-height, padding, visibility;
+    transition-duration: 0.25s;
+    transition-timing-function: ease-in-out;
+}
+
+.result-header .btn.btn-add-fin-result.visible {
+    max-width: 20em;
+    padding: 0 1.5em;
+    transition-delay: 0.25s;
+    animation: overflow-visible 0s 0.5s forwards;
+}
+
+@keyframes overflow-visible {
+    to {
+        overflow: visible;
+    }
+}
+
+.result-header .btn.btn-add-fin-result.visible.initial {
+    transition-delay: 0s;
+}
+
+.result .result-form {
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 250px;
+    padding: 0 1em;
+    box-sizing: border-box;
+    border-radius: 1em;
+    overflow: hidden;
+    background: rgb(254, 252, 250);
+    box-shadow: inset 0 0 6px grey;
+    visibility: hidden;
+    max-height: 0;
+    margin: 0;
+    transition: 0.25s ease-in-out;
+}
+
+.result .result-form.visible {
+    max-height: 13em;
+    margin-bottom: 1.5em;
+    transition-delay: 0.25s;
+}
+
+.result-form label {
+    margin-bottom: 1em;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.result-form input {
+    margin-top: 0;
+    width: calc(100% - 6.5em);
+    padding: 0.5em;
+    transition-duration: 0.25s;
+}
+
+.result-form input:invalid {
+    background-color: #ffebef;
+}
+
+.result-form .btn-wrapper {
+    margin: 10px 0 1em;
+}
+
+.result-form .btn {
+    height: 30px;
+    width: 30px;
+    font-size: 0;
+}
+
+.result-form .btn i {
+    position: absolute;
+    width: 2px;
+}
+
+.result-form .btn-yes i {
+    height: 18px;
+    background-color: coral;
+    transform: rotate(45deg);
+    transform-origin: center center;
+}
+
+.result-form .btn-yes i:last-child {
+    transform: rotate(-45deg);
+}
+
+.result-form .btn-no i {
+    height: 14px;
+    background-color: lightseagreen;
+    transform: rotate(35deg);
+    transform-origin: center calc(100% - 1px);
+    bottom: 7px;
+    left: 42%;
+}
+
+.result-form .btn-no i:last-child {
+    transform: rotate(-55deg);
+    height: 9px;
+}
+
+.result .summary {
+    position: relative;
+    align-self: flex-start;
+    margin: -1.5em 0 1.5em;
+    max-height: 0;
+    overflow: hidden;
+    background: lightyellow;
+    border-radius: 1em;
+    box-shadow: 0 0 15px -5px grey;
+    transition: 0.25s ease-in-out;
+}
+
+.result .summary.visible {
+    margin: calc(-1.5em - 40px) 0 1.5em;
+    max-height: 7em;
+    transition-delay: 0.25s;
+}
+
+.summary .btn.btn-clear-fin-res {
+    opacity: 0.5;
+    top: 0.2rem;
+    right: 0.2rem;
+    background-size: 80%;
+}
+
+.summary .btn.btn-clear-fin-res.focused,
+.summary .btn.btn-clear-fin-res:hover {
+    opacity: 1;
+}
+
+.summary ul {
+    padding: 0.7rem 0.7rem 0.5rem;
+    margin: 0;
+    overflow: hidden;
+    font-size: 85%;
+}
+
+.summary li {
+    list-style-type: none;
+    text-align: left;
+    padding: 0.5rem 20px 0.5rem 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.summary li:first-of-type {
+    padding-top: 0;
+    border-bottom: 1px dashed #e6cf93;
+}
+
+.result .summary span {
+    margin-left: 1em;
+    display: inline-block;
+}
+
+.result .summary .total {
+    font-size: calc(100% / 0.85);
+    padding-bottom: 0;
+    border-top: 2px solid #e6cf93;
+    font-weight: bold;
+}
+
+.result .summary .loss {
+    color: #e80000;
+}
+
+.result .summary .loss::before {
+    content: '− '
+}
+
+.result .summary .profit {
+    color: #008600;
+}
+
+.result .summary .profit::before {
+    content: '+ '
+}
+
+@media screen and (max-width: 500px) {
+    .result .result-header {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .result .btn.btn-add-fin-result {
+        margin: 1.5em 0 -1.5em;
+        max-width: unset;
+        max-height: 0;
+        padding: 0 1.5em;
+    }
+
+    .result .btn.btn-add-fin-result.visible {
+        margin: 1.5em 0 0;
+        max-height: 40px;
+    }
+
+    .result .summary {
+        align-self: center;
+        margin: 0;
+    }
+
+    .result .summary.visible {
+        margin: 0 0 1.5em;
+    }
+}
+
+/* <<< End of task result subsection <<< */
+
+
 .task-info .btn-delete-task,
 .task-info .btn-edit-task,
+.task-info .btn-clear-fin-res,
 .month-size-info .btn-delete-month {
     filter: brightness(0.75);
     position: absolute;
@@ -703,12 +1111,14 @@ section.memory-management.modal-shown {
 
 .task-info .btn-delete-task.focused,
 .task-info .btn-edit-task.focused,
+.task-info .btn-clear-fin-res.focused,
 .month-size-info .btn-delete-month.focused {
     filter: invert(100%);
 }
 
 .task-info .btn-delete-task::before,
 .task-info .btn-edit-task::before,
+.task-info .btn-clear-fin-res::before,
 .month-size-info .btn-delete-month::before {
     filter: invert(100%);
 }
@@ -724,6 +1134,7 @@ section.memory-management.modal-shown {
 
 .btn-clear,
 .btn-delete-task,
+.btn-clear-fin-res,
 .btn-delete-month {
     background-image: url('./icons/X.svg');
 }
@@ -766,7 +1177,6 @@ section.memory-management.modal-shown {
 
 .modal-window.visible {
     opacity: 1;
-    visibility: visible;
 }
 
 .modal-window .message {
@@ -794,7 +1204,8 @@ section.memory-management.modal-shown {
     padding: 0 0.5em;
 }
 
-.message .btn-wrapper {
+.message .btn-wrapper,
+.result-form .btn-wrapper {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
@@ -823,7 +1234,7 @@ section.memory-management.modal-shown {
 }
 
 
-.btn-wrapper .btn {
+.modal-window .btn {
     width: 7em;
     text-shadow: none;
 }
@@ -858,116 +1269,6 @@ textarea {
 input.focused,
 textarea.focused {
     box-shadow: 0 0 2px 1px coral;
-}
-
-.add-task input,
-.add-task textarea {
-    margin-top: 0.5em;
-    box-sizing: border-box;
-    height: 2em;
-    width: auto;
-    background-color: white;
-    outline: none;
-    border: 1px solid gray;
-    border-radius: 10px;
-    transition: background-color 0.5s;
-}
-
-.add-task input:disabled,
-.add-task textarea:disabled {
-    background-color: silver !important;
-}
-
-.add-task #submit-task {
-    display: none;
-}
-
-#task-date,
-#task-time {
-    padding: 3px 0 3px 14px;
-    position: relative;
-    height: 2em;
-    background-color: white;
-    outline: none;
-    border: 1px solid gray;
-    border-radius: 10px;
-}
-
-#task-name {
-    text-align: center;
-}
-
-#task-notes {
-    padding: 0.5em;
-    resize: none;
-    width: 100%;
-    height: 5em;
-}
-
-#working-day {
-    border: 0;
-    clip: rect(0 0 0 0);
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    z-index: -1;
-    width: 1px;
-}
-
-#working-day ~ .checkmark {
-    position: relative;
-    margin-top: 0.5em;
-    height: 22px;
-    width: 22px;
-    background-color: gainsboro;
-    border: 1px solid gray;
-    border-radius: 3px;
-    transition: transform 0.5s, color 0.5s, border-radius 0.5s;
-    transition: 0.5s;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-}
-
-#working-day:hover ~ .checkmark {
-    background-color: #ccc;
-    box-shadow: none;
-}
-
-#working-day:checked ~ .checkmark {
-    background-color: green;
-    box-shadow: 0 -3px 6px rgba(0,0,0,0.16), 0 -3px 6px rgba(0,0,0,0.23);
-    border-radius: 100%;
-    transform: rotate(180deg);
-}
-
-#working-day:checked:hover ~ .checkmark {
-    background-color: mediumseagreen;
-    box-shadow: none;
-}
-
-#working-day ~ .checkmark:after {
-    content: '';
-    position: absolute;
-    transform: rotate(45deg);
-    top: calc(50% - 0.5em);
-    box-sizing: border-box;
-    left: calc(50% - 0.25em);
-    width: 0.5em;
-    height: 0.8em;
-    border: solid gray;
-    border-width: 0 3px 3px 0;
-}
-
-#working-day:checked ~ .checkmark:after {
-    border-color: white;
-    transform: rotate(-135deg);
-    top: calc(50% - 0.3em);
-}
-
-#working-day.focused ~ .checkmark {
-    transition: box-shadow 0s 0.05s;
-    box-shadow: 0 0 5px 2px coral;
 }
 
 section.search-page {
@@ -1107,7 +1408,6 @@ section.search-page {
     outline: none;
     color: gray;
     font-style: italic;
-    cursor: pointer;
 }
 
 .search-results article {
@@ -1142,6 +1442,9 @@ section.search-page {
     align-self: center;
     font-size: 1.5em;
 }
+
+
+/* >>>>>> Footer section >>>>>> */
 
 .footer {
     width: 100%;
@@ -1318,6 +1621,11 @@ section.search-page {
     }
 }
 
+/* <<<<<< End of footer section <<<<<< */
+
+
+/* >>>>>> Memory management section >>>>>> */
+
 .btn-clear-all-data {
     background-image: url('./icons/delete.svg');
     background-color: #ffcccc;
@@ -1451,8 +1759,9 @@ section.search-page {
     border-bottom: none;
 }
 
-.group-year .btn-delete-year {
-    width: 14em;
+.group-year .btn-delete-year,
+.day-details .btn-add-fin-result {
+    padding: 0 1.5em;
     margin: 1em auto;
 }
 
@@ -1477,3 +1786,5 @@ section.search-page {
     margin-top: 0.3em;
     color: gray;
 }
+
+/* <<<<<< End of memory management section <<<<<< */

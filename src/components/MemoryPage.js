@@ -63,13 +63,20 @@ class MemoryPage extends Component {
     }
 
     confirmDeletion = (obj) => {
+        const inputField = document.getElementById('confirm-deletion');
+
+        document.querySelector('body').classList.add('modal-shown');
+
+        inputField.value = '';
+
         this.setState({
             showModal: true,
+            confirmed: false,
             deleteObject: obj || '',
         })
 
         setTimeout(() => {
-            document.getElementById('confirm-deletion').focus()
+            inputField.focus()
         }, 500);
     }
 
@@ -104,8 +111,6 @@ class MemoryPage extends Component {
             deleteObject: '',
             confirmed: false
         })
-
-        document.getElementById('confirm-deletion').value = '';
     }
 
     getDelText = (obj) => {
@@ -128,7 +133,7 @@ class MemoryPage extends Component {
             serviceInfoPercentage = Number(usedPercentage) - monthSizeInfo.reduce((acc, curr) => acc + curr.sizePercentage, 0)
 
         return (
-            <section className={`memory-management ${showModal ? 'modal-shown' : ''}`}>
+            <section className='memory-management'>
                 <div className="header-wrapper">
                     <header>
                         <Link to="/" className="btn btn-back" title="Back to main page">Back</Link>
@@ -222,9 +227,15 @@ class MemoryPage extends Component {
                         <p>
                             Please type in the following text to confirm:
                             <br/>
-                            «{this.getDelText(deleteObject)}»
+                            "{this.getDelText(deleteObject)}"
                         </p>
-                        <form className="btn-wrapper" onSubmit={(e) => this.clearData(e, deleteObject)}>
+                        <form
+                            className="btn-wrapper"
+                            onSubmit={(e) => {
+                                this.clearData(e, deleteObject);
+                                document.querySelector('body').classList.remove('modal-shown');
+                            }}
+                        >
                             <div className="input-wrapper">
                                 <input
                                     type="text"
@@ -245,7 +256,10 @@ class MemoryPage extends Component {
                             <button
                                 className="btn btn-no"
                                 type="button"
-                                onClick={() => this.setState({ showModal: false, deleteObject: '' })}
+                                onClick={() => {
+                                    this.setState({ showModal: false, deleteObject: '' });
+                                    document.querySelector('body').classList.remove('modal-shown');
+                                }}
                             >
                                 No, keep
                             </button>
