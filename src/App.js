@@ -9,7 +9,7 @@ import SearchPage from './components/SearchPage';
 import SelectMonthPage from './components/SelectMonthPage';
 import ManageTaskPage from './components/ManageTaskPage';
 import DayDetailsPage from './components/DayDetailsPage';
-import MemoryPage from './components/MemoryPage';
+import StoragePage from './components/StoragePage';
 
 class App extends Component {
     state = {
@@ -237,6 +237,8 @@ class App extends Component {
                         editData={{ dayData: dayData, task: editableTask }}
                         dayDataToState={this.dayDataToState}
                         editableTaskToState={this.editableTaskToState}
+                        getUsedSpace={this.testLocalStorageSize.getUsedSpaceInBytes}
+                        totalSpace={lsSpaceInfo.total}
                     />
                 )} />
 
@@ -258,10 +260,10 @@ class App extends Component {
                     />
                 )} />
 
-                <Route path="/memory-management" render={() => (
-                    <MemoryPage
+                <Route path="/storage-management" render={() => (
+                    <StoragePage
                         getUsedSpace={this.testLocalStorageSize.getUsedSpaceInBytes}
-                        lsSpaceInfo={lsSpaceInfo}
+                        totalSpace={lsSpaceInfo.total}
                         updateDate={this.updateDate}
                     />
                 )} />

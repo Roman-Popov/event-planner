@@ -30,7 +30,7 @@ class Footer extends Component {
                     <ul>
                         <li> <Link to="/instructions">User instructions</Link> </li>
                         <li> <Link to={`/statistics/${currentMonth}-${currentYear}`}>Month overview</Link> </li>
-                        <li> <Link to="/memory-management">Memory management</Link> </li>
+                        <li> <Link to="/storage-management">Storage management</Link> </li>
                     </ul>
                 </nav>
                 <div className="logo">

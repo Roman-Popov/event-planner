@@ -429,7 +429,8 @@ a, button, label {
     align-items: center;
 }
 
-.day-data h4[data-tasks="true"]::after {
+.day-data h4[data-tasks="true"]::after,
+.btn-submit .warning:not(.full)::after {
     content: '';
     display: inline-block;
     width: 1em;
@@ -438,6 +439,10 @@ a, button, label {
     background-repeat: no-repeat;
     margin-left: 1em;
     cursor: help;
+}
+
+.btn-submit .warning:not(.full)::after {
+    margin-left: 0.5em;
 }
 
 .day-data .summary {
@@ -562,6 +567,10 @@ section.add-task input[type="time"] {
 .add-task input:disabled,
 .add-task textarea:disabled {
     background-color: silver !important;
+}
+
+.add-task .mem-percent {
+    font-weight: bold;
 }
 
 .add-task #submit-task {
@@ -1276,7 +1285,8 @@ section.memory-management.modal-shown {
     transition: opacity 0.5s;
 }
 
-.btn-wrapper .btn-yes:disabled {
+.btn-wrapper .btn-yes:disabled,
+.btn-submit:disabled {
     filter: grayscale(70%);
 }
 

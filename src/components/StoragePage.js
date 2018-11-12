@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 class MemoryPage extends Component {
     state = {
         usedSpace: this.props.getUsedSpace(),
-        totalSpace: this.props.lsSpaceInfo.total,
         monthSizeInfo: [],
         showModal: false,
         deleteObject: '',
@@ -21,14 +20,14 @@ class MemoryPage extends Component {
     }
 
     getMonthSizeInfo = () => {
-        const { getUsedSpace, lsSpaceInfo } = this.props,
+        const { getUsedSpace, totalSpace } = this.props,
             monthDataKeys = Object.keys(localStorage).filter(key => /^[A-Z]+-20\d\d$/i.test(key));
 
         const tmp = monthDataKeys.reduce((acc, curr) => {
             const month = curr.split('-')[0],
                 year = curr.split('-')[1],
                 monthDataSize = getUsedSpace(localStorage.getItem(curr)),
-                monthDataSizePercentage = (monthDataSize / lsSpaceInfo.total * 100);
+                monthDataSizePercentage = (monthDataSize / totalSpace * 100);
 
             let yearInstance = acc[year];
 
@@ -126,10 +125,10 @@ class MemoryPage extends Component {
 
 
     render() {
-        const { usedSpace, totalSpace, monthSizeInfo, showModal, deleteObject, confirmed } = this.state,
-            { updateDate } = this.props,
-            usedPercentage = (usedSpace / totalSpace * 100).toFixed(2),
-            serviceInfoPercentage = Number(usedPercentage) - monthSizeInfo.reduce((acc, curr) => acc + curr.sizePercentage, 0)
+        const { usedSpace, monthSizeInfo, showModal, deleteObject, confirmed } = this.state,
+            { updateDate, totalSpace } = this.props,
+            usedPercentage = Number((usedSpace / totalSpace * 100).toFixed(2)),
+            serviceInfoPercentage = usedPercentage - monthSizeInfo.reduce((acc, curr) => acc + curr.sizePercentage, 0)
 
         return (
             <section className='memory-management'>

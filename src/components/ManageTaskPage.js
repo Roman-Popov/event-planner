@@ -17,11 +17,15 @@ class ManageTaskPage extends Component {
             } else {
                 return { date: null, time: null }
             }
-        })()
+        })(),
+        usedSpacePercentage: Number((this.props.getUsedSpace() / this.props.totalSpace * 100).toFixed(2)),
+        showModal: false
     }
 
     componentDidMount() {
         window.scrollTo(0, 0);
+
+        if (this.state.usedSpacePercentage > 0 && !this.state.showModal) setTimeout(() => this.setState({ showModal: true }), 1);
     }
 
     componentWillUnmount() {
@@ -99,7 +103,9 @@ class ManageTaskPage extends Component {
 
     render() {
         const { years, initialTaskDate, initialTaskTime, editMode, editData } = this.props,
-            { workingDay, editDate } = this.state;
+            { workingDay, editDate, showModal, usedSpacePercentage } = this.state,
+            // Used space can be more than 100% because of reserved space.
+            usedPercentageText = usedSpacePercentage > 100 ? 100 : usedSpacePercentage;
 
         return (
             <section className="add-task">
@@ -165,8 +171,47 @@ class ManageTaskPage extends Component {
                     <Link to="/" id="submit-task">{editMode ? 'Apply' : 'Add'}</Link>
 
                     <Link to="/" className="btn btn-cancel">Cancel</Link>
-                    <button className="btn btn-submit">{editMode ? 'Apply' : 'Add'}</button>
+                    <button className={`btn btn-submit ${usedPercentageText < 100 ? '' : 'disabled'}`} disabled={!(usedPercentageText < 100)}>
+                        <span className={usedPercentageText > 95 && usedPercentageText < 100 ? 'warning' : ''}>{editMode ? 'Apply' : 'Add'}</span>
+                    </button>
                 </form>
+
+                <div className={`modal-window ${showModal ? 'visible' : ''}`}>
+                    <div className="message">
+                        <h2><span className="modal-header">Warning!</span></h2>
+                        {usedPercentageText < 100 ?
+                            <div>
+                                <p>Storage is almost full</p>
+                                <p>
+                                    Application memory usage: <span className="mem-percent">{usedPercentageText}%</span>
+                                </p>
+                                <p>Soon you will be unable to add new tasks.</p>
+                                <p>You can manage your storage on the appropriate page.</p>
+                            </div> :
+
+                            <div>
+                                <p>Storage is full!</p>
+                                <p>
+                                    There is not enough available space to add a new task.
+                                </p>
+                                <p>You can manage your storage on the appropriate page.</p>
+                            </div>
+                        }
+                        <div className="btn-wrapper">
+                            <Link to="/storage-management" className="btn btn-no">Clear now</Link>
+                            <button
+                                className="btn btn-yes"
+                                onClick={() => {
+                                    this.setState({ showModal: false });
+                                    document.querySelector('body').classList.remove('modal-shown');
+                                }}
+                            >
+                                Clear later
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
             </section>
         )
     }
