@@ -128,7 +128,8 @@ class MemoryPage extends Component {
         const { usedSpace, monthSizeInfo, showModal, deleteObject, confirmed } = this.state,
             { updateDate, totalSpace } = this.props,
             usedPercentage = Number((usedSpace / totalSpace * 100).toFixed(2)),
-            serviceInfoPercentage = usedPercentage - monthSizeInfo.reduce((acc, curr) => acc + curr.sizePercentage, 0)
+            usedPercentageText = usedPercentage > 100 ? 100 : usedPercentage,
+            serviceInfoPercentage = usedPercentageText - monthSizeInfo.reduce((acc, curr) => acc + curr.sizePercentage, 0)
 
         return (
             <section className='memory-management'>
@@ -137,9 +138,9 @@ class MemoryPage extends Component {
                         <Link to="/" className="btn btn-back" title="Back to main page">Back</Link>
                         <div className="progress-bar">
                             <span className="progress-bar-title">
-                                Space usage: {usedPercentage}%
+                                Space usage: {usedPercentageText}%
                             </span>
-                            <div className="filler" style={{ '--usedSpace': usedPercentage + '%'}}></div>
+                            <div className="filler" style={{ '--usedSpace': usedPercentageText + '%'}}></div>
                             {[...Array(5).keys()].map(i =>
                                 <div key={i} className="tick" data-percent={i * 25 + '%'} style={{ left: i * 25 + '%'}}></div>
                             )}
