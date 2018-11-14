@@ -30,7 +30,7 @@ class SelectMonthPage extends Component {
                                     value={month}
                                     defaultChecked={month === currentMonth}
                                 />
-                                {month}
+                                <span>{month}</span>
                             </label>
                         ))}
                     </fieldset>
@@ -47,14 +47,14 @@ class SelectMonthPage extends Component {
                                     value={year}
                                     defaultChecked={year.toString() === currentYear.toString()}
                                 />
-                                {year}
+                                <span>{year}</span>
                             </label>
                         ))}
 
                     </fieldset>
 
-                    <Link to="/" className="btn btn-cancel">Cancel</Link>
-                    <Link to="/" className="btn btn-submit" onClick={e => submitMonth(e)}>Apply</Link>
+                    <Link to="/" className="btn btn-cancel" draggable="false">Cancel</Link>
+                    <Link to="/" className="btn btn-submit" onClick={e => submitMonth(e)} draggable="false">Apply</Link>
                 </form>
             </section>
 

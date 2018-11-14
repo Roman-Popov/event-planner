@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 
-class MemoryPage extends Component {
+class StoragePage extends Component {
     state = {
         usedSpace: this.props.getUsedSpace(),
         monthSizeInfo: [],
@@ -132,10 +132,10 @@ class MemoryPage extends Component {
             serviceInfoPercentage = usedPercentageText - monthSizeInfo.reduce((acc, curr) => acc + curr.sizePercentage, 0)
 
         return (
-            <section className='memory-management'>
+            <section className='storage-management'>
                 <div className="header-wrapper">
                     <header>
-                        <Link to="/" className="btn btn-back" title="Back to main page">Back</Link>
+                        <Link to="/" className="btn btn-back" title="Back to month page" draggable="false">Back</Link>
                         <div className="progress-bar">
                             <span className="progress-bar-title">
                                 Space usage: {usedPercentageText}%
@@ -155,64 +155,69 @@ class MemoryPage extends Component {
                     </header>
                 </div>
 
+                {monthSizeInfo.map(elem => (
+                    <section key={elem.year} className="group-year">
+                        <div className="year-info">
+                            {<time className="year-name">{elem.year}</time>}
+                            <p className="year-size">{elem.sizePercentage > 0.1 ? elem.sizePercentage + '%' : 'less than 0.1%'}</p>
+                        </div>
 
-                <div className="data-wrapper">
-                    {monthSizeInfo.map(elem => (
-                        <section key={elem.year} className="group-year">
-                            <p className="year-name">
-                                {elem.year} <span className="year-size">{elem.sizePercentage > 0.1 ? elem.sizePercentage + '%' : 'less than 0.1%'}</span>
-                            </p>
-                            <ul>
-                                {elem.months.map(month => (
-                                    <li key={month.name} className="month-size-info">
+                        <ul>
+                            {elem.months.map(month => (
+                                <li key={month.name} className="month-size-info">
+                                    <div className="month-link-wrapper">
                                         <Link
                                             to="/"
                                             className="month-link"
                                             title={`Go to ${month.name} ${elem.year}`}
                                             onClick={() => updateDate(month.name, elem.year)}
+                                            draggable="false"
                                         >
                                             <h3 className="month">{month.name}</h3>
                                             <p className="size">
                                                 Size: {month.sizePercentage > 0.1 ? month.sizePercentage + '%' : 'less than 0.1%'}
                                             </p>
                                         </Link>
+                                    </div>
 
-                                        <button
-                                            className="btn btn-delete-month"
-                                            onClick={() => this.confirmDeletion({month: month.name, year: elem.year})}
-                                            title={`Clear ${month.name} ${elem.year} data`}
-                                        >
-                                            Clear {month.name} {elem.year} data
-                                        </button>
-                                    </li>
-                                ))}
-                            </ul>
-                            <button
-                                className="btn btn-delete-year"
-                                onClick={() => this.confirmDeletion({ year: elem.year })}
-                                title={`Clear all ${elem.year} year data`}
-                            >
-                                {`Clear all ${elem.year} year data`}
-                            </button>
-                        </section>
-                    ))}
-                    <section className="group-year">
-                        <p className="year-name">
-                            Other
-                        </p>
-                        <ul>
-                            <li className="month-size-info service-info">
+                                    <button
+                                        className="btn btn-delete-month"
+                                        onClick={() => this.confirmDeletion({month: month.name, year: elem.year})}
+                                        title={`Clear ${month.name} ${elem.year} data`}
+                                    >
+                                        Clear {month.name} {elem.year} data
+                                    </button>
+                                </li>
+                            ))}
+                            <li>
+                                <button
+                                    className="btn btn-delete-year"
+                                    onClick={() => this.confirmDeletion({ year: elem.year })}
+                                    title={`Clear all ${elem.year} year data`}
+                                >
+                                    {`Clear all ${elem.year} year data`}
+                                </button>
+                            </li>
+                        </ul>
+                    </section>
+                ))}
+                <section className="group-year">
+                    <p className="year-info">
+                        {<div className="year-name other">Other</div>}
+                    </p>
+                    <ul>
+                        <li className="month-size-info service-info">
+                            <div className="month-link-wrapper">
                                 <div className="month-link">
                                     <h3 className="month">Service information</h3>
                                     <p className="size">Size: {serviceInfoPercentage > 0.1 ? Number(serviceInfoPercentage.toFixed(2)) + '%' : 'less than 0.1%'}</p>
                                 </div>
-                            </li>
-                        </ul>
-                    </section>
+                            </div>
+                        </li>
+                    </ul>
+                </section>
 
-                    <span className="end-of-storage">There is no more stored items</span>
-                </div>
-
+                <span className="end-of-storage">There is no more stored items</span>
 
                 <div className={`modal-window ${showModal ? 'visible' : ''}`}>
                     <div className="message">
@@ -280,4 +285,4 @@ class MemoryPage extends Component {
     }
 }
 
-export default MemoryPage
+export default StoragePage

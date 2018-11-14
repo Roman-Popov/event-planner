@@ -164,7 +164,7 @@ class DayDetailsPage extends Component {
             <section className='day-details' >
                 <div className="header-wrapper" data-weekend={weekend.includes(dayName)}>
                     <header>
-                        <Link to="/" className="btn btn-back" title="Back to month page">Back</Link>
+                        <Link to="/" className="btn btn-back" title="Back to month page" draggable="false">Back</Link>
                         <div>
                             <h1>{dayData.day}</h1>
                             <span className="day-of-week">{dayName}</span>
@@ -179,138 +179,136 @@ class DayDetailsPage extends Component {
                     </header>
                 </div>
 
-                <div className="tasks-wrapper">
-                    {dayTasks.length ? dayTasks.map((task, index) => (
-                        <div key={index} className={`task ${task.time ? '' : 'no-time'}`}>
-                            {task.time && <time className="task-time">{task.time}</time>}
-                            <article className={`task-info ${task.done ? 'done' : ''} ${task.name === 'Day off' ? 'day-off' : ''}`}>
-                                <Link
-                                    to={`/edit-task/${dayData.day}-${currentMonth}-${currentYear}/${task.name}~${task.time.replace(':', '-')}`}
-                                    className="btn btn-edit-task"
-                                    title="Edit task"
-                                    onClick={() => editableTaskToState(task)}
+                {dayTasks.length ? dayTasks.map((task, index) => (
+                    <div key={index} className={`task ${task.time ? '' : 'no-time'}`}>
+                        {task.time && <time className="task-time">{task.time}</time>}
+                        <article className={`task-info ${task.done ? 'done' : ''} ${task.name === 'Day off' ? 'day-off' : ''}`}>
+                            <Link
+                                to={`/edit-task/${dayData.day}-${currentMonth}-${currentYear}/${task.name}~${task.time.replace(':', '-')}`}
+                                className="btn btn-edit-task"
+                                title="Edit task"
+                                onClick={() => editableTaskToState(task)}
+                            >
+                                {`Edit task "${task.name}"`}
+                            </Link>
+                            <button
+                                className="btn btn-delete-task"
+                                title="Delete task"
+                                onClick={() => this.confirmDeletion(task)}
+                            >
+                                {`Clear task "${task.name}"`}
+                            </button>
+
+                            <h2>{task.name}</h2>
+                            {task.notes && <p className="details">{task.notes}</p>}
+
+                            {task.name !== 'Day off' && <section className="result" data-task={index}>
+                                <header className="result-header">
+                                    <label title={`Click here to mark this task as ${task.done ? "incomplete" : "completed"}`}>
+                                        <span>Task is<span className='cmplt' data-cmplt={task.done}> not</span> completed</span>
+                                        <input
+                                            type="checkbox"
+                                            className="task-done"
+                                            defaultChecked={task.done}
+                                            onChange={(e) => this.taskDoneCheckmark(e.target, task, index)}
+                                        />
+                                        <span className="checkmark"></span>
+                                    </label>
+
+                                    <button
+                                        className={`btn btn-add-fin-result ${task.done && !task.res ? 'visible initial' : ''}`}
+                                        title="Add financial result"
+                                        onClick={(e) => {
+                                            e.target.classList.remove('visible', 'initial');
+                                            document.querySelector(`.result[data-task="${index}"] .result-form`).classList.add('visible');
+                                        }}
+                                    >
+                                        Add financial result
+                                    </button>
+                                </header>
+
+                                <form
+                                    className="result-form"
+                                    onSubmit={(e) => this.submitResult(e, task, index)}
                                 >
-                                    {`Edit task "${task.name}"`}
-                                </Link>
-                                <button
-                                    className="btn btn-delete-task"
-                                    title="Delete task"
-                                    onClick={() => this.confirmDeletion(task)}
-                                >
-                                    {`Clear task "${task.name}"`}
-                                </button>
+                                    <h3>Results</h3>
+                                    <label>
+                                        Revenue:
+                                        <input
+                                            type="tel"
+                                            id={`revenue-task-${index}`}
+                                            autoComplete="off"
+                                            pattern="[\s\+]*(?:\d+(?:\.\d)?(?:\s*\++\s*)*)+\s*"
+                                            placeholder="0"
+                                            title='Allowed symbols: "+" (plus), "." (dot), " " (space) and numbers'
+                                        />
+                                    </label>
+                                    <label>
+                                        Expenses:
+                                        <input
+                                            type="tel"
+                                            id={`expenses-task-${index}`}
+                                            autoComplete="off"
+                                            pattern="[\s\+]*(?:\d+(?:\.\d)?(?:\s*\++\s*)*)+\s*"
+                                            placeholder="0"
+                                            title='Allowed symbols: "+" (plus), "." (dot), " " (space) and numbers'
+                                        />
+                                    </label>
 
-                                <h2>{task.name}</h2>
-                                {task.notes && <p className="details">{task.notes}</p>}
-
-                                {task.name !== 'Day off' && <section className="result" data-task={index}>
-                                    <header className="result-header">
-                                        <label title={`Click here to mark this task as ${task.done ? "incomplete" : "completed"}`}>
-                                            <span>Task is<span className='cmplt' data-cmplt={task.done}> not</span> completed</span>
-                                            <input
-                                                type="checkbox"
-                                                className="task-done"
-                                                defaultChecked={task.done}
-                                                onChange={(e) => this.taskDoneCheckmark(e.target, task, index)}
-                                            />
-                                            <span className="checkmark"></span>
-                                        </label>
-
+                                    <div className="btn-wrapper">
                                         <button
-                                            className={`btn btn-add-fin-result ${task.done && !task.res ? 'visible initial' : ''}`}
-                                            title="Add financial result"
-                                            onClick={(e) => {
-                                                e.target.classList.remove('visible', 'initial');
-                                                document.querySelector(`.result[data-task="${index}"] .result-form`).classList.add('visible');
+                                            className="btn btn-yes"
+                                            type="button"
+                                            title="Cancel"
+                                            onClick={() => {
+                                                document.querySelector(`.result[data-task="${index}"] .result-form`).classList.remove('visible');
+                                                document.querySelector(`.result[data-task="${index}"] .btn-add-fin-result`).classList.add('visible')
                                             }}
                                         >
-                                            Add financial result
+                                            Cancel <i></i><i></i>
                                         </button>
-                                    </header>
-
-                                    <form
-                                        className="result-form"
-                                        onSubmit={(e) => this.submitResult(e, task, index)}
-                                    >
-                                        <h3>Results</h3>
-                                        <label>
-                                            Revenue:
-                                            <input
-                                                type="tel"
-                                                id={`revenue-task-${index}`}
-                                                autoComplete="off"
-                                                pattern="[\s\+]*(?:\d+(?:\.\d)?(?:\s*\++\s*)*)+\s*"
-                                                placeholder="0"
-                                                title='Allowed symbols: "+" (plus), "." (dot), " " (space) and numbers'
-                                            />
-                                        </label>
-                                        <label>
-                                            Expenses:
-                                            <input
-                                                type="tel"
-                                                id={`expenses-task-${index}`}
-                                                autoComplete="off"
-                                                pattern="[\s\+]*(?:\d+(?:\.\d)?(?:\s*\++\s*)*)+\s*"
-                                                placeholder="0"
-                                                title='Allowed symbols: "+" (plus), "." (dot), " " (space) and numbers'
-                                            />
-                                        </label>
-
-                                        <div className="btn-wrapper">
-                                            <button
-                                                className="btn btn-yes"
-                                                type="button"
-                                                title="Cancel"
-                                                onClick={() => {
-                                                    document.querySelector(`.result[data-task="${index}"] .result-form`).classList.remove('visible');
-                                                    document.querySelector(`.result[data-task="${index}"] .btn-add-fin-result`).classList.add('visible')
-                                                }}
-                                            >
-                                                Cancel <i></i><i></i>
-                                            </button>
-                                            <button
-                                                className="btn btn-no"
-                                                type="submit"
-                                                title="Apply"
-                                            >
-                                                Apply <i></i><i></i>
-                                            </button>
-                                        </div>
-                                    </form>
-
-                                    <div className={`summary ${task.res && task.done ? 'visible' : ''}`}>
-                                    <button
-                                        className="btn btn-clear-fin-res"
-                                        title="Clear financial result"
-                                        onClick={(e) => this.clearResult(task, index)}
-                                    >
-                                        {`Clear financial result for task "${task.name}"`}
-                                    </button>
-                                        <ul>
-                                            <li>Revenue: <span>{task.res ? task.res.rev : 0}</span></li>
-                                            <li>Expenses: <span>{task.res ? task.res.exp : 0}</span></li>
-                                            <li className="total">
-                                                Total:
-                                                <span
-                                                    className={!task.res || (task.res && task.res.tot === 0) ? '' :
-                                                        task.res.tot > 0 ? 'profit' : 'loss'}
-                                                >
-                                                    {task.res ? Math.abs(task.res.tot) : 0}
-                                                </span>
-                                            </li>
-                                        </ul>
+                                        <button
+                                            className="btn btn-no"
+                                            type="submit"
+                                            title="Apply"
+                                        >
+                                            Apply <i></i><i></i>
+                                        </button>
                                     </div>
+                                </form>
 
-                                </section>}
-                            </article>
-                        </div>
-                    )) : ''}
+                                <div className={`summary ${task.res && task.done ? 'visible' : ''}`}>
+                                <button
+                                    className="btn btn-clear-fin-res"
+                                    title="Clear financial result"
+                                    onClick={(e) => this.clearResult(task, index)}
+                                >
+                                    {`Clear financial result for task "${task.name}"`}
+                                </button>
+                                    <ul>
+                                        <li>Revenue: <span>{task.res ? task.res.rev : 0}</span></li>
+                                        <li>Expenses: <span>{task.res ? task.res.exp : 0}</span></li>
+                                        <li className="total">
+                                            Total:
+                                            <span
+                                                className={!task.res || (task.res && task.res.tot === 0) ? '' :
+                                                    task.res.tot > 0 ? 'profit' : 'loss'}
+                                            >
+                                                {task.res ? Math.abs(task.res.tot) : 0}
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
 
-                    <span className="end-of-tasks">
-                        {dayTasks.length ? 'There is no more tasks for today' :
-                            'There is no tasks yet'}
-                    </span>
-                </div>
+                            </section>}
+                        </article>
+                    </div>
+                )) : ''}
+
+                <span className="end-of-tasks">
+                    {dayTasks.length ? 'There is no more tasks for today' :
+                        'There is no tasks yet'}
+                </span>
 
                 <div className={`modal-window ${showModal ? 'visible' : ''}`}>
                     <div className="message">

@@ -53,17 +53,17 @@ class Header extends Component {
                     <button className='btn btn-add activated' onClick={this.historyBack}>Back</button> :
                     currentPage.name === 'Edit task' ?
                         <button className='btn btn-edit-task activated' onClick={this.historyBack}>Back</button> :
-                        <Link to="/add-task" className='btn btn-add'>Add new task</Link>
+                        <Link to="/add-task" className='btn btn-add' draggable="false">Add new task</Link>
                 }
 
                 {currentPage ? // !== Main page
                     <div className="btn btn-select-month disabled">{buttonText}</div> :
-                    <Link to="/select-month" className="btn btn-select-month">{buttonText}</Link>
+                    <Link to="/select-month" className="btn btn-select-month" draggable="false">{buttonText}</Link>
                 }
 
                 {currentPage.name === 'Search' ?
                     <button className="btn btn-open-search activated" onClick={this.historyBack}>Back</button> :
-                    <Link to="/search" className="btn btn-open-search" onClick={() => updateLastSearch('')}>Open search</Link>
+                    <Link to="/search" className="btn btn-open-search" onClick={() => updateLastSearch('')} draggable="false">Open search</Link>
                 }
             </header>
         )

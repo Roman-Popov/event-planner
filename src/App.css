@@ -1,6 +1,6 @@
 html {
     text-align: center;
-    background-color: whitesmoke;
+    background-color: #fdfdff;
     height: 100%;
     width: 100%;
 }
@@ -16,10 +16,15 @@ body.modal-shown {
 
 #root {
     transition: height 0.25s;
+    display: flex;
+    justify-content: center;
 }
 
 .App {
     position: relative;
+    max-width: 750px;
+    margin-left: calc(100vw - 100%);
+    background-color: whitesmoke;
 }
 
 .focused {
@@ -45,11 +50,34 @@ a, button, label {
     -webkit-tap-highlight-color: transparent;
 }
 
+legend,
+label,
+input,
+.btn,
+.search-results .show-day,
+.search-results .result-counter,
+.end-of-search,
+.message,
+.no-tasks,
+.business-day,
+.day-data .summary,
+.day-data .total,
+.footer nav a,
+.footer aside,
+.footer .logo,
+.task-info .result,
+.end-of-tasks,
+.storage-management {
+    user-select: none;
+}
+
+
 .control-panel {
     position: fixed;
     z-index: 999;
     top: 0;
     width: 100%;
+    max-width: inherit;
     padding: 0 10px;
     box-sizing: border-box;
     background-color: lightblue;
@@ -57,7 +85,7 @@ a, button, label {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.16), 0 4px 6px -1px rgba(0,0,0,0.23);
 }
 
 .btn {
@@ -80,7 +108,6 @@ a, button, label {
     align-items: center;
     text-decoration: none;
     font-size: 0.8em;
-    user-select: none;
     cursor: pointer;
 }
 
@@ -202,7 +229,7 @@ a, button, label {
 
 .select-month fieldset legend {
     margin: auto;
-    box-shadow: 0 0 5px 10px whitesmoke
+    box-shadow: 0 -10px 5px 10px whitesmoke
 }
 
 .select-month fieldset label {
@@ -216,11 +243,22 @@ a, button, label {
     justify-content: center;
     align-items: center;
     border-radius: 15px;
-    transition: background 0.25s;
-    user-select: none;
+    transition: 0.15s;
     outline: none;
     min-height: 25px;
     max-height: calc((100vh - 300px) / 12);
+}
+
+.select-month form fieldset label:active {
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.23);
+}
+
+.select-month fieldset label:active span {
+    transform: scale(0.9);
+}
+
+.select-month fieldset label:hover {
+    box-shadow: 0 0 10px -3px rgba(0,0,0,0.23);
 }
 
 .select-month .radio-selected {
@@ -254,7 +292,7 @@ a, button, label {
 
 .list-days ul,
 .footer ul,
-.memory-management ul {
+.storage-management ul {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -508,17 +546,21 @@ a, button, label {
 
 section.add-task,
 section.select-month,
-section.month-overview,
+section.month-page,
 section.day-details,
-section.memory-management {
+section.storage-management,
+section.search-page {
     padding-top: 60px;
     min-height: 100%;
+    max-width: inherit;
     box-sizing: border-box;
     position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    outline: 1px solid darkgray;
+    box-shadow: 0 0 10px silver;
 }
 
 section.add-task form {
@@ -538,7 +580,6 @@ section.add-task label {
     display: flex;
     flex-direction: column;
     align-items: center;
-    user-select: none;
 }
 
 section.add-task label:last-of-type {
@@ -673,52 +714,48 @@ section.add-task input[type="time"] {
 }
 
 section.day-details,
-section.memory-management {
+section.storage-management,
+section.search-page {
     display: block;
     background-color: rgb(254, 252, 250);
 }
 
 section.day-details.modal-shown,
-section.memory-management.modal-shown {
+section.storage-management.modal-shown {
     overflow: hidden;
     height: 100%;
 }
 
 .day-details .header-wrapper,
-.memory-management .header-wrapper {
-    position: fixed;
+.storage-management .header-wrapper {
+    position: sticky;
+    top: 60px;
     z-index: 999;
-    left: -20px;
-    width: calc(100% + 40px);
+    width: 100%;
     background-color: whitesmoke;
-    box-shadow: inset 0 3px 6px whitesmoke,
-                    inset 0 -3px 6px whitesmoke,
-                    0 10px 10px whitesmoke;
+    box-shadow: inset 0 13px 6px -10px whitesmoke,
+                inset 0 -13px 6px -10px whitesmoke,
+                0 10px 10px whitesmoke;
     animation: day-details-shadow 0.5s ease-out 0.25s forwards;
 }
 
 @keyframes day-details-shadow {
     to {
-        background-color: white;
-        box-shadow: inset 0 3px 6px silver,
-                    inset 0 -3px 6px silver,
+        background-color: rgb(254, 252, 250);
+        box-shadow: inset 0 13px 6px -10px silver,
+                    inset 0 -13px 6px -10px silver,
                     0 10px 10px whitesmoke;
     }
 }
 
-.day-details .tasks-wrapper,
-.memory-management .data-wrapper {
-    margin-top: 70px;
-}
-
 .day-details .header-wrapper header,
-.memory-management .header-wrapper header {
+.storage-management .header-wrapper header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
     height: 70px;
-    padding: 0 30px;
+    padding: 0 10px;
     box-sizing: border-box;
     border: 1px solid silver;
 }
@@ -776,21 +813,15 @@ section.memory-management.modal-shown {
 
 .day-details .task {
     position: relative;
+    width: 100%;
+    box-sizing: border-box;
     min-height: 50px;
     display: flex;
     flex-wrap: nowrap;
-    margin-bottom: 7px;
+    margin-top: 7px;
     background-color: whitesmoke;
     border-left: 1px dashed lightgray;
-    box-shadow: 0 0 3px grey;
-}
-
-.day-details .task:first-of-type {
-    border-top: none;
-}
-
-.day-details .task:last-of-type {
-    margin-bottom: 0;
+    box-shadow: 0 2px 3px -1px grey, 0 0 3px -1px grey;
 }
 
 .day-details .task.no-time {
@@ -802,12 +833,11 @@ section.memory-management.modal-shown {
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    min-height: 50px;
     width: 50px;
     position: sticky;
     top: 150px;
     margin: 1em -1px;
-    height: 2em;
+    height: 50px;
     background: linear-gradient(whitesmoke 5%,
                                 rgb(228, 228, 228),
                                 rgb(254, 252, 250) 20%, rgb(254, 252, 250) 80%,
@@ -883,7 +913,6 @@ section.memory-management.modal-shown {
 }
 
 .result .result-header {
-    user-select: none;
     width: 100%;
     margin: 1.5em 0;
     display: flex;
@@ -942,7 +971,6 @@ section.memory-management.modal-shown {
 }
 
 .result .result-form {
-    user-select: none;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1184,7 +1212,8 @@ section.memory-management.modal-shown {
 }
 
 .end-of-tasks,
-.end-of-search {
+.end-of-search,
+.end-of-storage {
     display: inline-block;
     margin: 0.5em 0;
     color: gainsboro;
@@ -1201,9 +1230,9 @@ section.memory-management.modal-shown {
 .modal-window {
     position: fixed;
     z-index: 9999;
-    top: 60px;
-    left: 0;
-    right: 0;
+    top: 0;
+    width: 100%;
+    max-width: inherit;
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.8);
     visibility: hidden;
@@ -1311,21 +1340,15 @@ textarea.focused {
     box-shadow: 0 0 2px 1px coral;
 }
 
-section.search-page {
-    padding-top: 60px;
-    box-sizing: border-box;
-    height: 100%;
-}
-
 .search-page .search-bar {
-    position: fixed;
+    position: sticky;
+    top: 60px;
     z-index: 999;
-    left: -20px;
-    width: calc(100% + 40px);
+    width: 100%;
     height: 70px;
     display: flex;
     align-items: center;
-    padding: 0 30px;
+    padding: 0 10px;
     box-sizing: border-box;
     background: linear-gradient(lightblue 30%, rgb(234, 234, 234));
     box-shadow: 0 4px 6px -3px rgba(0, 0, 0, 0.16), 0 4px 6px -3px rgba(0, 0, 0, 0.23);
@@ -1340,7 +1363,7 @@ section.search-page {
         max-height: 0;
     }
     to {
-        padding: 15px 30px;
+        padding: 15px 10px;
         max-height: 100px;
     }
 }
@@ -1396,7 +1419,6 @@ section.search-page {
 }
 
 .search-page .search-results {
-    padding-top: 60px;
     box-sizing: border-box;
     min-height: 100%;
     display: flex;
@@ -1409,7 +1431,7 @@ section.search-page {
 }
 
 .search-results ul {
-    padding: 0;
+    padding: 5px 0 0;
     margin: 0;
 }
 
@@ -1423,7 +1445,11 @@ section.search-page {
     flex-wrap: nowrap;
     align-items: flex-start;
     background-color: whitesmoke;
-    box-shadow: 0 1px 3px gray;
+    box-shadow: 0 2px 3px -1px grey, 0 0 3px -1px grey;
+}
+
+.search-results li:first-child {
+    margin: 0;
 }
 
 .search-results .date-info {
@@ -1646,9 +1672,13 @@ section.search-page {
     filter: brightness(100);
 }
 
-@media screen and (max-width: 380px) {
+@media screen and (max-width: 430px) {
     .footer {
         padding-bottom: 6em;
+    }
+
+    .footer nav a {
+        font-size: 95%;
     }
 
     .footer aside {
@@ -1663,7 +1693,7 @@ section.search-page {
 /* <<<<<< End of footer section <<<<<< */
 
 
-/* >>>>>> Memory management section >>>>>> */
+/* >>>>>> Storage management section >>>>>> */
 
 .btn-clear-all-data {
     background-image: url('./icons/delete.svg');
@@ -1671,22 +1701,12 @@ section.search-page {
     box-shadow: inset 0 0 5px red;
 }
 
-.memory-management .header-wrapper {
+.storage-management .header-wrapper {
     background-color: lightblue;
     box-shadow: none;
-    animation: memory-management-shadow 0.5s ease-out 0.25s forwards;
 }
 
-@keyframes memory-management-shadow {
-    to {
-        background-color: white;
-        box-shadow: inset 0 3px 6px silver,
-                    inset 0 -3px 6px silver,
-                    0 5px 10px lightblue;
-    }
-}
-
-.memory-management .progress-bar {
+.storage-management .progress-bar {
     background: linear-gradient(90deg, #0ac20a 29%, #ffc233 75%, red);
     width: 50vw;
     height: 15px;
@@ -1703,7 +1723,7 @@ section.search-page {
     }
 }
 
-.memory-management .progress-bar-title  {
+.storage-management .progress-bar-title  {
     position: absolute;
     font-size: 80%;
     top: -130%;
@@ -1743,46 +1763,59 @@ section.search-page {
     bottom: -90%;
 }
 
-.memory-management ul {
-    margin-top: 6px;
+.storage-management ul {
+    width: calc(100% - 50px);
+    border-left: 1px dashed lightgray;
 }
 
-.memory-management .end-of-storage {
-    color: gainsboro;
-    position: relative;
-    top: -0.5em;
-}
-
-.memory-management .group-year {
+.storage-management .group-year {
     display: flex;
-    flex-direction: column;
-
-    margin-bottom: 1em;
+    flex-wrap: nowrap;
+    margin-top: 0.7em;
     background-color: whitesmoke;
-    box-shadow: 0 1px 3px grey;
+    box-shadow: 0 2px 3px -1px grey, 0 -1px 3px -1px grey;
 }
 
-.group-year .year-name {
+.storage-management .group-year:first-of-type {
+    margin-top: 0;
+    padding-top: 4px;
+}
+
+.group-year .year-info {
+    width: 50px;
+    position: sticky;
+    top: 140px;
+    margin: 0.5em -1px 0.5em -1px;
+    height: fit-content;
+    max-height: 100px;
+}
+
+.group-year .year-info .year-name {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 100%;
+    height: 50px;
+    background: linear-gradient(whitesmoke 5%, rgb(228, 228, 228), rgb(254, 252, 250) 20%, rgb(254, 252, 250) 80%, rgb(228, 228, 228), whitesmoke 95%);
+    border: 1px solid silver;
+    border-top: none;
+    border-bottom: none;
+}
+
+.year-info .year-name.other {
+    font-size: 80%;
+}
+
+.group-year .year-info p {
+    margin: 0;
+    padding: 0.5em 0.5em 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: lightblue;
-    color: white;
-    font-weight: bold;
-    position: sticky;
-    z-index: 2;
-    top: 130px;
-    margin: 0;
-    height: 2.5em;
-    box-shadow: 0 1px 4px 2px rgba(0,0,0,0.16), 0 1px 4px 2px rgba(0,0,0,0.23);
-    text-shadow: 0 0 1px black, 0 0 1px black;
-}
-
-.group-year .year-name span {
-    position: absolute;
-    right: 1rem;
-    font-size: 0.8em;
+    font-size: 0.7em;
     font-style: italic;
+    color: gray;
 }
 
 .group-year .month-size-info {
@@ -1804,14 +1837,32 @@ section.search-page {
     margin: 1em auto;
 }
 
+.month-size-info .month-link-wrapper {
+    margin: 0.4em 4em 0.4em 5%;
+    width: calc(100% - 4em - 5%);
+    border-radius: 1em;
+    transition: 0.15s ease-in-out;
+}
+
+.month-size-info:not(.service-info) .month-link-wrapper:hover {
+    background: rgb(254, 252, 250);
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.23);
+}
+
 .month-size-info .month-link {
+    position: relative;
+    border-radius: inherit;
     color: black;
     text-decoration: none;
-    margin: 0.7em 4em 0.7em 5%;
-    width: calc(100% - 4em - 5%);
+    padding: 0.3em 0 0.3em 1em;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    transition: 0.15s ease-in-out;
+}
+
+.month-size-info:not(.service-info) .month-link:hover {
+    transform: scale(0.98);
 }
 
 .month-size-info .month,
@@ -1826,4 +1877,4 @@ section.search-page {
     color: gray;
 }
 
-/* <<<<<< End of memory management section <<<<<< */
+/* <<<<<< End of Storage management section <<<<<< */

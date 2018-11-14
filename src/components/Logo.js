@@ -15,7 +15,7 @@ class Logo extends Component {
 
         return (
             <custom-div class={s['wrapper']} style={logoStyle}>
-                <a href={href ? href : '/'} className={`${s['logo']} ${type ? s[type] : ''}`}>
+                <a href={href ? href : '/'} className={`${s['logo']} ${type ? s[type] : ''}`} draggable="false">
                     <custom-div class={`${s['hex-corner']} ${s['hex-pt1']}`}></custom-div>
                     <custom-div class={`${s['hex-corner']} ${s['hex-pt2']}`}></custom-div>
 

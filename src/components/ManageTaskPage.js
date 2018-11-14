@@ -25,7 +25,7 @@ class ManageTaskPage extends Component {
     componentDidMount() {
         window.scrollTo(0, 0);
 
-        if (this.state.usedSpacePercentage > 0 && !this.state.showModal) setTimeout(() => this.setState({ showModal: true }), 1);
+        if (this.state.usedSpacePercentage > 95 && !this.state.showModal) setTimeout(() => this.setState({ showModal: true }), 1);
     }
 
     componentWillUnmount() {
@@ -33,9 +33,11 @@ class ManageTaskPage extends Component {
         this.props.dayDataToState(null);
     }
 
-    submitTask = () => {
+    submitTask = (e) => {
         const taskDate = document.getElementById('task-date').value,
             taskTime = document.getElementById('task-time').value;
+
+        e.preventDefault();
 
         if (taskDate) {
             const workingDay = this.state.workingDay,
@@ -109,7 +111,7 @@ class ManageTaskPage extends Component {
 
         return (
             <section className="add-task">
-                <form onSubmit={(e) => { e.preventDefault(); this.submitTask(); }}>
+                <form onSubmit={(e) => this.submitTask(e)}>
                     <label title="Task date">
                         <span>Date</span>
                         <input
@@ -170,7 +172,7 @@ class ManageTaskPage extends Component {
                     {/* Fake hidden button to go back if task was added successfully */}
                     <Link to="/" id="submit-task">{editMode ? 'Apply' : 'Add'}</Link>
 
-                    <Link to="/" className="btn btn-cancel">Cancel</Link>
+                    <Link to="/" className="btn btn-cancel" draggable="false">Cancel</Link>
                     <button className={`btn btn-submit ${usedPercentageText < 100 ? '' : 'disabled'}`} disabled={!(usedPercentageText < 100)}>
                         <span className={usedPercentageText > 95 && usedPercentageText < 100 ? 'warning' : ''}>{editMode ? 'Apply' : 'Add'}</span>
                     </button>
@@ -198,7 +200,7 @@ class ManageTaskPage extends Component {
                             </div>
                         }
                         <div className="btn-wrapper">
-                            <Link to="/storage-management" className="btn btn-no">Clear now</Link>
+                            <Link to="/storage-management" className="btn btn-no" draggable="false">Clear now</Link>
                             <button
                                 className="btn btn-yes"
                                 onClick={() => {

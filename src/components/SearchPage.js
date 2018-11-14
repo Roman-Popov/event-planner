@@ -85,7 +85,7 @@ class SearchPage extends Component {
         return (
             <section className="search-page">
                 <header className="search-bar">
-                    <Link to="/" className="btn btn-back">Back</Link>
+                    <Link to="/" className="btn btn-back" title="Back to month page" draggable="false">Back</Link>
                     <div className="search-input-wrapper">
                         <input
                             type="text"
@@ -120,6 +120,7 @@ class SearchPage extends Component {
                                                 to={`/day-details/${foundElem.day}-${foundElem.month}-${foundElem.year}`}
                                                 className="show-day"
                                                 onClick={() => updateLastSearch(searchString)}
+                                                draggable="false"
                                             >
                                                 Show this day
                                             </Link>

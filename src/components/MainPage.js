@@ -61,6 +61,7 @@ class MainPage extends Component {
                         to={`/day-details/${ day }-${ currentMonth }-${ currentYear }`}
                         className="business-day"
                         onClick={() => dayDataToState(dayData)}
+                        draggable="false"
                     >
                         <span className="day-of-week">
                             {weekdayName}
@@ -101,7 +102,7 @@ class MainPage extends Component {
         const { currentMonth, currentYear } = this.props;
 
         return (
-            <section className="month-overview">
+            <section className="month-page">
 
                 <nav className="list-days">
                     <ul>
