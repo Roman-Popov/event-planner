@@ -1237,10 +1237,15 @@ section.storage-management.modal-shown {
     background-color: rgba(0, 0, 0, 0.8);
     visibility: hidden;
     opacity: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    overflow: auto;
     transition: 0.5s ease-in-out;
+}
+
+.modal-window::before {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    content: "";
 }
 
 .modal-window.visible {
@@ -1249,6 +1254,9 @@ section.storage-management.modal-shown {
 
 .modal-window .message {
     position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 2em auto;
     background-color: whitesmoke;
     box-shadow: inset 0 0 0.5em 0.2em coral, 0 0 0.5em 0.2em whitesmoke;
     transform: scale(0) rotate(-90deg);
