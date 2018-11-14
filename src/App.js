@@ -132,7 +132,7 @@ class App extends Component {
         if (month !== this.state.currentMonth || year !== this.state.currentYear) {
             this.setState({
                 currentMonth: month,
-                currentYear: year,
+                currentYear: Number(year),
                 daysInMonth: this.GetDaysInMonth(this.state.months.indexOf(month), year)
             })
         }
@@ -262,6 +262,8 @@ class App extends Component {
 
                 <Route path="/storage-management" render={() => (
                     <StoragePage
+                        currentMonth={currentMonth}
+                        currentYear={currentYear}
                         getUsedSpace={this.testLocalStorageSize.getUsedSpaceInBytes}
                         totalSpace={lsSpaceInfo.total}
                         updateDate={this.updateDate}

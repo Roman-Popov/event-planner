@@ -39,9 +39,9 @@ class Header extends Component {
                     text: 'Search by keywords',
                 },
                 {
-                    name: 'Memory management',
-                    here: pathName.includes('memory-management'),
-                    text: 'Memory management',
+                    name: 'Storage management',
+                    here: pathName.includes('storage-management'),
+                    text: 'Storage management',
                 }
             ],
             currentPage = pages.find(elem => elem.here) || '',

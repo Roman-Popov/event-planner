@@ -126,7 +126,7 @@ class StoragePage extends Component {
 
     render() {
         const { usedSpace, monthSizeInfo, showModal, deleteObject, confirmed } = this.state,
-            { updateDate, totalSpace } = this.props,
+            { currentMonth, currentYear, updateDate, totalSpace } = this.props,
             usedPercentage = Number((usedSpace / totalSpace * 100).toFixed(2)),
             usedPercentageText = usedPercentage > 100 ? 100 : usedPercentage,
             serviceInfoPercentage = usedPercentageText - monthSizeInfo.reduce((acc, curr) => acc + curr.sizePercentage, 0)
@@ -178,6 +178,7 @@ class StoragePage extends Component {
                                                 Size: {month.sizePercentage > 0.1 ? month.sizePercentage + '%' : 'less than 0.1%'}
                                             </p>
                                         </Link>
+                                        {(elem.year === currentYear && month.name === currentMonth) && <div className="current" title="Current month"></div>}
                                     </div>
 
                                     <button
@@ -202,13 +203,13 @@ class StoragePage extends Component {
                     </section>
                 ))}
                 <section className="group-year">
-                    <p className="year-info">
+                    <div className="year-info">
                         {<div className="year-name other">Other</div>}
-                    </p>
+                    </div>
                     <ul>
                         <li className="month-size-info service-info">
                             <div className="month-link-wrapper">
-                                <div className="month-link">
+                                <div className="month-link" title="Service information can not be deleted">
                                     <h3 className="month">Service information</h3>
                                     <p className="size">Size: {serviceInfoPercentage > 0.1 ? Number(serviceInfoPercentage.toFixed(2)) + '%' : 'less than 0.1%'}</p>
                                 </div>
