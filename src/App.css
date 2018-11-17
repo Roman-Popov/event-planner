@@ -584,6 +584,11 @@ section.search-page {
     box-shadow: 0 0 10px silver;
 }
 
+section.add-task,
+section.select-month {
+    background-color: #f5f5f5;
+}
+
 section.add-task form {
     display: flex;
     flex-direction: column;
@@ -1098,6 +1103,11 @@ section.storage-management.modal-shown {
     top: 0.2rem;
     right: 0.2rem;
     background-size: 80%;
+    visibility: hidden;
+}
+
+.summary.visible .btn.btn-clear-fin-res {
+    visibility: visible;
 }
 
 .summary .btn.btn-clear-fin-res.focused,

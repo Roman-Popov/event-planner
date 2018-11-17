@@ -122,9 +122,9 @@ class DayDetailsPage extends Component {
                 storedDayData = storedMonthData[dayData.day - 1];
 
             task.res = {
-                rev: revenue || 0,
-                exp: expenses || 0,
-                tot: revenue - expenses
+                rev: Number(revenue.toFixed(2)) || 0,
+                exp: Number(expenses.toFixed(2)) || 0,
+                tot: Number((revenue - expenses).toFixed(2))
             }
 
             storedDayData.tasks = dayData.tasks;
@@ -219,6 +219,12 @@ class DayDetailsPage extends Component {
                                         className={`btn btn-add-fin-result ${task.done && !task.res ? 'visible initial' : ''}`}
                                         title="Add financial result"
                                         onClick={(e) => {
+                                            const openedForm = document.querySelector('.result-form.visible');
+
+                                            if (openedForm) {
+                                                openedForm.classList.remove('visible');
+                                                openedForm.parentElement.querySelector('.btn-add-fin-result').classList.add('visible');
+                                            }
                                             e.target.classList.remove('visible', 'initial');
                                             document.querySelector(`.result[data-task="${index}"] .result-form`).classList.add('visible');
                                         }}
@@ -281,7 +287,7 @@ class DayDetailsPage extends Component {
                                 <button
                                     className="btn btn-clear-fin-res"
                                     title="Clear financial result"
-                                    onClick={(e) => this.clearResult(task, index)}
+                                    onClick={() => this.clearResult(task, index)}
                                 >
                                     {`Clear financial result for task "${task.name}"`}
                                 </button>
