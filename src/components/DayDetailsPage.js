@@ -233,7 +233,7 @@ class DayDetailsPage extends Component {
                                 >
                                     <h3>Results</h3>
                                     <label>
-                                        Revenue:
+                                        Revenues:
                                         <input
                                             type="tel"
                                             id={`revenue-task-${index}`}
@@ -287,7 +287,7 @@ class DayDetailsPage extends Component {
                                 </button>
                                     <ul>
                                         <li>Revenue: <span>{task.res ? task.res.rev : 0}</span></li>
-                                        <li>Expenses: <span>{task.res ? task.res.exp : 0}</span></li>
+                                        <li>Expense: <span>{task.res ? task.res.exp : 0}</span></li>
                                         <li className="total">
                                             Total:
                                             <span

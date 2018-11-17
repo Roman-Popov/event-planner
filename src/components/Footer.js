@@ -22,15 +22,14 @@ class Footer extends Component {
     }
 
     render() {
-        const { currentMonth, currentYear } = this.props,
-            vw = window.innerWidth;
+        const vw = window.innerWidth;
 
         return (
             <footer className="footer">
                 <nav>
                     <ul>
                         <li> <Link to="/instructions" draggable="false">User instructions</Link> </li>
-                        <li> <Link to={`/statistics/${currentMonth}-${currentYear}`} draggable="false">Month overview</Link> </li>
+                        <li> <Link to="/statistics" draggable="false">Statistics</Link> </li>
                         <li> <Link to="/storage-management" draggable="false">Storage management</Link> </li>
                     </ul>
                 </nav>

@@ -10,6 +10,7 @@ import SelectMonthPage from './components/SelectMonthPage';
 import ManageTaskPage from './components/ManageTaskPage';
 import DayDetailsPage from './components/DayDetailsPage';
 import StoragePage from './components/StoragePage';
+import StatisticsPage from './components/StatisticsPage';
 
 class App extends Component {
     state = {
@@ -266,6 +267,14 @@ class App extends Component {
                         currentYear={currentYear}
                         getUsedSpace={this.testLocalStorageSize.getUsedSpaceInBytes}
                         totalSpace={lsSpaceInfo.total}
+                        updateDate={this.updateDate}
+                    />
+                )} />
+
+                <Route path="/statistics" render={() => (
+                    <StatisticsPage
+                        currentMonth={currentMonth}
+                        currentYear={currentYear}
                         updateDate={this.updateDate}
                     />
                 )} />
