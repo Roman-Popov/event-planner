@@ -15,6 +15,10 @@ class StoragePage extends Component {
         this.setState({ monthSizeInfo: this.getMonthSizeInfo() })
     }
 
+    componentWillUnmount() {
+        document.querySelector('body').classList.remove('modal-shown');
+    }
+
     componentDidMount() {
         window.scrollTo(0, 0);
     }

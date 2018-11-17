@@ -16,6 +16,10 @@ class DayDetailsPage extends Component {
         this.getDayData();
     }
 
+    componentWillUnmount() {
+        document.querySelector('body').classList.remove('modal-shown');
+    }
+
     componentDidMount() {
         window.scrollTo(0, 0);
     }
