@@ -80,11 +80,18 @@ class ManageTaskPage extends Component {
                 if (workingDay || listOfDays[taskDay].work) {
                     if (!workingDay) listOfDays[taskDay].work = false;
 
-                    listOfDays[taskDay].tasks.push({
+                    const newTask = {
                         time: workingDay ? taskTime : '',
                         name: workingDay ? taskName : 'Day off',
                         notes: workingDay ? taskNotes : '',
-                    })
+                    }
+
+                    if (editMode) {
+                        taskToDelete.done && (newTask.done = taskToDelete.done)
+                        taskToDelete.res && (newTask.res = taskToDelete.res)
+                    }
+
+                    listOfDays[taskDay].tasks.push(newTask)
 
                     listOfDays[taskDay].tasks.sort((a, b) => {
                         // "Day off" task will always be on top position
