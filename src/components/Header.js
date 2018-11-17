@@ -42,6 +42,11 @@ class Header extends Component {
                     name: 'Storage management',
                     here: pathName.includes('storage-management'),
                     text: 'Storage management',
+                },
+                {
+                    name: 'Statistics',
+                    here: pathName.includes('statistics'),
+                    text: 'Statistics',
                 }
             ],
             currentPage = pages.find(elem => elem.here) || '',

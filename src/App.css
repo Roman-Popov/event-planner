@@ -54,7 +54,7 @@ legend,
 label,
 input,
 .btn,
-.search-results .show-day,
+.show-day,
 .search-results .result-counter,
 .end-of-search,
 .message,
@@ -67,7 +67,12 @@ input,
 .footer .logo,
 .task-info .result,
 .end-of-tasks,
-.storage-management {
+.end-of-stats,
+.no-results,
+.storage-management,
+.statistics .summary,
+.statistics .year-info,
+.statistics h3 {
     user-select: none;
 }
 
@@ -292,7 +297,8 @@ input,
 
 .list-days ul,
 .footer ul,
-.storage-management ul {
+.storage-management ul,
+.statistics ul {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -430,19 +436,23 @@ input,
     font-weight: bold;
 }
 
-.day-data .loss {
+.day-data .loss,
+.statistics .loss {
     color: #e00000;
 }
 
-.day-data .loss::before {
+.day-data .loss::before,
+.statistics .loss::before {
     content: '−'
 }
 
-.day-data .profit {
+.day-data .profit,
+.statistics .profit {
     color: #008600;
 }
 
-.day-data .profit::before {
+.day-data .profit::before,
+.statistics .profit::before {
     content: '+'
 }
 
@@ -482,7 +492,8 @@ input,
     margin-left: 0.5em;
 }
 
-.day-data .summary {
+.day-data .summary,
+.short-stats-wrapper .summary {
     position: absolute;
     right: 1em;
     padding: 0;
@@ -496,19 +507,23 @@ input,
     cursor: pointer;
 }
 
-.day-data .summary.focused::before {
+.day-data .summary.focused::before,
+.short-stats-wrapper .summary.focused::before {
     padding: 5px;
     top: -4px;
     left: -5px;
     border-radius: 10px;
 }
 
-.day-data .summary:active {
+.day-data .summary:active,
+.short-stats-wrapper .summary:active {
     color: black;
 }
 
 .day-data .details,
-.list-of-results .details {
+.list-of-results .details,
+.statistics .short-stats,
+.statistics .stats-wrapper {
     display: flex;
     max-height: 0;
     margin: 0 1em;
@@ -522,7 +537,9 @@ input,
 }
 
 .day-data .details.shown,
-.list-of-results .details {
+.list-of-results .details,
+.statistics .short-stats.shown,
+.statistics .stats-wrapper.shown {
     max-height: 150px;
     margin: 0.5em 1em 0;
     box-shadow: inset 0 0 6px gray;
@@ -530,7 +547,9 @@ input,
 }
 
 .day-data .details p,
-.list-of-results .details p {
+.list-of-results .details p,
+.statistics .short-stats ul,
+.statistics .stats-wrapper ol {
     width: 100%;
     padding: 0 0.75em;
     margin: 0.75em 0;
@@ -539,7 +558,9 @@ input,
 }
 
 .day-data .details.shown p,
-.list-of-results .details p {
+.list-of-results .details p,
+.statistics .short-stats.shown ul,
+.statistics .stats-wrapper.shown ol {
     overflow: auto;
 }
 
@@ -547,6 +568,7 @@ section.add-task,
 section.select-month,
 section.month-page,
 section.day-details,
+section.statistics,
 section.storage-management,
 section.search-page {
     padding-top: 60px;
@@ -713,6 +735,7 @@ section.add-task input[type="time"] {
 }
 
 section.day-details,
+section.statistics,
 section.storage-management,
 section.search-page {
     display: block;
@@ -726,6 +749,7 @@ section.storage-management.modal-shown {
 }
 
 .day-details .header-wrapper,
+.statistics  .header-wrapper,
 .storage-management .header-wrapper {
     position: sticky;
     top: 60px;
@@ -748,13 +772,14 @@ section.storage-management.modal-shown {
 }
 
 .day-details .header-wrapper header,
+.statistics .header-wrapper header,
 .storage-management .header-wrapper header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
     height: 70px;
-    padding: 0 10px;
+    padding: 0 9px;
     box-sizing: border-box;
     border: 1px solid silver;
 }
@@ -1212,6 +1237,7 @@ section.storage-management.modal-shown {
 
 .end-of-tasks,
 .end-of-search,
+.end-of-stats,
 .end-of-storage {
     display: inline-block;
     margin: 0.5em 0;
@@ -1708,6 +1734,7 @@ textarea.focused {
     box-shadow: inset 0 0 5px red;
 }
 
+.statistics .header-wrapper,
 .storage-management .header-wrapper {
     background-color: lightblue;
     box-shadow: none;
@@ -1770,11 +1797,13 @@ textarea.focused {
     bottom: -90%;
 }
 
+.statistics ul.year-data,
 .storage-management ul {
     width: calc(100% - 50px);
     border-left: 1px dashed lightgray;
 }
 
+.statistics .group-year,
 .storage-management .group-year {
     display: flex;
     flex-wrap: nowrap;
@@ -1783,6 +1812,7 @@ textarea.focused {
     box-shadow: 0 2px 3px -1px grey, 0 -1px 3px -1px grey;
 }
 
+.statistics .group-year:first-of-type,
 .storage-management .group-year:first-of-type {
     margin-top: 0;
     padding-top: 4px;
@@ -1825,6 +1855,7 @@ textarea.focused {
     color: gray;
 }
 
+.group-year .month-stats-info,
 .group-year .month-size-info {
     position: relative;
     border-bottom: 1px dashed silver;
@@ -1844,6 +1875,7 @@ textarea.focused {
     margin: 1em auto;
 }
 
+.month-stats-info .month-link-wrapper,
 .month-size-info .month-link-wrapper {
     position: relative;
     display: flex;
@@ -1851,7 +1883,14 @@ textarea.focused {
     margin: 0.4em 4em 0.4em 5%;
     width: calc(100% - 4em - 5%);
     border-radius: 1em;
+    background-color: #f7f7f7;
+    box-shadow: inset 0 0 0 rgba(0,0,0,0.23), 0 0 10px -4px rgba(0,0,0,0.23);
     transition: 0.15s ease-in-out;
+}
+
+.month-size-info.service-info .month-link-wrapper {
+    background-color: unset;
+    box-shadow: none;
 }
 
 .month-link-wrapper .current {
@@ -1871,15 +1910,17 @@ textarea.focused {
     box-shadow: inset 0 0 0 0.35em #076cab, 0 0 3px black;
 }
 
+.month-stats-info .month-link-wrapper:hover,
 .month-size-info:not(.service-info) .month-link-wrapper:hover {
     background-color: rgb(254, 252, 250);
-    box-shadow: inset 0 0 6px rgba(0,0,0,0.23);
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.23), 0 0 0 0 rgba(0,0,0,0.23);
 }
 
 .month-size-info.service-info .month-link-wrapper {
     cursor: help;
 }
 
+.month-stats-info .month-link,
 .month-size-info .month-link {
     position: relative;
     width: 100%;
@@ -1893,10 +1934,12 @@ textarea.focused {
     transition: 0.15s ease-in-out;
 }
 
+.month-stats-info .month-link:hover,
 .month-size-info:not(.service-info) .month-link:hover {
     transform: scale(0.98);
 }
 
+.month-stats-info .month,
 .month-size-info .month,
 .month-size-info .size {
     margin: 0;
@@ -1909,4 +1952,195 @@ textarea.focused {
     color: gray;
 }
 
-/* <<<<<< End of Storage management section <<<<<< */
+/* <<<<<< End of storage management section <<<<<< */
+
+
+/* >>>>>> Statistics section >>>>>> */
+
+.statistics .current-info {
+    font-size: 75%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 0.75em 0;
+    box-sizing: border-box;
+    width: 70vw;
+    max-width: 25em;
+}
+
+.current-info h3 {
+    margin: 0 0 0.3em;
+    text-align: right
+}
+
+.current-info .current-stats {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    text-align: left;
+}
+
+.current-info .current-stats div:first-child {
+    margin-right: 1.25em;
+}
+
+.group-year .month-stats-info {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    padding-bottom: 1em;
+}
+
+.group-year .month-stats-info:last-child {
+    border-bottom: none;
+}
+
+.month-stats-info .month-link-wrapper {
+    margin: 0.5em  5%;
+    width: 100%;
+}
+
+.month-stats-info .month-link {
+    padding: 0.6em 0 0.6em 1em;
+}
+
+.month-stats-info section,
+.month-stats-info > h3 {
+    width: 100%;
+}
+
+.month-stats-info .no-results {
+    color: silver;
+    font-style: italic;
+    font-size: 80%;
+}
+
+.month-stats-info .short-stats-wrapper {
+    position: relative;
+    width: 90%;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.short-stats-wrapper .summary {
+    position: relative;
+    right: 0;
+    margin: 1em 0;
+}
+
+.short-stats-wrapper .short-stats {
+    max-width: calc(100% - 10em);
+    width: auto;
+    text-align: left;
+}
+
+.short-stats-wrapper .short-stats.shown {
+    margin: 0;
+    max-height: 5em;
+    transition-delay: 0.35s;
+}
+
+.short-stats-wrapper .short-stats ul {
+    padding: 0 1.5em;
+    margin: 1em 0;
+}
+
+.short-stats-wrapper .short-stats li {
+    margin-bottom: 0.5em;
+}
+
+.short-stats-wrapper .short-stats li:last-of-type {
+    margin-bottom: 0;
+}
+
+.statistics .month-stats-info .stats-wrapper {
+    width: 90%;
+    margin: auto;
+}
+
+.statistics .stats-wrapper.shown {
+    max-height: 13em;
+    transition-delay: 0.35s;
+}
+
+.statistics .stats-wrapper.annual {
+    max-height: 1000em;
+}
+
+.statistics .stats-wrapper ol,
+.statistics .short-stats ul {
+    font-size: 80%;
+}
+
+.statistics .stats-wrapper ol {
+    padding: 0 1.25em 0 2.5em;
+    outline: none;
+}
+
+.statistics .stats-wrapper ol.focused::before {
+    content: none;
+}
+
+.statistics .stats-wrapper ol li {
+    margin: 0.5em 0;
+}
+
+.statistics .stats-wrapper ol > li:last-child {
+    padding-top: 0.5em;
+    list-style-type: none;
+    border-top: 1px solid gray;
+    font-size: 120%;
+    font-weight: bold;
+    margin-left: -0.5em;
+    padding-left: 0.5em;
+}
+
+.statistics .stats-wrapper li ul {
+    list-style-type: initial;
+    margin: 1em 0 1em 1em;
+}
+
+.statistics .stats-wrapper a {
+    position: relative;
+    text-decoration: none;
+    border-bottom: 1px dashed gray;
+    margin-left: 0.25em;
+    padding: 0 0.1em;
+}
+
+.statistics .stats-wrapper:not(.shown) a {
+    visibility: hidden;
+}
+
+.stats-wrapper .done-percent,
+.stats-wrapper time,
+.stats-wrapper a {
+    color: silver;
+    font-style: italic;
+}
+
+.stats-wrapper time,
+.stats-wrapper a {
+    white-space: nowrap;
+}
+
+@media screen and (max-width: 500px) {
+    .statistics .short-stats-wrapper {
+        flex-direction: column;
+    }
+
+    .short-stats-wrapper .short-stats {
+        max-width: none;
+        width: 100%;
+    }
+
+    .short-stats-wrapper .short-stats.shown + .summary {
+        margin-bottom: 0;
+        transition: margin-bottom 0.6s;
+    }
+}
+
+/* <<<<<< End of statistics section <<<<<< */
