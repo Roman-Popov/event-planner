@@ -158,7 +158,7 @@ class DayDetailsPage extends Component {
     }
 
     render() {
-        const { editableTaskToState } = this.props,
+        const { editDataToState } = this.props,
             { dayData, showModal, deleteObject, currentMonth, currentYear } = this.state,
             dayTasks = dayData.tasks,
             dayName = dayData.wdName,
@@ -191,7 +191,7 @@ class DayDetailsPage extends Component {
                                 to={`/edit-task/${dayData.day}-${currentMonth}-${currentYear}/${task.name}~${task.time.replace(':', '-')}`}
                                 className="btn btn-edit-task"
                                 title="Edit task"
-                                onClick={() => editableTaskToState(task)}
+                                onClick={() => { editDataToState(dayData, task) }}
                             >
                                 {`Edit task "${task.name}"`}
                             </Link>

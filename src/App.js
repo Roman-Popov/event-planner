@@ -24,7 +24,7 @@ class App extends Component {
         currentYear: '',
         daysInMonth: '',
         dayData: null,
-        editableTask: null,
+        editData: null,
         addTaskDateValue: '',
         addTaskTimeValue: '',
         lastSearchString: ''
@@ -147,9 +147,10 @@ class App extends Component {
     }
 
     initLocalData = (month, year) => {
-        const { currentYear, months, currentMonth, daysInMonth } = this.state,
+        const { currentYear, months, currentMonth } = this.state,
             localMonth = (month || currentMonth),
             localYear = (year || currentYear),
+            daysInMonth = this.GetDaysInMonth(months.indexOf(month), localYear),
             localDataName = `${localMonth}-${localYear}`,
             storedData = localStorage.getItem(localDataName),
             initialData = [];
@@ -181,13 +182,21 @@ class App extends Component {
         this.setState({ dayData: dayData }, callback)
     }
 
-    editableTaskToState = (task) => {
-        this.setState({ editableTask: task })
+    editDataToState = (dayData, task) => {
+        if (dayData && task) {
+            this.setState({ editData: { dayData: dayData, task: task } })
+        } else {
+            this.setState({ editData: null })
+        }
+    }
+
+    appForceUpdate = () => {
+        this.forceUpdate()
     }
 
     render() {
         const { lsSpaceInfo, months, currentMonth, years, currentYear, daysInMonth,
-            dayData, addTaskDateValue, addTaskTimeValue, lastSearchString, editableTask } = this.state;
+            dayData, addTaskDateValue, addTaskTimeValue, lastSearchString, editData } = this.state;
 
         return (
             <div className="App">
@@ -201,6 +210,7 @@ class App extends Component {
                     currentMonth={currentMonth}
                     currentYear={currentYear}
                     updateLastSearch={this.updateLastSearch}
+                    editData={editData}
                 />
 
                 <Route path="/select-month" render={() => (
@@ -224,7 +234,7 @@ class App extends Component {
                     />
                 )} />
 
-                <Route path={`${editableTask ? /(add-task|edit-task)/ : '/add-task'}`} render={() => (
+                <Route path={`${/(add-task|edit-task)/}`} render={() => (
                     <ManageTaskPage
                         months={months}
                         currentMonth={currentMonth}
@@ -234,12 +244,11 @@ class App extends Component {
                         initialTaskDate={addTaskDateValue}
                         initialTaskTime={addTaskTimeValue}
                         dateTimeValueToState={this.dateTimeValueToState}
-                        editMode={dayData && editableTask}
-                        editData={{ dayData: dayData, task: editableTask }}
-                        dayDataToState={this.dayDataToState}
-                        editableTaskToState={this.editableTaskToState}
+                        editData={editData}
+                        editDataToState={this.editDataToState}
                         getUsedSpace={this.testLocalStorageSize.getUsedSpaceInBytes}
                         totalSpace={lsSpaceInfo.total}
+                        appForceUpdate={this.appForceUpdate}
                     />
                 )} />
 
@@ -256,7 +265,7 @@ class App extends Component {
                         currentYear={currentYear}
                         dayData={dayData}
                         dayDataToState={this.dayDataToState}
-                        editableTaskToState={this.editableTaskToState}
+                        editDataToState={this.editDataToState}
                         updateDate={this.updateDate}
                     />
                 )} />

@@ -54,7 +54,7 @@ class SelectMonthPage extends Component {
                     </fieldset>
 
                     <Link to="/" className="btn btn-cancel" draggable="false">Cancel</Link>
-                    <Link to="/" className="btn btn-submit" onClick={e => submitMonth(e)} draggable="false">Apply</Link>
+                    <Link to="/" className="btn btn-submit" onClick={() => submitMonth()} draggable="false">Apply</Link>
                 </form>
             </section>
 

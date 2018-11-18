@@ -27,6 +27,12 @@ body.modal-shown {
     background-color: whitesmoke;
 }
 
+@media screen and ( max-width: 800px ) {
+    .App {
+        margin-left: 0;
+    }
+}
+
 .focused {
     z-index: 1;
 }
