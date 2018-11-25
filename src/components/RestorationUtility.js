@@ -95,6 +95,14 @@ class RestorationUtility extends Component {
                                         storedData[index].tasks.push(task)
                                     }
                                 })
+
+                                if (!day.work) storedData[index].work = false;
+
+                                storedData[index].tasks.sort((a, b) => {
+                                    // "Day off" task will always be on top position
+                                    if (a.name === 'Day off') { return -1 } else if (b.name === 'Day off') { return 1 }
+                                    if (a.time > b.time) { return 1 } else { return -1 }
+                                })
                             }
                         })
 
