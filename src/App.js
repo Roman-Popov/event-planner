@@ -14,7 +14,9 @@ import StatisticsPage from './components/StatisticsPage';
 
 class App extends Component {
     state = {
-        lsSpaceInfo: JSON.parse(localStorage.getItem('localStorageSpaceInfo')),
+        isLoading: false,
+        lsSpaceInfo: JSON.parse(localStorage.getItem('localStorageSpaceInfo')) ||
+            { total: 4981036 /* typical */, used: 0 },
         months: ['January', 'February', 'March',
             'April', 'May', 'June',
             'July', 'August', 'September',
@@ -55,13 +57,13 @@ class App extends Component {
     }
 
     componentDidMount() {
-        if (!('localStorage' in window)) {
-            alert('Sorry :( \nThis app will not work with this browser because it has no localStorage support.')
-        }
+        const lsSpaceInfo = JSON.parse(localStorage.getItem('localStorageSpaceInfo'));
+
+        !lsSpaceInfo && this.appSetLoading(true)
 
         setTimeout(() => {
-            const lsSpaceInfo = JSON.parse(localStorage.getItem('localStorageSpaceInfo')),
-                usedLocalSpace = this.testLocalStorageSize.getUsedSpaceInBytes();
+            const usedLocalSpace = this.testLocalStorageSize.getUsedSpaceInBytes();
+
             let localStorageQuota = lsSpaceInfo ? lsSpaceInfo.total : undefined;
 
             if (!localStorageQuota) {
@@ -94,6 +96,8 @@ class App extends Component {
                 runtime = 0,
                 unusedSpace = 0;
 
+            !this.state.isLoading && this.appSetLoading(true)
+
             do {
                 runtime = new Date() - startTime;
                 try {
@@ -110,6 +114,8 @@ class App extends Component {
             if (runtime >= timeout) {
                 alert("Calculation of LocalStorage's free space was off due to timeout.");
             }
+
+            this.appSetLoading(false)
 
             // Compensate for the byte size of the key that was used,
             // then subtract 1 byte because the last value of the tryByteSize threw the exception
@@ -194,13 +200,17 @@ class App extends Component {
         this.forceUpdate()
     }
 
+    appSetLoading = (status) => {
+        this.setState({ isLoading: status })
+    }
+
     render() {
-        const { lsSpaceInfo, months, currentMonth, years, currentYear, daysInMonth,
+        const { isLoading, lsSpaceInfo, months, currentMonth, years, currentYear, daysInMonth,
             dayData, addTaskDateValue, addTaskTimeValue, lastSearchString, editData } = this.state;
 
         return (
             <div className="App">
-                {!lsSpaceInfo && <aside className="loading">
+                {isLoading && <aside className="loading">
                     <div className="spinner"></div>
                     <p>Loading...</p>
                     <p>Please wait</p>
@@ -277,6 +287,8 @@ class App extends Component {
                         getUsedSpace={this.testLocalStorageSize.getUsedSpaceInBytes}
                         totalSpace={lsSpaceInfo.total}
                         updateDate={this.updateDate}
+                        isLoading={isLoading}
+                        appSetLoading={this.appSetLoading}
                     />
                 )} />
 

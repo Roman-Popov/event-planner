@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
+import RestorationUtility from './RestorationUtility';
 
 class StoragePage extends Component {
     state = {
         usedSpace: this.props.getUsedSpace(),
         monthSizeInfo: [],
+        storedKeys: Object.keys(localStorage).filter(key => /^[A-Z]+-20\d\d$/i.test(key)),
         showModal: false,
         deleteObject: '',
-        confirmed: false
+        confirmed: false,
     }
 
     componentWillMount() {
-        this.setState({ monthSizeInfo: this.getMonthSizeInfo() })
+        this.getMonthSizeInfo()
     }
 
     componentWillUnmount() {
@@ -25,7 +27,14 @@ class StoragePage extends Component {
 
     getMonthSizeInfo = () => {
         const { getUsedSpace, totalSpace } = this.props,
+            localStorageSpaceInfo = JSON.parse(localStorage.getItem('localStorageSpaceInfo')) || {},
             monthDataKeys = Object.keys(localStorage).filter(key => /^[A-Z]+-20\d\d$/i.test(key));
+
+        localStorageSpaceInfo.used = getUsedSpace();
+        // Information in the LocalStorage exists, so refresh it
+        if (localStorageSpaceInfo.total) {
+            localStorage.setItem('localStorageSpaceInfo', JSON.stringify(localStorageSpaceInfo));
+        }
 
         const tmp = monthDataKeys.reduce((acc, curr) => {
             const month = curr.split('-')[0],
@@ -62,7 +71,13 @@ class StoragePage extends Component {
             return tmp[key]
         });
 
-        return result.sort((a, b) => a.year - b.year)
+        result.sort((a, b) => a.year - b.year)
+
+        this.setState({
+            monthSizeInfo: result,
+            storedKeys: monthDataKeys,
+            usedSpace: localStorageSpaceInfo.used
+        })
     }
 
     confirmDeletion = (obj) => {
@@ -86,9 +101,7 @@ class StoragePage extends Component {
     clearData = (e, obj) => {
         e.preventDefault();
 
-        const { getUsedSpace } = this.props,
-            monthDataKeys = Object.keys(localStorage).filter(key => /^[A-Z]+-20\d\d$/i.test(key)),
-            localStorageSpaceInfo = JSON.parse(localStorage.getItem('localStorageSpaceInfo'));
+        const { storedKeys } = this.state;
 
         let arrayToRemove = [];
 
@@ -96,20 +109,17 @@ class StoragePage extends Component {
             if (obj.month) {
                 arrayToRemove.push(`${obj.month}-${obj.year}`);
             } else {
-                arrayToRemove = monthDataKeys.filter(key => key.includes(obj.year));
+                arrayToRemove = storedKeys.filter(key => key.includes(obj.year));
             }
         } else {
-            arrayToRemove = monthDataKeys;
+            arrayToRemove = storedKeys;
         }
 
         arrayToRemove.forEach(key => localStorage.removeItem(key));
 
-        localStorageSpaceInfo.used = getUsedSpace();
-        localStorage.setItem('localStorageSpaceInfo', JSON.stringify(localStorageSpaceInfo));
+        this.getMonthSizeInfo();
 
         this.setState({
-            usedSpace: localStorageSpaceInfo.used,
-            monthSizeInfo: this.getMonthSizeInfo(),
             showModal: false,
             confirmed: false
         })
@@ -127,10 +137,20 @@ class StoragePage extends Component {
         return text
     }
 
+    getBackupData = (name, type) => {
+        const a = document.getElementById('backup-link'),
+            text = JSON.stringify(localStorage),
+            file = new Blob([text], { type: type });
+        a.href = URL.createObjectURL(file);
+        a.download = name;
+        a.click();
+    }
 
     render() {
-        const { usedSpace, monthSizeInfo, showModal, deleteObject, confirmed } = this.state,
-            { currentMonth, currentYear, updateDate, totalSpace } = this.props,
+        const { usedSpace, monthSizeInfo, showModal,
+            deleteObject, confirmed, storedKeys } = this.state,
+            { currentMonth, currentYear, updateDate,
+            getUsedSpace, totalSpace, appSetLoading, isLoading } = this.props,
             usedPercentage = Number((usedSpace / totalSpace * 100).toFixed(2)),
             usedPercentageText = usedPercentage > 100 ? 100 : usedPercentage,
             serviceInfoPercentage = usedPercentageText - monthSizeInfo.reduce((acc, curr) => acc + curr.sizePercentage, 0)
@@ -149,61 +169,67 @@ class StoragePage extends Component {
                                 <div key={i} className="tick" data-percent={i * 25 + '%'} style={{ left: i * 25 + '%'}}></div>
                             )}
                         </div>
+
+                        <a href="" id="backup-link" hidden={true}>Click here to download backup file</a>
                         <button
-                            className={`btn btn-clear-all-data`}
-                            onClick={() => this.confirmDeletion()}
-                            title="DANGER! Delete all application data"
+                            className="btn btn-backup"
+                            title="Download backup file"
+                            onClick={() => this.getBackupData(`TimeTable-${Date.now()}.json`, 'application/json')}
                         >
-                            DANGER! Delete all application data
+                            Download backup file
                         </button>
                     </header>
                 </div>
 
                 {monthSizeInfo.map(elem => (
                     <section key={elem.year} className="group-year">
-                        <div className="year-info">
-                            {<time className="year-name">{elem.year}</time>}
-                            <p className="year-size">{elem.sizePercentage > 0.1 ? elem.sizePercentage + '%' : 'less than 0.1%'}</p>
+                        <div className="year-data-wrapper">
+                            <div className="year-info">
+                                {<time className="year-name">{elem.year}</time>}
+                                <p className="year-size">{elem.sizePercentage > 0.1 ? elem.sizePercentage + '%' : 'less than 0.1%'}</p>
+                            </div>
+
+                            <ul>
+                                {elem.months.map(month => (
+                                    <li key={month.name} className="month-size-info">
+                                        <div className="month-link-wrapper">
+                                            <Link
+                                                to="/"
+                                                className="month-link"
+                                                title={`Go to ${month.name} ${elem.year}`}
+                                                onClick={() => updateDate(month.name, elem.year)}
+                                                draggable="false"
+                                            >
+                                                <h3 className="month">{month.name}</h3>
+                                                <p className="size">
+                                                    Size: {month.sizePercentage > 0.1 ? month.sizePercentage + '%' : 'less than 0.1%'}
+                                                </p>
+                                            </Link>
+                                            {(elem.year === currentYear && month.name === currentMonth) && <div className="current" title="Current month"></div>}
+                                        </div>
+
+                                        <button
+                                            className="btn btn-delete-month"
+                                            onClick={() => this.confirmDeletion({ month: month.name, year: elem.year })}
+                                            title={`Clear ${month.name} ${elem.year} data`}
+                                        >
+                                            Clear {month.name} {elem.year} data
+                                    </button>
+                                    </li>
+                                ))}
+                            </ul>
                         </div>
 
-                        <ul>
-                            {elem.months.map(month => (
-                                <li key={month.name} className="month-size-info">
-                                    <div className="month-link-wrapper">
-                                        <Link
-                                            to="/"
-                                            className="month-link"
-                                            title={`Go to ${month.name} ${elem.year}`}
-                                            onClick={() => updateDate(month.name, elem.year)}
-                                            draggable="false"
-                                        >
-                                            <h3 className="month">{month.name}</h3>
-                                            <p className="size">
-                                                Size: {month.sizePercentage > 0.1 ? month.sizePercentage + '%' : 'less than 0.1%'}
-                                            </p>
-                                        </Link>
-                                        {(elem.year === currentYear && month.name === currentMonth) && <div className="current" title="Current month"></div>}
-                                    </div>
+                        <div className="delete-year-wrapper">
+                            <button
+                                className="btn btn-delete-year"
+                                onClick={() => this.confirmDeletion({ year: elem.year })}
+                                title={`Clear all ${elem.year} year data`}
+                            >
+                                {`Clear all ${elem.year} year data`}
+                            </button>
+                        </div>
 
-                                    <button
-                                        className="btn btn-delete-month"
-                                        onClick={() => this.confirmDeletion({month: month.name, year: elem.year})}
-                                        title={`Clear ${month.name} ${elem.year} data`}
-                                    >
-                                        Clear {month.name} {elem.year} data
-                                    </button>
-                                </li>
-                            ))}
-                            <li>
-                                <button
-                                    className="btn btn-delete-year"
-                                    onClick={() => this.confirmDeletion({ year: elem.year })}
-                                    title={`Clear all ${elem.year} year data`}
-                                >
-                                    {`Clear all ${elem.year} year data`}
-                                </button>
-                            </li>
-                        </ul>
                     </section>
                 ))}
                 <section className="group-year">
@@ -222,7 +248,29 @@ class StoragePage extends Component {
                     </ul>
                 </section>
 
-                <span className="end-of-storage">There is no more stored items</span>
+                <RestorationUtility
+                    getMonthSizeInfo={this.getMonthSizeInfo}
+                    monthSizeInfo={monthSizeInfo}
+                    getUsedSpace={getUsedSpace}
+                    appSetLoading={appSetLoading}
+                    isLoading={isLoading}
+                    storedKeys={storedKeys}
+                    usedSpace={usedSpace}
+                    totalSpace={totalSpace}
+                />
+
+                <section className="group-year">
+                    <div className="danger-zone">
+                        <h2>Danger zone</h2>
+                        <button
+                            className="btn btn-clear-all-data"
+                            onClick={() => this.confirmDeletion()}
+                            title="DANGER! Delete all application data"
+                        >
+                            Delete all application data
+                        </button>
+                    </div>
+                </section>
 
                 <div className={`modal-window ${showModal ? 'visible' : ''}`}>
                     <div className="message">

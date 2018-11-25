@@ -163,9 +163,17 @@ input,
 .btn-delete-month,
 .btn-delete-day,
 .btn-clear,
-.btn-clear-all-data {
+.btn-backup,
+.btn-close-banner {
     font-size: 0;
     width: 40px;
+}
+
+.btn-back,
+.btn-delete-day,
+.btn-backup {
+    background-color: transparent;
+    box-shadow: none;
 }
 
 .btn-add {
@@ -284,11 +292,15 @@ input,
     border-radius: 100em;
 }
 
-.select-month fieldset input {
+.select-month fieldset input,
+.upload .options-wrapper input {
     width: 0;
     height: 0;
     margin: 0;
-    z-index: -1;
+}
+
+.select-month fieldset input.focused {
+    box-shadow: none;
 }
 
 .select-month fieldset input:focus::after {
@@ -444,7 +456,8 @@ input,
 }
 
 .day-data .loss,
-.statistics .loss {
+.statistics .loss,
+.upload .overload {
     color: #e00000;
 }
 
@@ -500,6 +513,7 @@ input,
 }
 
 .day-data .summary,
+.options-toggle .summary,
 .short-stats-wrapper .summary {
     position: absolute;
     right: 1em;
@@ -508,10 +522,8 @@ input,
     background: none;
     border: none;
     border-bottom: 1px dashed gray;
-    outline: none;
     color: gray;
     font-style: italic;
-    cursor: pointer;
 }
 
 .day-data .summary.focused::before,
@@ -529,6 +541,7 @@ input,
 
 .day-data .details,
 .list-of-results .details,
+.upload .selection-wrapper,
 .statistics .short-stats,
 .statistics .stats-wrapper {
     display: flex;
@@ -545,6 +558,7 @@ input,
 
 .day-data .details.shown,
 .list-of-results .details,
+.upload .selection-wrapper.shown,
 .statistics .short-stats.shown,
 .statistics .stats-wrapper.shown {
     max-height: 150px;
@@ -687,7 +701,8 @@ section.add-task input[type="time"] {
 }
 
 #working-day ~ .checkmark,
-.task-done ~ .checkmark {
+.task-done ~ .checkmark,
+.month-checkbox ~ .checkmark {
     position: relative;
     margin-top: 0.5em;
     height: 22px;
@@ -700,13 +715,14 @@ section.add-task input[type="time"] {
 }
 
 #working-day:hover ~ .checkmark,
-.task-done:hover ~ .checkmark {
+.task-done:hover ~ .checkmark,
+.month-checkbox:hover ~ .checkmark {
     background-color: #ccc;
-    box-shadow: none;
 }
 
 #working-day:checked ~ .checkmark,
-.task-done:checked ~ .checkmark {
+.task-done:checked ~ .checkmark,
+.month-checkbox:checked ~ .checkmark {
     background-color: green;
     box-shadow: 0 -3px 6px rgba(0,0,0,0.16), 0 -3px 6px rgba(0,0,0,0.23);
     border-radius: 100%;
@@ -714,13 +730,14 @@ section.add-task input[type="time"] {
 }
 
 #working-day:checked:hover ~ .checkmark,
-.task-done:checked:hover ~ .checkmark {
+.task-done:checked:hover ~ .checkmark,
+.month-checkbox:checked:hover ~ .checkmark {
     background-color: mediumseagreen;
-    box-shadow: none;
 }
 
 #working-day ~ .checkmark:after,
-.task-done ~ .checkmark:after {
+.task-done ~ .checkmark:after,
+.month-checkbox ~ .checkmark:after {
     content: '';
     position: absolute;
     transform: rotate(45deg);
@@ -734,14 +751,17 @@ section.add-task input[type="time"] {
 }
 
 #working-day:checked ~ .checkmark:after,
-.task-done:checked ~ .checkmark:after {
+.task-done:checked ~ .checkmark:after,
+.month-checkbox:checked ~ .checkmark::after {
     border-color: white;
     transform: rotate(-135deg);
     top: calc(50% - 0.3em);
 }
 
 #working-day.focused ~ .checkmark,
-.task-done.focused ~ .checkmark {
+.task-done.focused ~ .checkmark,
+.month-checkbox.focused ~ .checkmark,
+.options-wrapper input.focused ~ .radio-checkmark {
     transition: box-shadow 0s 0.05s;
     box-shadow: 0 0 5px 2px coral;
 }
@@ -832,14 +852,10 @@ section.storage-management.modal-shown {
 
 .btn-back {
     background-image: url('./icons/arrow-back.svg');
-    background-color: transparent;
-    box-shadow: none;
 }
 
 .btn-delete-day {
     background-image: url('./icons/delete.svg');
-    background-color: transparent;
-    box-shadow: none;
     visibility: hidden;
 }
 
@@ -1006,7 +1022,8 @@ section.storage-management.modal-shown {
     transition-delay: 0s;
 }
 
-.result .result-form {
+.result .result-form,
+.upload .options-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1205,7 +1222,8 @@ section.storage-management.modal-shown {
 .task-info .btn-delete-task,
 .task-info .btn-edit-task,
 .task-info .btn-clear-fin-res,
-.month-size-info .btn-delete-month {
+.month-size-info .btn-delete-month,
+.warning .btn-close-banner {
     filter: brightness(0.75);
     position: absolute;
     top: 0.5rem;
@@ -1243,7 +1261,8 @@ section.storage-management.modal-shown {
 .btn-clear,
 .btn-delete-task,
 .btn-clear-fin-res,
-.btn-delete-month {
+.btn-delete-month,
+.btn-close-banner {
     background-image: url('./icons/X.svg');
 }
 
@@ -1254,8 +1273,7 @@ section.storage-management.modal-shown {
 
 .end-of-tasks,
 .end-of-search,
-.end-of-stats,
-.end-of-storage {
+.end-of-stats {
     display: inline-block;
     margin: 0.5em 0;
     color: gainsboro;
@@ -1745,10 +1763,8 @@ textarea.focused {
 
 /* >>>>>> Storage management section >>>>>> */
 
-.btn-clear-all-data {
-    background-image: url('./icons/delete.svg');
-    background-color: #ffcccc;
-    box-shadow: inset 0 0 5px red;
+.btn-backup {
+    background-image: url('./icons/backup.svg');
 }
 
 .statistics .header-wrapper,
@@ -1818,12 +1834,15 @@ textarea.focused {
 .storage-management ul {
     width: calc(100% - 50px);
     border-left: 1px dashed lightgray;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .statistics .group-year,
 .storage-management .group-year {
     display: flex;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     margin-top: 0.7em;
     background-color: whitesmoke;
     box-shadow: 0 2px 3px -1px grey, 0 -1px 3px -1px grey;
@@ -1833,6 +1852,12 @@ textarea.focused {
 .storage-management .group-year:first-of-type {
     margin-top: 0;
     padding-top: 4px;
+}
+
+.group-year .year-data-wrapper {
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
 }
 
 .group-year .year-info {
@@ -1882,11 +1907,22 @@ textarea.focused {
     justify-content: center;
 }
 
+.group-year .month-size-info:last-child {
+    border-bottom: none;
+}
+
 .group-year .month-size-info.service-info {
     border-bottom: none;
 }
 
+.group-year .delete-year-wrapper {
+    width: 100%;
+    display: flex;
+    border-top: 1px dashed silver;
+}
+
 .group-year .btn-delete-year,
+.group-year .btn-clear-all-data,
 .day-details .btn-add-fin-result {
     padding: 0 1.5em;
     margin: 1em auto;
@@ -1967,6 +2003,515 @@ textarea.focused {
     font-style: italic;
     margin-top: 0.3em;
     color: gray;
+}
+
+/* >>> Recovery subsection >>> */
+
+.storage-management .group-year.upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 1.5em;
+}
+
+.upload .select-file-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    width: 85%;
+}
+
+.upload .upload-input-wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    box-sizing: border-box;
+    height: 2em;
+    width: 22em;
+    max-width: calc(100% - 5.5rem);
+    background-color: white;
+    border: 1px solid gray;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.upload-input-wrapper #load-json {
+    display: none;
+}
+
+.upload-input-wrapper .btn-browse-wrapper {
+    background-color: lightskyblue;
+    height: 100%;
+    padding: 2px;
+    box-sizing: border-box;
+}
+
+.btn-browse-wrapper .btn-browse {
+    position: relative;
+    height: 100%;
+    border-radius: 2px;
+    box-shadow: none;
+    padding: 0 0.5em;
+}
+
+
+.btn-browse-wrapper .btn-browse:active {
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.23);
+    transform: scale(0.97);
+}
+
+.btn-browse span {
+    display: flex;
+    align-items: center;
+}
+
+.btn-browse span::before {
+    content: '';
+    display: inline-block;
+    width: 1.7rem;
+    height: 1.7rem;
+    background-image: url('./icons/browse.svg');
+    background-repeat: no-repeat;
+    margin-right: 0.5em;
+}
+
+.upload-input-wrapper label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.5rem;
+    box-sizing: border-box;
+    font-size: 85%;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+
+}
+
+.upload-input-wrapper label span {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.btn-upload {
+    margin-left: 1em;
+    height: 2rem;
+    width: 5em;
+}
+
+.upload .restoration-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    overflow: hidden;
+    max-height: 0;
+    box-sizing: border-box;
+    transition: 0.35s;
+    visibility: hidden;
+}
+
+.upload .restoration-wrapper.visible {
+    max-height: 50em;
+}
+
+.restoration-wrapper .file-info {
+    margin: 0 auto 0.25em;
+    width: 80%;
+    font-size: 85%;
+    text-align: right;
+    color: gray;
+    font-style: italic;
+}
+
+.restoration-wrapper .options-toggle {
+    margin: auto;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.options-toggle .summary {
+    position: relative;
+    right: 0;
+    margin-top: 0.8rem
+}
+
+.options-toggle .current-options {
+    font-style: italic;
+    color: gray;
+    font-size: 80%;
+    display: flex;
+    align-items: center;
+    max-height: 0;
+    overflow: hidden;
+    transition: 0.25s;
+    margin: 0;
+}
+
+.options-toggle .current-options.shown {
+    max-height: 1.5em;
+    margin-top: 0.55rem;
+}
+
+.restoration-wrapper .options-wrapper {
+    max-width: 85%;
+    width: fit-content;
+    margin: 0.8rem auto 0;
+    padding: 0 1.5em;
+}
+
+.restoration-wrapper .options-wrapper.visible {
+    max-height: 16em;
+    margin-bottom: 1.5em;
+}
+
+.options-wrapper form {
+    margin: 1em 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.options-wrapper fieldset {
+    padding: 0;
+    border: none;
+    display: flex;
+    text-align: left;
+}
+
+.options-wrapper fieldset#supplement-option {
+    max-width: 70%;
+    align-self: flex-end;
+    margin-top: 1em;
+    padding: 0 0 0.1em 0.3em;
+    overflow: hidden;
+    max-height: 8em;
+    transition: 0.35s;
+}
+
+.options-wrapper #supplement-option:disabled {
+    padding-bottom: 0;
+    max-height: 0;
+    margin: 0;
+}
+
+.options-wrapper legend {
+    text-align: center;
+    padding-bottom: 0.05em;
+    margin-bottom: 0.5em;
+    border-bottom: 1px solid black;
+}
+
+.options-wrapper .hint {
+    margin: 0 0 0.5em;
+    font-size: 85%;
+    color: gray;
+    font-style: italic;
+    white-space: nowrap;
+    width: 100%;
+    text-align: center;
+}
+
+.options-wrapper label {
+    margin: 0.5em 0;
+    display: flex;
+    align-items: center;
+}
+
+.options-wrapper label:last-of-type {
+    margin-bottom: 0;
+}
+
+.options-wrapper input ~ .radio-checkmark {
+    position: relative;
+    margin-right: 0.5em;
+    height: 14px;
+    width: 14px;
+    border-radius: 100%;
+    background-color: #076cab;
+    box-shadow: inset 0 0 0 1px gray, inset 0 0 0 8px white;
+    transition: 0.2s;
+}
+
+.options-wrapper input:hover:not(:checked) ~ .radio-checkmark {
+    box-shadow: inset 0 0 0 1px gray, inset 0 0 0 8px lightblue;
+}
+
+.options-wrapper input:checked ~ .radio-checkmark {
+    box-shadow: inset 0 0 0 1px gray, inset 0 0 0 3px white;
+}
+
+.options-wrapper input.focused ~ .radio-checkmark {
+    box-shadow: 0 0 5px 2px coral, inset 0 0 0 1px gray, inset 0 0 0 8px white;
+}
+
+.options-wrapper input:checked.focused ~ .radio-checkmark {
+    box-shadow: 0 0 5px 2px coral, inset 0 0 0 1px gray, inset 0 0 0 3px white;
+}
+
+.restoration-wrapper .btn-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0.5em auto 0;
+    width: 80%;
+    max-width: 27em;
+    padding: 0 5px 8px;
+    box-sizing: border-box;
+}
+
+.restoration-wrapper .btn-wrapper .btn {
+    width: 8em;
+}
+
+.restoration-wrapper .btn-wrapper .btn-restore {
+    text-transform: capitalize;
+}
+
+.upload .selection-wrapper.shown {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    max-height: 10000em;
+    margin: auto;
+    width: 85%;
+}
+
+.upload .selection-wrapper.shown:last-child {
+    margin-top: 1.2em;
+    text-align: center;
+}
+
+.selection-wrapper header {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5em 1.3em;
+    box-sizing: border-box;
+    box-shadow: 0 0 6px grey;
+    background-color: #00c0ff17;
+}
+
+.selection-wrapper header label {
+    display: flex;
+}
+
+.selection-wrapper header h4 {
+    margin: auto;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+.selection-wrapper header p {
+    margin: 0;
+    font-size: 85%;
+    position: relative;
+    background-image: linear-gradient(to bottom right, transparent calc(50% - 0.5px), black calc(50%), transparent calc(50% + 0.5px));
+    background-repeat: no-repeat;
+    width: 3em;
+    height: 2em;
+    margin-right: 1.5em;
+}
+
+.selection-wrapper header .selected {
+    position: absolute;
+    line-height: 1em;
+    right: 1.7em;
+    top: 0;
+    transition: 0.35s;
+}
+
+.selection-wrapper header .selected.overload {
+    font-weight: bold;
+    font-size: 120%;
+}
+
+.selection-wrapper header .merge {
+    position: absolute;
+    right: -0.5em;
+    top: -0.1em;
+    font-size: 120%;
+    cursor: help;
+}
+
+.selection-wrapper header .available {
+    position: absolute;
+    bottom: 0;
+    line-height: 1em;
+    left: 1.7em;
+}
+
+.selection-wrapper form.months-list {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 0 1em;
+    box-sizing: border-box;
+    max-height: 16em;
+    overflow: auto;
+}
+
+form.months-list label {
+    height: 2em;
+    width: 100%;
+    border: 1px dashed #ebebeb;
+    border-width: 1px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1em;
+    padding: 0 0.3em;
+    box-sizing: border-box;
+
+}
+
+form.months-list label:first-child {
+    margin-top: 5px;
+}
+
+form.months-list label span {
+    line-height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.months-list .month-name.double::before,
+.months-list .warning p::before {
+    content: '';
+    display: inline-block;
+    width: 0.8em;
+    height: 0.8em;
+    background-image: url('./icons/warning.svg');
+    background-repeat: no-repeat;
+    margin-right: 0.5em;
+}
+
+.months-list .backup-month-size {
+    font-size: 85%;
+}
+
+.selection-wrapper input.month-checkbox {
+    width: 0;
+    height: 0;
+    box-shadow: none !important;
+    margin: 0;
+}
+
+.selection-wrapper input.month-checkbox::before {
+    content: none;
+}
+
+.selection-wrapper .month-checkbox:not(.focused) ~ .checkmark {
+    box-shadow: none;
+}
+
+.selection-wrapper .month-checkbox ~ .checkmark {
+    margin: 0;
+    margin-right: 1em;
+}
+
+.months-list .warning {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #ffa5007a;
+    position: sticky;
+    bottom: 0;
+    margin: 0 -1em;
+    width: calc(100% + 2em);
+    border-radius: 0 0 1em 1em;
+    hyphens: none;
+}
+
+.months-list .warning p {
+    font-size: 85%;
+    text-align: center;
+    margin: 0.5rem;
+    background: #ffffffcf;
+    border-radius: 1em;
+    padding: 0.5em 1em;
+    box-sizing: border-box;
+}
+
+.months-list .warning span:not(#supplement-method) {
+    margin-top: 0.5em;
+    display: inline-block;
+}
+
+.warning .btn-close-banner {
+    background-color: #fed282;
+    border: 1px solid #fff7e8;
+    filter: none;
+    top: 0.3rem;
+    right: 0.3rem;
+}
+
+@media screen and (max-width: 430px) {
+    .upload .btn-browse {
+        font-size: 0;
+        padding: 0 0.5rem;
+    }
+
+    .selection-wrapper header h4 {
+        left: 3.7em;
+        transform: none;
+    }
+
+    .options-wrapper form {
+        font-size: 85%;
+    }
+
+    .months-list .month-name {
+        font-size: 85%;
+    }
+}
+
+/* <<< End of recovery subsection <<< */
+
+.group-year .danger-zone {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #fffafa;
+    box-shadow: inset 0 0 5px 1px crimson;
+    border-radius: 1em;
+    margin: 1em;
+    padding-bottom: 1em;
+}
+
+.danger-zone h2 {
+    color: crimson;
+    margin: 1rem 0 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.danger-zone h2::before,
+.danger-zone h2::after {
+    content: '';
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    background-image: url('./icons/warning.svg');
+    background-repeat: no-repeat;
+}
+
+.danger-zone h2::before {
+    margin-right: 1em;
+}
+
+.danger-zone h2::after {
+    margin-left: 1em;
 }
 
 /* <<<<<< End of storage management section <<<<<< */

@@ -5,6 +5,10 @@ import App from './App'
 import './index.css'
 import registerServiceWorker from './registerServiceWorker';
 
+if (!('localStorage' in window)) {
+    alert('Sorry :( \nThis app will not work with this browser because it has no localStorage support.')
+}
+
 ReactDOM.render(
     <BrowserRouter basename={process.env.PUBLIC_URL}><App /></BrowserRouter>,
     document.getElementById('root')
