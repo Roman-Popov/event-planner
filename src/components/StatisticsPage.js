@@ -183,7 +183,7 @@ class StatisticsPage extends Component {
 
         shortDetails.classList.toggle('shown')
         details.classList.toggle('shown')
-        details.classList.contains('shown') ? targetBtn.innerHTML = 'Hide detailed statistics' : targetBtn.innerHTML = 'Show detailed statistics';
+        details.classList.contains('shown') ? targetBtn.innerText = 'Hide detailed statistics' : targetBtn.innerText = 'Show detailed statistics';
 
         this.showOnlyFewDetails(details)
     }
@@ -199,7 +199,7 @@ class StatisticsPage extends Component {
                 const closedItem = openedDetails.splice(0, 1)[0];
                 closedItem.classList.remove('shown');
                 closedItem.parentNode.querySelector('.short-stats').classList.add('shown');
-                closedItem.parentNode.querySelector('button').innerHTML = 'Show detailed statistics'
+                closedItem.parentNode.querySelector('button').innerText = 'Show detailed statistics'
             }
 
             // Add detailItem to stack

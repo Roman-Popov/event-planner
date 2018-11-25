@@ -53,8 +53,12 @@ class SearchPage extends Component {
                                 unixTime = Date.parse(`${year} ${month} ${day} ${time}`);
 
                             // To highlight found words in search results
-                            copiedTask.name = task.name.replace(new RegExp(keywords.join('|'), "gi"), match => `<i class="highlighted">${match}</i>`)
-                            copiedTask.notes = task.notes.replace(new RegExp(keywords.join('|'), "gi"), match => `<i class="highlighted">${match}</i>`)
+                            copiedTask.name = task.name
+                                .replace(new RegExp('<|>', "gi"), '')
+                                .replace(new RegExp(keywords.join('|'), "gi"), match => `<i class="highlighted">${match}</i>`)
+                            copiedTask.notes = task.notes
+                                .replace(new RegExp('<|>', "gi"), '')
+                                .replace(new RegExp(keywords.join('|'), "gi"), match => `<i class="highlighted">${match}</i>`)
 
                             results.push({
                                 day: elem.day,

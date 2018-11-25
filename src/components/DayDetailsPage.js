@@ -323,7 +323,7 @@ class DayDetailsPage extends Component {
                 <div className={`modal-window ${showModal ? 'visible' : ''}`}>
                     <div className="message">
                         <h2><span className="modal-header">Attention!</span></h2>
-                        <p>Deleted data can not be restored.</p>
+                        <p>Deleted data can not be restored without a backup file.</p>
                         <p>
                             Do you really want to delete
                             { deleteObject ? ` the task "${ deleteObject.name }"${ deleteObject.time ? ` (at ${ deleteObject.time })` : '' }` :

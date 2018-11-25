@@ -19,7 +19,7 @@ class MainPage extends Component {
     toggleDetails = (targetBtn) => {
         const details = targetBtn.parentNode.nextElementSibling;
         details.classList.toggle('shown')
-        details.classList.contains('shown') ? targetBtn.innerHTML = 'Hide notes' : targetBtn.innerHTML = 'Show notes';
+        details.classList.contains('shown') ? targetBtn.innerText = 'Hide notes' : targetBtn.innerText = 'Show notes';
         this.showOnlyFewDetails(details)
     }
 
@@ -33,7 +33,7 @@ class MainPage extends Component {
             } else if (openedDetails.length > 3) {
                 const closedItem = openedDetails.splice(0, 1);
                 closedItem[0].classList.remove('shown');
-                closedItem[0].parentNode.querySelector('button').innerHTML = 'Show notes'
+                closedItem[0].parentNode.querySelector('button').innerText = 'Show notes'
             }
 
             // Add detailItem to stack
