@@ -78,7 +78,8 @@ input,
 .storage-management,
 .statistics .summary,
 .statistics .year-info,
-.statistics h3 {
+.statistics h3,
+.error-boundary-page {
     user-select: none;
 }
 
@@ -514,7 +515,8 @@ input,
 
 .day-data .summary,
 .options-toggle .summary,
-.short-stats-wrapper .summary {
+.short-stats-wrapper .summary,
+.error-boundary-page button.summary {
     position: absolute;
     right: 1em;
     padding: 0;
@@ -591,7 +593,8 @@ section.month-page,
 section.day-details,
 section.statistics,
 section.storage-management,
-section.search-page {
+section.search-page,
+section.error-boundary-page {
     padding-top: 60px;
     min-height: 100%;
     max-width: inherit;
@@ -1023,7 +1026,9 @@ section.storage-management.modal-shown {
 }
 
 .result .result-form,
-.upload .options-wrapper {
+.upload .options-wrapper,
+.error-boundary-page .bug-info-wrapper,
+.error-boundary-page .application-reset {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1369,16 +1374,19 @@ section.storage-management.modal-shown {
     color: gainsboro;
 }
 
-
 .modal-window .btn {
     width: 7em;
+}
+
+.btn-wrapper .btn-yes,
+.btn-wrapper .btn-no {
     text-shadow: none;
+    color: black;
 }
 
 .btn-wrapper .btn-yes {
     background-color: bisque;
     border: 2px solid coral;
-    color: black;
     transition: opacity 0.5s;
 }
 
@@ -1390,12 +1398,11 @@ section.storage-management.modal-shown {
 .btn-wrapper .btn-no {
     background-color: rgb(193, 239, 193);
     border: 2px solid lightseagreen;
-    color: black;
 }
 
-.btn-yes::after,
-.btn-no::after {
-    box-shadow: 0 0 5px 5px coral;
+.btn-yes::before,
+.btn-no::before {
+    box-shadow: 0 0 10px 4px coral;
 }
 
 input,
@@ -2706,3 +2713,171 @@ form.months-list label span {
 }
 
 /* <<<<<< End of statistics section <<<<<< */
+
+
+/* >>>>>> Error-Boundary section >>>>>> */
+
+section.error-boundary-page {
+    background-color: inherit;
+    padding-bottom: 7em;
+    position: absolute;
+    top: 0;
+    width: inherit;
+}
+
+.error-boundary-page button.summary {
+    position: relative;
+    right: unset;
+}
+
+.error-boundary-page .btn-send-report,
+.error-boundary-page .btn-go-main {
+    font-size: 100%;
+    padding: 0 1.5em;
+}
+
+.error-boundary-page .send-report-notes {
+    font-size: 85%;
+    font-style: italic;
+    color: gray;
+    max-width: 13em;
+    line-height: 1.5em;
+}
+
+.error-boundary-page .backup-btn-wrapper {
+    margin: 1em 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.error-boundary-page .btn-download-backup {
+    display: inline-block;
+    margin: 0.5em 0;
+    height: 2em;
+    padding: 0 1em 0 2.5em;
+}
+
+.btn-download-backup span {
+    display: inline-block;
+    background-image: url('./icons/backup.svg');
+    width: 2em;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: absolute;
+    top: 0.05em;
+    bottom: 0.05em;
+    left: 0.5em;
+}
+
+.error-boundary-page .btn-go-main {
+    margin: 1em 0;
+}
+
+.error-boundary-page .bug-info-wrapper {
+    width: 85%;
+    max-width: unset;
+    margin: 1em 0;
+}
+
+.error-boundary-page .bug-info-wrapper.visible {
+    max-height: 15em;
+    overflow: auto;
+}
+
+.bug-info-wrapper #bug-info {
+    width: 100%;
+    font-size: 85%;
+    text-align: left;
+    word-break: break-all;
+    user-select: text;
+}
+
+#bug-info > div {
+    margin: 1em 0;
+}
+
+#bug-info li {
+    margin: 0.5em 0;
+}
+
+.bug-info-wrapper .copy-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #add8e68a;
+    position: sticky;
+    bottom: 0;
+    margin: 0 -1em;
+    width: calc(100% + 2em);
+    border-bottom-right-radius: inherit;
+    border-bottom-left-radius: inherit;
+}
+
+.copy-panel .btn.copy-to-clipboard {
+    width: 6em;
+    margin: 0.5em;
+    border: 1px solid #076cab;
+}
+
+.error-boundary-page .application-reset {
+    max-height: unset;
+    visibility: visible;
+    padding: 2em;
+    margin-top: 2em;
+    width: 20em;
+    max-width: 85vw;
+}
+
+.application-reset h2 {
+    margin-top: 0;
+}
+
+.application-reset .btn-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 85vw;
+}
+
+.application-reset .btn-wrapper .btn {
+    width: 6em;
+}
+
+.application-reset .btn-wrapper .btn-yes {
+    padding-left: 1em;
+}
+
+.application-reset .btn-wrapper .btn-yes::after {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0.8em;
+    top: 0;
+    bottom: 0.1em;
+    width: 1em;
+    background: url('./icons/warning.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.error-boundary-page .footer {
+    padding: 0;
+    position: absolute;
+    bottom: 0;
+}
+
+.error-boundary-page .footer aside {
+    position: relative;
+    margin: 2em 0 1.5em;
+}
+
+@media screen and (max-width: 430px) {
+    section.error-boundary-page {
+        padding-bottom: 10em;
+    }
+}
+
+/* <<<<<< End of Error-Boundary section <<<<<< */

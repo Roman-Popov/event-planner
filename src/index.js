@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
+import ErrorBoundaryPage from './components/ErrorBoundaryPage';
 import './index.css'
 import registerServiceWorker from './registerServiceWorker';
 
@@ -10,7 +11,7 @@ if (!('localStorage' in window)) {
 }
 
 ReactDOM.render(
-    <BrowserRouter basename={process.env.PUBLIC_URL}><App /></BrowserRouter>,
+    <ErrorBoundaryPage><BrowserRouter basename={process.env.PUBLIC_URL}><App /></BrowserRouter></ErrorBoundaryPage>,
     document.getElementById('root')
 );
 registerServiceWorker();

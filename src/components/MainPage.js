@@ -99,8 +99,6 @@ class MainPage extends Component {
     }
 
     render() {
-        const { currentMonth, currentYear } = this.props;
-
         return (
             <section className="month-page">
 
@@ -110,10 +108,7 @@ class MainPage extends Component {
                     </ul>
                 </nav>
 
-                <Footer
-                    currentMonth={currentMonth}
-                    currentYear={currentYear}
-                />
+                <Footer />
             </section>
         )
     }

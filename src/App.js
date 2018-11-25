@@ -11,6 +11,7 @@ import ManageTaskPage from './components/ManageTaskPage';
 import DayDetailsPage from './components/DayDetailsPage';
 import StoragePage from './components/StoragePage';
 import StatisticsPage from './components/StatisticsPage';
+import ErrorBoundaryPage from './components/ErrorBoundaryPage';
 
 class App extends Component {
     state = {
@@ -216,88 +217,105 @@ class App extends Component {
                     <p>Please wait</p>
                 </aside>}
 
-                <Header
-                    currentMonth={currentMonth}
-                    currentYear={currentYear}
-                    updateLastSearch={this.updateLastSearch}
-                    editData={editData}
-                />
+                <ErrorBoundaryPage>
+                    <Header
+                        currentMonth={currentMonth}
+                        currentYear={currentYear}
+                        updateLastSearch={this.updateLastSearch}
+                        editData={editData}
+                    />
+                </ErrorBoundaryPage>
+
 
                 <Route path="/select-month" render={() => (
-                    <SelectMonthPage
-                        months={months}
-                        currentMonth={currentMonth}
-                        years={years}
-                        currentYear={currentYear}
-                        submitMonth={this.submitMonth}
-                    />
+                    <ErrorBoundaryPage>
+                        <SelectMonthPage
+                            months={months}
+                            currentMonth={currentMonth}
+                            years={years}
+                            currentYear={currentYear}
+                            submitMonth={this.submitMonth}
+                        />
+                    </ErrorBoundaryPage>
                 )} />
 
                 <Route exact path="/" render={() => (
-                    <MainPage
-                        months={months}
-                        currentMonth={currentMonth}
-                        currentYear={currentYear}
-                        daysInMonth={daysInMonth}
-                        initLocalData={this.initLocalData}
-                        dayDataToState={this.dayDataToState}
-                    />
+                    <ErrorBoundaryPage>
+                        <MainPage
+                            months={months}
+                            currentMonth={currentMonth}
+                            currentYear={currentYear}
+                            daysInMonth={daysInMonth}
+                            initLocalData={this.initLocalData}
+                            dayDataToState={this.dayDataToState}
+                        />
+                    </ErrorBoundaryPage>
                 )} />
 
                 <Route path={`${/(add-task|edit-task)/}`} render={() => (
-                    <ManageTaskPage
-                        months={months}
-                        currentMonth={currentMonth}
-                        years={years}
-                        currentYear={currentYear}
-                        initLocalData={this.initLocalData}
-                        initialTaskDate={addTaskDateValue}
-                        initialTaskTime={addTaskTimeValue}
-                        dateTimeValueToState={this.dateTimeValueToState}
-                        editData={editData}
-                        editDataToState={this.editDataToState}
-                        getUsedSpace={this.testLocalStorageSize.getUsedSpaceInBytes}
-                        totalSpace={lsSpaceInfo.total}
-                        appForceUpdate={this.appForceUpdate}
-                    />
+                    <ErrorBoundaryPage>
+                        <ManageTaskPage
+                            months={months}
+                            currentMonth={currentMonth}
+                            years={years}
+                            currentYear={currentYear}
+                            initLocalData={this.initLocalData}
+                            initialTaskDate={addTaskDateValue}
+                            initialTaskTime={addTaskTimeValue}
+                            dateTimeValueToState={this.dateTimeValueToState}
+                            editData={editData}
+                            editDataToState={this.editDataToState}
+                            getUsedSpace={this.testLocalStorageSize.getUsedSpaceInBytes}
+                            totalSpace={lsSpaceInfo.total}
+                            appForceUpdate={this.appForceUpdate}
+                        />
+                    </ErrorBoundaryPage>
                 )} />
 
                 <Route path="/search" render={() => (
-                    <SearchPage
-                        lastSearchString={lastSearchString}
-                        updateLastSearch={this.updateLastSearch}
-                    />
+                    <ErrorBoundaryPage>
+                        <SearchPage
+                            lastSearchString={lastSearchString}
+                            updateLastSearch={this.updateLastSearch}
+                        />
+                    </ErrorBoundaryPage>
                 )} />
 
                 <Route path="/day-details" render={() => (
-                    <DayDetailsPage
-                        currentMonth={currentMonth}
-                        currentYear={currentYear}
-                        dayData={dayData}
-                        dayDataToState={this.dayDataToState}
-                        editDataToState={this.editDataToState}
-                        updateDate={this.updateDate}
-                    />
+                    <ErrorBoundaryPage>
+                        <DayDetailsPage
+                            currentMonth={currentMonth}
+                            currentYear={currentYear}
+                            dayData={dayData}
+                            dayDataToState={this.dayDataToState}
+                            editDataToState={this.editDataToState}
+                            updateDate={this.updateDate}
+                        />
+                    </ErrorBoundaryPage>
                 )} />
 
                 <Route path="/storage-management" render={() => (
-                    <StoragePage
-                        currentMonth={currentMonth}
-                        currentYear={currentYear}
-                        getUsedSpace={this.testLocalStorageSize.getUsedSpaceInBytes}
-                        totalSpace={lsSpaceInfo.total}
-                        updateDate={this.updateDate}
-                        isLoading={isLoading}
-                        appSetLoading={this.appSetLoading}
-                    />
+                    <ErrorBoundaryPage>
+                        <StoragePage
+                            currentMonth={currentMonth}
+                            currentYear={currentYear}
+                            getUsedSpace={this.testLocalStorageSize.getUsedSpaceInBytes}
+                            totalSpace={lsSpaceInfo.total}
+                            updateDate={this.updateDate}
+                            isLoading={isLoading}
+                            appSetLoading={this.appSetLoading}
+                        />
+                    </ErrorBoundaryPage>
                 )} />
 
                 <Route path="/statistics" render={() => (
-                    <StatisticsPage
-                        currentMonth={currentMonth}
-                        currentYear={currentYear}
-                        updateDate={this.updateDate}
-                    />
+                    <ErrorBoundaryPage>
+                        <StatisticsPage
+                            currentMonth={currentMonth}
+                            currentYear={currentYear}
+                            updateDate={this.updateDate}
+                        />
+                    </ErrorBoundaryPage>
                 )} />
 
             </div>

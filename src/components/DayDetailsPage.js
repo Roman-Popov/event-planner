@@ -44,9 +44,6 @@ class DayDetailsPage extends Component {
                 updateDate(monthURL, yearURL);
                 dayDataToState(parsedData);
                 this.setState({ dayData: parsedData })
-            } else {
-                // Go to the main page if stored data was not found (or in case of invalid URL)
-                window.location.replace("/");
             }
         }
     }
