@@ -186,7 +186,7 @@ class App extends Component {
     }
 
     dayDataToState = (dayData, callback) => {
-        this.setState({ dayData: dayData }, callback)
+        this.setState({ dayData: dayData }, typeof(callback) === 'function' ? callback : undefined)
     }
 
     editDataToState = (dayData, task) => {
@@ -314,6 +314,7 @@ class App extends Component {
                             currentMonth={currentMonth}
                             currentYear={currentYear}
                             updateDate={this.updateDate}
+                            dayDataToState={this.dayDataToState}
                         />
                     </ErrorBoundaryPage>
                 )} />

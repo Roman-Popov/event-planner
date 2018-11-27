@@ -170,6 +170,7 @@ class StatisticsPage extends Component {
                     className="show-day"
                     draggable="false"
                     title={`Go to ${new Date(unixTime).toLocaleDateString()}`}
+                    onClick={() => this.props.dayDataToState(null)}
                 >
                     Show this day
                 </Link>

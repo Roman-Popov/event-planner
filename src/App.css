@@ -1601,7 +1601,7 @@ textarea.focused {
 
 .footer nav {
     text-align: left;
-    max-width: calc(100% - 20vw);
+    max-width: 80%;
 }
 
 .footer nav a {
@@ -1929,7 +1929,7 @@ textarea.focused {
 }
 
 .group-year .btn-delete-year,
-.group-year .btn-clear-all-data,
+.group-year .btn-reset,
 .day-details .btn-add-fin-result {
     padding: 0 1.5em;
     margin: 1em auto;
@@ -2012,12 +2012,16 @@ textarea.focused {
     color: gray;
 }
 
-/* >>> Recovery subsection >>> */
-
-.storage-management .group-year.upload {
+.storage-management .group-year.upload,
+.storage-management .group-year.app-reset {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+/* >>> Recovery subsection >>> */
+
+.storage-management .group-year.upload {
     padding-bottom: 1.5em;
 }
 
@@ -2111,7 +2115,7 @@ textarea.focused {
 .upload .restoration-wrapper {
     display: flex;
     justify-content: center;
-    width: 100%;
+    width: 85%;
     overflow: hidden;
     max-height: 0;
     box-sizing: border-box;
@@ -2121,6 +2125,10 @@ textarea.focused {
 
 .upload .restoration-wrapper.visible {
     max-height: 50em;
+}
+
+.restoration-wrapper > div:not(#auxiliary-element) {
+    width: 100%;
 }
 
 .restoration-wrapper .file-info {
@@ -2482,17 +2490,26 @@ form.months-list label span {
 
 /* <<< End of recovery subsection <<< */
 
-.group-year .danger-zone {
+.group-year.app-reset .reset-description {
+    font-size: 85%;
+    color: gray;
+    font-style: italic;
+    width: 25em;
+    max-width: 60vw;
+    margin: 0;
+}
+
+.group-year.app-reset .danger-zone {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
+    width: 85%;
     box-sizing: border-box;
     background-color: #fffafa;
     box-shadow: inset 0 0 5px 1px crimson;
     border-radius: 1em;
-    margin: 1em;
+    margin: 2em 1em 1em;
     padding-bottom: 1em;
 }
 
@@ -2759,7 +2776,7 @@ section.error-boundary-page {
     padding: 0 1em 0 2.5em;
 }
 
-.btn-download-backup span {
+.btn-download-backup .backup-icon {
     display: inline-block;
     background-image: url('./icons/backup.svg');
     width: 2em;
@@ -2803,9 +2820,6 @@ section.error-boundary-page {
 }
 
 .bug-info-wrapper .copy-panel {
-    display: flex;
-    align-items: center;
-    justify-content: center;
     background-color: #add8e68a;
     position: sticky;
     bottom: 0;
@@ -2817,8 +2831,36 @@ section.error-boundary-page {
 
 .copy-panel .btn.copy-to-clipboard {
     width: 6em;
-    margin: 0.5em;
+    margin: 0.5em auto;
     border: 1px solid #076cab;
+}
+
+.copy-panel .btn.copy-to-clipboard::after {
+    content: 'Successfully copied!';
+    position: absolute;
+    top: -1.5em;
+    margin: auto;
+    width: 12em;
+    color: transparent;
+    text-shadow: none;
+    background-color: none;
+    box-shadow: 0 0 5px transparent;
+    padding: 0.3em 0;
+    border-radius: 5em;
+    z-index: -1;
+    visibility: hidden;
+}
+
+.copy-panel .btn.copy-to-clipboard.success::after {
+    visibility: visible;
+    color: inherit;
+    text-shadow: inherit;
+    background-color: #076cabe6;
+    box-shadow: 0 0 5px 2px #076cabe6;
+    opacity: 0;
+    transform: translateY(-1.75em);
+    transition: all 0.5s, opacity 0.25s 1s;
+    transition-timing-function: ease-in-out;
 }
 
 .error-boundary-page .application-reset {

@@ -111,8 +111,6 @@ class StoragePage extends Component {
             } else {
                 arrayToRemove = storedKeys.filter(key => key.includes(obj.year));
             }
-        } else {
-            arrayToRemove = storedKeys;
         }
 
         arrayToRemove.forEach(key => localStorage.removeItem(key));
@@ -125,10 +123,33 @@ class StoragePage extends Component {
         })
     }
 
+    appReset = (hard) => {
+        const monthDataKeys = hard === true ? Object.keys(localStorage).filter(key => /^[A-Z]+-20\d\d$/i.test(key)) : [],
+            serviceInfoKeys = ['localStorageSpaceInfo'];
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations()
+                .then(registrations => {
+                    for (let registration of registrations) {
+                        if (registration.scope.includes(process.env.PUBLIC_URL || '/')) registration.unregister()
+                    }
+                })
+                .catch(() => alert('ServiceWorker error'))
+                .then(() => [...monthDataKeys, ...serviceInfoKeys].forEach(key => localStorage.removeItem(key)))
+                .catch(() => alert('Reset error'))
+                .then(() => window.location.replace(process.env.PUBLIC_URL || '/'))
+        } else {
+            [...monthDataKeys, ...serviceInfoKeys].forEach(key => localStorage.removeItem(key));
+            window.location.replace(process.env.PUBLIC_URL || '/');
+        }
+    }
+
     getDelText = (obj) => {
         let text = 'Delete';
 
-        if (obj) {
+        if (obj === 'soft reset') {
+            text += ' service data'
+        } else if (obj) {
             text += obj.month ? ` ${obj.month} ${obj.year}` : ` ${obj.year} year`
         } else {
             text += ' application data for all time'
@@ -259,27 +280,50 @@ class StoragePage extends Component {
                     totalSpace={totalSpace}
                 />
 
-                <section className="group-year">
+                <section className="group-year app-reset">
+                    <h2>Application reset</h2>
+
+                    <button
+                        className="btn btn-reset"
+                        onClick={() => this.confirmDeletion('soft reset')}
+                        title="Delete service data of the application, user data will not be affected"
+                    >
+                        Soft reset
+                    </button>
+                    <p className="reset-description">
+                        During the soft reset, only service data of the application will be deleted,
+                        so user data will not be affected.
+                    </p>
+
+
                     <div className="danger-zone">
                         <h2>Danger zone</h2>
                         <button
-                            className="btn btn-clear-all-data"
+                            className="btn btn-reset"
                             onClick={() => this.confirmDeletion()}
                             title="DANGER! Delete all application data"
                         >
-                            Delete all application data
+                            Hard reset
                         </button>
+                        <p className="reset-description">
+                            During the hard reset, <b>ALL</b> application data will be deleted
+                            and cannot be restored without a backup file
+                        </p>
                     </div>
                 </section>
 
                 <div className={`modal-window ${showModal ? 'visible' : ''}`}>
                     <div className="message">
                         <h2><span className="modal-header">Attention!</span></h2>
-                        <p>Deleted data can not be restored without a backup file.</p>
+                        {deleteObject !== 'soft reset' && <p>Deleted data cannot be restored without a backup file.</p>}
                         <p>
-                            Do you really want to delete all
-                            {deleteObject ? ` data for ${deleteObject.month || ''} ${deleteObject.year}${(!deleteObject.month && ' year') || ''}` :
-                                ' application data for all time'}?
+                            Do you really want to delete
+                            {deleteObject === 'soft reset' ?
+                                ' all service information of the application' :
+                                deleteObject ?
+                                    ` all data for ${deleteObject.month || ''} ${deleteObject.year}${(!deleteObject.month && ' year') || ''}` :
+                                    ' application data for all time'
+                            }?
                         </p>
                         <p>
                             Please type in the following text to confirm:
@@ -289,7 +333,13 @@ class StoragePage extends Component {
                         <form
                             className="btn-wrapper"
                             onSubmit={(e) => {
-                                this.clearData(e, deleteObject);
+                                if (deleteObject === 'soft reset') {
+                                    this.appReset();
+                                } else if (deleteObject) {
+                                    this.clearData(e, deleteObject);
+                                } else {
+                                    this.appReset(true);
+                                }
                                 document.querySelector('body').classList.remove('modal-shown');
                             }}
                         >

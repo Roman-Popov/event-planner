@@ -22,7 +22,7 @@ class Footer extends Component {
     }
 
     render() {
-        const vw = window.innerWidth;
+        const iw = window.innerWidth;
 
         return (
             <footer className="footer">
@@ -34,11 +34,9 @@ class Footer extends Component {
                     </ul>
                 </nav>
                 <div className="logo">
-                    {(vw > 950) ?
-                        <Logo style={{ width: '50px', bgColor: '#076cab' }} type="small" href="https://roman-popov.github.io" /> :
-                        (vw <500 || vw > 620) ?
-                            <Logo style={{ width: '70px', bgColor: '#076cab' }} type="medium" href="https://roman-popov.github.io" /> :
-                            <Logo style={{ width: '100px', bgColor: '#076cab' }} type="big" href="https://roman-popov.github.io" />
+                    {(iw <500 || iw > 620) ?
+                        <Logo style={{ width: '70px', bgColor: '#076cab' }} type="medium" href="https://roman-popov.github.io" /> :
+                        <Logo style={{ width: '100px', bgColor: '#076cab' }} type="big" href="https://roman-popov.github.io" />
                     }
                 </div>
                 <aside>

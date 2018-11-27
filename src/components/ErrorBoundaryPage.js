@@ -19,11 +19,11 @@ class ErrorBoundaryPage extends Component {
         var clipboard = new ClipboardJS('.copy-to-clipboard');
 
         clipboard.on('success', function (e) {
-            console.info('Action:', e.action);
-            console.info('Text:', e.text);
-            console.info('Trigger:', e.trigger);
-            console.log('success')
+            e.trigger.classList.add('success')
 
+            setTimeout(() => {
+                e.trigger.classList.remove('success')
+            }, 1250);
             e.clearSelection();
         });
 
@@ -43,6 +43,27 @@ class ErrorBoundaryPage extends Component {
         this.state.clipboard && this.state.clipboard.destroy();
     }
 
+    appReset = (hard) => {
+        const monthDataKeys = hard === true ? Object.keys(localStorage).filter(key => /^[A-Z]+-20\d\d$/i.test(key)) : [],
+            serviceInfoKeys = ['localStorageSpaceInfo'];
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations()
+                .then(registrations => {
+                    for (let registration of registrations) {
+                        if (registration.scope.includes(process.env.PUBLIC_URL || '/')) registration.unregister()
+                    }
+                })
+                .catch(() => alert('ServiceWorker error'))
+                .then(() => [...monthDataKeys, ...serviceInfoKeys].forEach(key => localStorage.removeItem(key)))
+                .catch(() => alert('Reset error'))
+                .then(() => window.location.replace(process.env.PUBLIC_URL || '/'))
+        } else {
+            [...monthDataKeys, ...serviceInfoKeys].forEach(key => localStorage.removeItem(key));
+            window.location.replace(process.env.PUBLIC_URL || '/');
+        }
+    }
+
     render() {
         const { error, errorInfo } = this.state;
 
@@ -54,24 +75,6 @@ class ErrorBoundaryPage extends Component {
                 description = encodeURIComponent(`Location: ${location}\n\nError: ${error.toString()}\n\nError stack: ${shortErrStack}\n\nError info componentStack: ${errorInfo.componentStack}`);
 
             window.scrollTo(0, 0);
-
-            function appReset(hard) {
-                const monthDataKeys = hard === true ? Object.keys(localStorage).filter(key => /^[A-Z]+-20\d\d$/i.test(key)) : [],
-                    serviceInfoKeys = ['localStorageSpaceInfo'];
-
-                if ('serviceWorker' in navigator) {
-                    navigator.serviceWorker.getRegistrations()
-                        .then(registrations => {
-                            for (let registration of registrations) {
-                                registration.unregister()
-                            }
-                        })
-                        .catch(() => alert('ServiceWorker error'))
-                        .then(() => [...monthDataKeys, ...serviceInfoKeys].forEach(key => localStorage.removeItem(key)))
-                        .catch(() => alert('Reset error'))
-                        .then(() => window.location.replace(process.env.PUBLIC_URL || '/'))
-                }
-            }
 
             return (
                 <section className="error-boundary-page">
@@ -138,6 +141,7 @@ class ErrorBoundaryPage extends Component {
                         href={`mailto:popov.r.k.18@gmail.com?subject=${subject}&body=${description}`}
                         className="btn btn-send-report"
                         title="Click to create an email automatically"
+                        draggable="false"
                     >
                         Send bug report
                     </a>
@@ -158,7 +162,7 @@ class ErrorBoundaryPage extends Component {
                                 a.click();
                             }}
                         >
-                            <span></span>download backup file
+                            <span className="backup-icon"></span>Download backup file
                         </button>
                         just in case
                     </div>
@@ -193,7 +197,7 @@ class ErrorBoundaryPage extends Component {
                                     'Attention! During the soft reset, only service application data will be deleted. ' +
                                     'User data will not be affected. ' +
                                     'Do you really want to continue?'
-                                ) ? appReset() : false}
+                                ) ? this.appReset() : false}
                                 title="Reset all settings and keep user data"
                             >
                                 Soft
@@ -204,8 +208,8 @@ class ErrorBoundaryPage extends Component {
                                     'Warning! During the hard reset, ALL application data will be deleted. ' +
                                     'Deleted data CAN NOT BE RESTORED without a backup file. ' +
                                     'Do you really want to continue?'
-                                    ) ? appReset(true) : false}
-                                title="Warning! Deleted data can not be restored without a backup file"
+                                ) ? this.appReset(true) : false}
+                                title="Warning! ALL application data will be deleted and cannot be restored without a backup file"
                             >
                                 Hard
                             </button>
