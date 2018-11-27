@@ -55,20 +55,59 @@ class Header extends Component {
         return (
             <header className="control-panel">
                 {currentPage.name === 'Add task' ?
-                    <button className='btn btn-add activated' onClick={this.historyBack}>Back</button> :
+                    <button
+                        className='btn btn-add activated'
+                        onClick={this.historyBack}
+                        title="Back to the previous screen"
+                    >
+                        Back
+                    </button> :
                     currentPage.name === 'Edit task' ?
-                        <button className='btn btn-edit-task activated' onClick={this.historyBack}>Back</button> :
-                        <Link to="/add-task" className='btn btn-add' draggable="false">Add new task</Link>
+                        <button
+                            className='btn btn-edit-task activated'
+                            onClick={this.historyBack}
+                            title="Back to the previous screen"
+                        >
+                            Back
+                        </button> :
+                        <Link to="/add-task"
+                            className='btn btn-add'
+                            draggable="false"
+                            title="Add new task"
+                        >
+                            Add new task
+                        </Link>
                 }
 
                 {currentPage ? // !== Main page
                     <div className="btn btn-select-month disabled">{buttonText}</div> :
-                    <Link to="/select-month" className="btn btn-select-month" draggable="false">{buttonText}</Link>
+                    <Link
+                        to="/select-month"
+                        className="btn btn-select-month"
+                        draggable="false"
+                        title="Select month"
+                    >
+                        {buttonText}
+                    </Link>
                 }
 
                 {currentPage.name === 'Search' ?
-                    <button className="btn btn-open-search activated" onClick={this.historyBack}>Back</button> :
-                    <Link to="/search" className="btn btn-open-search" onClick={() => updateLastSearch('')} draggable="false">Open search</Link>
+                    <button
+                        className="btn btn-open-search activated"
+                        onClick={this.historyBack}
+                        title="Back to the previous screen"
+                    >
+                        Back
+                    </button> :
+                    <Link
+                        to="/search"
+                        className="btn btn-open-search"
+                        onClick={() => updateLastSearch('')}
+                        draggable="false"
+                        title="Open search"
+                    >
+                        Open search
+                    </Link>
                 }
             </header>
         )

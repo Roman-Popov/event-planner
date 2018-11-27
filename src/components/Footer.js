@@ -28,9 +28,9 @@ class Footer extends Component {
             <footer className="footer">
                 <nav>
                     <ul>
-                        <li> <Link to="/instructions" draggable="false">User instructions</Link> </li>
-                        <li> <Link to="/statistics" draggable="false">Statistics</Link> </li>
-                        <li> <Link to="/storage-management" draggable="false">Storage management</Link> </li>
+                        <li> <Link to="/instructions" draggable="false" title="User instructions">User instructions</Link> </li>
+                        <li> <Link to="/statistics" draggable="false" title="Statistics">Statistics</Link> </li>
+                        <li> <Link to="/storage-management" draggable="false" title="Storage management">Storage management</Link> </li>
                     </ul>
                 </nav>
                 <div className="logo">

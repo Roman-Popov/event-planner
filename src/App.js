@@ -9,6 +9,7 @@ import SearchPage from './components/SearchPage';
 import SelectMonthPage from './components/SelectMonthPage';
 import ManageTaskPage from './components/ManageTaskPage';
 import DayDetailsPage from './components/DayDetailsPage';
+import InstructionsPage from './components/InstructionsPage';
 import StoragePage from './components/StoragePage';
 import StatisticsPage from './components/StatisticsPage';
 import ErrorBoundaryPage from './components/ErrorBoundaryPage';
@@ -291,6 +292,12 @@ class App extends Component {
                             editDataToState={this.editDataToState}
                             updateDate={this.updateDate}
                         />
+                    </ErrorBoundaryPage>
+                )} />
+
+                <Route path="/instructions" render={() => (
+                    <ErrorBoundaryPage>
+                        <InstructionsPage />
                     </ErrorBoundaryPage>
                 )} />
 

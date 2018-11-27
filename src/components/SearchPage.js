@@ -95,6 +95,8 @@ class SearchPage extends Component {
                             type="text"
                             placeholder="Please enter text to search..."
                             value={searchString}
+                            autoFocus="yes"
+                            title="Please enter at least three characters to search by task name and notes"
                             onChange={(e) => {
                                 const inputValue = e.target.value;
                                 this.setState({
@@ -103,7 +105,13 @@ class SearchPage extends Component {
                                 })
                             }}
                         />
-                        <button className="btn btn-clear" onClick={() => this.setState({ searchString: '', searchResults: [] })}>Clear query</button>
+                        <button
+                            className="btn btn-clear"
+                            onClick={() => this.setState({ searchString: '', searchResults: [] })}
+                            title="Clear query"
+                        >
+                            Clear query
+                        </button>
                     </div>
                 </header>
 
@@ -125,6 +133,7 @@ class SearchPage extends Component {
                                                 className="show-day"
                                                 onClick={() => updateLastSearch(searchString)}
                                                 draggable="false"
+                                                title={`Go to ${new Date(`${foundElem.day}-${foundElem.month}-${foundElem.year}`).toLocaleDateString()}`}
                                             >
                                                 Show this day
                                             </Link>

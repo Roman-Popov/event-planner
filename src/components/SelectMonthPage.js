@@ -22,7 +22,11 @@ class SelectMonthPage extends Component {
                         <legend>Select month</legend>
 
                         {months.map(month => (
-                            <label key={month} className={month === currentMonth ? 'radio-selected' : ''}>
+                            <label
+                                key={month}
+                                className={month === currentMonth ? 'radio-selected' : ''}
+                                title={`Select ${month}`}
+                            >
                                 <input
                                     type="radio"
                                     id={`select-${month}`}
@@ -39,7 +43,11 @@ class SelectMonthPage extends Component {
                         <legend>Select year</legend>
 
                         {years.map(year => (
-                            <label key={year} className={year.toString() === currentYear.toString() ? 'radio-selected' : ''}>
+                            <label
+                                key={year}
+                                className={year.toString() === currentYear.toString() ? 'radio-selected' : ''}
+                                title={`Select ${year}`}
+                            >
                                 <input
                                     type="radio"
                                     id={`select-${year}`}
@@ -53,8 +61,23 @@ class SelectMonthPage extends Component {
 
                     </fieldset>
 
-                    <Link to="/" className="btn btn-cancel" draggable="false">Cancel</Link>
-                    <Link to="/" className="btn btn-submit" onClick={() => submitMonth()} draggable="false">Apply</Link>
+                    <Link
+                        to="/"
+                        className="btn btn-cancel"
+                        draggable="false"
+                        title="Cancel"
+                    >
+                        Cancel
+                    </Link>
+                    <Link
+                        to="/"
+                        className="btn btn-submit"
+                        onClick={() => submitMonth()}
+                        draggable="false"
+                        title="Confirm selection"
+                    >
+                        Apply
+                    </Link>
                 </form>
             </section>
 

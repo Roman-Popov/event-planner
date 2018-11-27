@@ -53,15 +53,17 @@ class MainPage extends Component {
             const dayData = monthData[i],
                 day = dayData.day,
                 weekdayName = dayData.wdName.slice(0,3),
+                dateString = `${ day }-${ currentMonth }-${ currentYear }`,
                 dayTasks = dayData.tasks;
 
             listDays.push(
                 <li key={day} data-weekend={weekend.includes(weekdayName)}>
                     <Link
-                        to={`/day-details/${ day }-${ currentMonth }-${ currentYear }`}
+                        to={`/day-details/${ dateString }`}
                         className="business-day"
                         onClick={() => dayDataToState(dayData)}
                         draggable="false"
+                        title={`Show detailed information about this day (${new Date(dateString).toLocaleDateString()})`}
                     >
                         <span className="day-of-week">
                             {weekdayName}
@@ -82,7 +84,12 @@ class MainPage extends Component {
                                         <h4 data-tasks={dayTasks.length > 1} title="Attention! You have tasks for the day off!">{task.name}</h4> :
                                         <h4>{task.name}</h4>
                                     }
-                                    {task.notes && <button className="summary" onClick={e => this.toggleDetails(e.target)}>
+                                    {task.notes &&
+                                    <button
+                                        className="summary"
+                                        onClick={e => this.toggleDetails(e.target)}
+                                        title="Toggle notes visibility"
+                                    >
                                         Show notes
                                     </button>}
                                 </div>

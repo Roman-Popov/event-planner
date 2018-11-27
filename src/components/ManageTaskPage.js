@@ -170,10 +170,14 @@ class ManageTaskPage extends Component {
                     </label>
 
                     {/* Fake hidden button to go back if task was added successfully */}
-                    <Link to="/" id="submit-task">{editData ? 'Apply' : 'Add'}</Link>
+                    <Link to="/" id="submit-task" title={editData ? 'Apply changes' : 'Add task'}>{editData ? 'Apply' : 'Add'}</Link>
 
-                    <Link to="/" className="btn btn-cancel" draggable="false">Cancel</Link>
-                    <button className={`btn btn-submit ${usedPercentageText < 100 ? '' : 'disabled'}`} disabled={!(usedPercentageText < 100)}>
+                    <Link to="/" className="btn btn-cancel" draggable="false" title="Cancel">Cancel</Link>
+                    <button
+                        className={`btn btn-submit ${usedPercentageText < 100 ? '' : 'disabled'}`}
+                        disabled={!(usedPercentageText < 100)}
+                        title={editData ? 'Apply changes' : 'Add task'}
+                    >
                         <span className={usedPercentageText > 95 && usedPercentageText < 100 ? 'warning' : ''}>{editData ? 'Apply' : 'Add'}</span>
                     </button>
                 </form>
@@ -200,9 +204,17 @@ class ManageTaskPage extends Component {
                             </div>
                         }
                         <div className="btn-wrapper">
-                            <Link to="/storage-management" className="btn btn-no" draggable="false">Clear now</Link>
+                            <Link
+                                to="/storage-management"
+                                className="btn btn-no"
+                                draggable="false"
+                                title="Clear now"
+                            >
+                                Clear now
+                            </Link>
                             <button
                                 className="btn btn-yes"
+                                title="Clear later"
                                 onClick={() => {
                                     this.setState({ showModal: false });
                                     document.querySelector('body').classList.remove('modal-shown');
