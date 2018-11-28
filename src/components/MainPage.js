@@ -64,11 +64,13 @@ class MainPage extends Component {
                         onClick={() => dayDataToState(dayData)}
                         draggable="false"
                         title={`Show detailed information about this day (${new Date(dateString).toLocaleDateString()})`}
+                        style={dayData.color ? { '--bgColor': dayData.color } : {}}
+                        data-colored={dayData.color ? 'true' : 'false'}
                     >
-                        <span className="day-of-week">
-                            {weekdayName}
-                        </span>
-                        <span className="day-of-month">{day}</span>
+                        <div>
+                            <span className="day-of-week">{weekdayName}</span>
+                            <span className="day-of-month">{day}</span>
+                        </div>
                     </Link>
 
                     <div className={`day-data ${dayData.work ? '' : 'day-off'}`}>

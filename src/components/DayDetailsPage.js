@@ -48,6 +48,27 @@ class DayDetailsPage extends Component {
         }
     }
 
+    changeDayColor = (color) => {
+        const { dayDataToState } = this.props,
+            { dayData, currentMonth, currentYear } = this.state,
+            dayName = dayData.wdName,
+            weekend = ['Saturday', 'Sunday'],
+            listOfDays = JSON.parse(localStorage.getItem(`${currentMonth}-${currentYear}`)),
+            storedDay = listOfDays[dayData.day - 1],
+            colorPicker = document.getElementById('color-picker');
+
+        if (color) {
+            storedDay.color = color;
+        } else {
+            delete storedDay.color;
+            colorPicker.value = weekend.includes(dayName) ? '#f8c6c6' : '#add8e6';
+        }
+
+        this.setState({ dayData: storedDay });
+        dayDataToState(storedDay);
+        localStorage.setItem(`${currentMonth}-${currentYear}`, JSON.stringify(listOfDays));
+    }
+
     confirmDeletion = (task) => {
         document.querySelector('body').classList.add('modal-shown');
 
@@ -164,11 +185,37 @@ class DayDetailsPage extends Component {
         return (
             <section className='day-details' >
                 <div className="header-wrapper" data-weekend={weekend.includes(dayName)}>
-                    <header>
+                    <header style={dayData.color ? { '--bgColor': dayData.color } : {}}>
                         <Link to="/" className="btn btn-back" title="Back to month page" draggable="false">Back</Link>
                         <div>
                             <h1>{dayData.day}</h1>
                             <span className="day-of-week">{dayName}</span>
+
+                            <button
+                                className="day-color"
+                                onClick={() => document.getElementById('color-picker').click()}
+                                title="Set custom day color"
+                            >
+                                Set custom day color
+                            </button>
+
+                            <button
+                                className="clear-day-color"
+                                onClick={() => this.changeDayColor()}
+                                title="Set default day color"
+                            >
+                                Set default day color
+                            </button>
+
+                            {/* Hidden color-picker element */}
+                            <input
+                                id="color-picker"
+                                style={{ display: 'none' }}
+                                type="color"
+                                defaultValue={dayData.color ? dayData.color : weekend.includes(dayName) ? '#f8c6c6' : '#add8e6'}
+                                onChange={(e) => this.changeDayColor(e.target.value)}
+                            />
+
                         </div>
                         <button
                             className={`btn btn-delete-day ${dayTasks.length ? 'visible' : ''}`}
@@ -210,7 +257,7 @@ class DayDetailsPage extends Component {
                                         <input
                                             type="checkbox"
                                             className="task-done"
-                                            defaultChecked={task.done}
+                                            checked={task.done || false}
                                             onChange={(e) => this.taskDoneCheckmark(e.target, task, index)}
                                         />
                                         <span className="checkmark"></span>

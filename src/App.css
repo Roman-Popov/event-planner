@@ -326,7 +326,7 @@ input,
 
 .list-days ul li {
     position: relative;
-    min-height: 50px;
+    min-height: 3.5em;
     border-top: 1px solid darkgray;
     display: flex;
     flex-wrap: wrap;
@@ -363,6 +363,8 @@ input,
 }
 
 .list-days .business-day {
+    --bgColor: none;
+    background-color: var(--bgColor);
     position: relative;
     display: flex;
     flex-direction: column;
@@ -378,11 +380,26 @@ input,
 }
 
 .list-days li[data-weekend='true'] .business-day {
+    --bgColor: rgb(248, 235, 235);
+}
+
+.list-days li .business-day div {
+    background-color: whitesmoke;
+    border-radius: 0.3em;
+    padding: 0.2em 0;
+    width: 70%;
+}
+
+.list-days li .business-day[data-colored='true'] div {
+    box-shadow: inset 0 0 2px gray;
+}
+
+.list-days li[data-weekend='true'] .business-day div {
     background-color: rgb(248, 235, 235);
 }
 
-.day-of-week,
-.day-of-month {
+.business-day .day-of-week,
+.business-day .day-of-month {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -405,6 +422,8 @@ input,
 }
 
 .day-data {
+    --bgColor: none;
+    background-color: var(--bgColor);
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -413,7 +432,7 @@ input,
 }
 
 .day-data.day-off {
-    background-color: rgb(248, 235, 235)
+    --bgColor: rgb(248, 235, 235);
 }
 
 .no-tasks,
@@ -440,7 +459,7 @@ input,
     background-color: #edf7ed;
 }
 .day-data.day-off section.done {
-    background: linear-gradient(240deg, #edf7ed, transparent);
+    background: linear-gradient(60deg, transparent, #edf7ed 45%);
 }
 
 .day-data .total {
@@ -820,8 +839,16 @@ section.storage-management.modal-shown {
     border: 1px solid silver;
 }
 
+.day-details .header-wrapper header {
+    --bgColor: lightblue;
+}
+
+.day-details .header-wrapper[data-weekend='true'] header {
+    --bgColor: rgb(248, 198, 198);
+}
+
 .day-details .header-wrapper header::before {
-    background-image: radial-gradient(at top, lightblue, transparent 75%);
+    background-image: radial-gradient(at top, var(--bgColor), transparent 75%);
     background-repeat: no-repeat;
     background-position-y: 3px;
     content: '';
@@ -831,12 +858,12 @@ section.storage-management.modal-shown {
     top: 0; left: 0;
     opacity: 0;
     width: 100%;
-    z-index: -1;
     animation: change-opacity 1s linear 1s forwards;
 }
 
-.day-details .header-wrapper[data-weekend='true'] header::before {
-    background-image: radial-gradient(at top, rgb(248, 198, 198), transparent 75%);
+.day-details .header-wrapper header > div:first-of-type {
+    position: relative;
+    width: 10em;
 }
 
 @keyframes change-opacity {
@@ -852,6 +879,47 @@ section.storage-management.modal-shown {
 .day-details .day-of-week {
     margin: 0;
     height: 30px;
+}
+
+.day-details .day-color,
+.day-details .clear-day-color {
+    font-size: 0;
+    position: absolute;
+    top: 0.25em;
+    border: none;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.5);
+    background-color: transparent;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 2rem;
+    opacity: 0.4;
+}
+
+.day-details .day-color:hover,
+.day-details .day-color:active,
+.day-details .day-color.focused,
+.day-details .clear-day-color:hover,
+.day-details .clear-day-color:active,
+.day-details .clear-day-color.focused {
+    opacity: 1;
+}
+
+.day-details .day-color:active,
+.day-details .clear-day-color:active {
+    transform-origin: center;
+    transform: scale(0.9);
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.23);
+}
+
+.day-details .day-color {
+    left: 0;
+    background-image: url('./icons/set-color.svg');
+}
+
+.day-details .clear-day-color {
+    right: 0;
+    background-image: url('./icons/clear-color.svg');
 }
 
 .btn-back {

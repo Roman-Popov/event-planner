@@ -104,6 +104,9 @@ class RestorationUtility extends Component {
                                     if (a.time > b.time) { return 1 } else { return -1 }
                                 })
                             }
+
+                            if (day.color) storedData[index].color = day.color;
+
                         })
 
                         localStorage.setItem(month, JSON.stringify(storedData))
