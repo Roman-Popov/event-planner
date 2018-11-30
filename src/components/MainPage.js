@@ -13,7 +13,11 @@ class MainPage extends Component {
     }
 
     componentDidMount() {
-        window.scrollTo(0, 0);
+        window.scrollTo(0, this.props.scrollY);
+    }
+
+    componentWillUnmount() {
+        this.props.setInitialScroll(window.scrollY)
     }
 
     toggleDetails = (targetBtn) => {

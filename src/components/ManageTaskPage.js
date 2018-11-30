@@ -46,9 +46,9 @@ class ManageTaskPage extends Component {
             taskYear = taskDate.split('-')[0],
             taskMonth = months[Number(taskDate.split('-')[1]) - 1],
             taskDay = Number(taskDate.split('-')[2]) - 1,
-            taskName = document.getElementById('task-name').value,
+            taskName = document.getElementById('task-name').value.trim(),
             taskTime = document.getElementById('task-time').value,
-            taskNotes = document.getElementById('task-notes').value,
+            taskNotes = document.getElementById('task-notes').value.trim(),
             listOfDays = initLocalData(taskMonth, taskYear);
 
         // Delete existing task (old version) if it is being edited
@@ -143,6 +143,8 @@ class ManageTaskPage extends Component {
                             placeholder={workingDay ? "Task name (required)" : "Day off"}
                             defaultValue={!editData ? '' : editData.task.name !== 'Day off' ? editData.task.name : '' }
                             autoComplete="off"
+                            pattern=".*\S+.*"
+                            title={workingDay ? "Task name (required, 50 symbols max, at least 1 character)" : "Day off"}
                             maxLength="50"
                             disabled={!workingDay}
                         />

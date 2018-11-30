@@ -146,7 +146,7 @@ class ErrorBoundaryPage extends Component {
                         Send bug report
                     </a>
 
-                    <p className="send-report-notes">Your default mail client for sending an email will be open.</p>
+                    <p className="send-report-notes">Your default mail client for sending an email will be open</p>
 
                     <div className="backup-btn-wrapper">
                         You can

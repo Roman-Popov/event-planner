@@ -418,7 +418,7 @@ class RestorationUtility extends Component {
                                             type="radio"
                                             id="restore-supplement"
                                             name="restore-option"
-                                            value="Overwrite all"
+                                            value="Supplement existing information"
                                             defaultChecked={true}
                                         />
                                         <span className="radio-checkmark"></span>

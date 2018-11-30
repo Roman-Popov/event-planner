@@ -60,7 +60,7 @@ class Header extends Component {
                         onClick={this.historyBack}
                         title="Back to the previous screen"
                     >
-                        Back
+                        Back to the previous screen
                     </button> :
                     currentPage.name === 'Edit task' ?
                         <button
@@ -68,7 +68,7 @@ class Header extends Component {
                             onClick={this.historyBack}
                             title="Back to the previous screen"
                         >
-                            Back
+                            Back to the previous screen
                         </button> :
                         <Link to="/add-task"
                             className='btn btn-add'

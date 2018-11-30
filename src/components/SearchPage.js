@@ -124,7 +124,7 @@ class SearchPage extends Component {
                                     <li key={index}>
                                         <div className="date-info">
                                             <time>
-                                                {new Date(foundElem.unixTime).toLocaleDateString([], { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' })}
+                                                {new Date(foundElem.unixTime).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' })}
                                                 {foundElem.task.time ? ` at ${new Date(foundElem.unixTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}` : ''}
                                             </time>
 
@@ -162,8 +162,8 @@ class SearchPage extends Component {
                             searchString.trim().length > 0 ?
 
                                 <div className="message">
-                                    <p>The search request is too short.</p>
-                                    <p>Please enter at least three characters.</p>
+                                    <p>The search request is too short.</p>
+                                    <p>Please enter at least three characters.</p>
                                 </div> : ''
                     }
                 </section>

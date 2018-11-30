@@ -31,7 +31,8 @@ class App extends Component {
         editData: null,
         addTaskDateValue: '',
         addTaskTimeValue: '',
-        lastSearchString: ''
+        lastSearchString: '',
+        scrollY: 0
     }
 
     componentWillMount() {
@@ -206,8 +207,12 @@ class App extends Component {
         this.setState({ isLoading: status })
     }
 
+    setInitialScroll = (scrollValue) => {
+        this.setState({ scrollY: scrollValue })
+    }
+
     render() {
-        const { isLoading, lsSpaceInfo, months, currentMonth, years, currentYear, daysInMonth,
+        const { scrollY, isLoading, lsSpaceInfo, months, currentMonth, years, currentYear, daysInMonth,
             dayData, addTaskDateValue, addTaskTimeValue, lastSearchString, editData } = this.state;
 
         return (
@@ -243,6 +248,8 @@ class App extends Component {
                 <Route exact path="/" render={() => (
                     <ErrorBoundaryPage>
                         <MainPage
+                            scrollY={scrollY}
+                            setInitialScroll={this.setInitialScroll}
                             months={months}
                             currentMonth={currentMonth}
                             currentYear={currentYear}

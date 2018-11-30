@@ -7,7 +7,7 @@ html {
 
 body, #root, .App {
     width: 100%;
-    height: 100%;
+    min-height: 100%;
 }
 
 body.modal-shown {
@@ -526,6 +526,7 @@ input,
     background-repeat: no-repeat;
     margin-left: 1em;
     cursor: help;
+    vertical-align: middle;
 }
 
 .btn-submit .warning:not(.full)::after {
@@ -864,6 +865,7 @@ section.storage-management.modal-shown {
 .day-details .header-wrapper header > div:first-of-type {
     position: relative;
     width: 10em;
+    text-shadow: white 5px 5px 20px, white 5px -5px 20px, white -5px -5px 20px, white -5px 5px 20px;
 }
 
 @keyframes change-opacity {
@@ -1651,6 +1653,7 @@ textarea.focused {
 .search-results .message {
     align-self: center;
     font-size: 1.5em;
+    width: 90%;
 }
 
 
@@ -2178,7 +2181,7 @@ textarea.focused {
 .btn-upload {
     margin-left: 1em;
     height: 2rem;
-    width: 5em;
+    padding: 0 1em;
 }
 
 .upload .restoration-wrapper {
@@ -2309,6 +2312,10 @@ textarea.focused {
     margin-bottom: 0;
 }
 
+.options-wrapper label span {
+    max-width: calc(100% - 14px - 0.5em);
+}
+
 .options-wrapper input ~ .radio-checkmark {
     position: relative;
     margin-right: 0.5em;
@@ -2341,7 +2348,7 @@ textarea.focused {
     justify-content: space-between;
     align-items: center;
     margin: 0.5em auto 0;
-    width: 80%;
+    width: 100%;
     max-width: 27em;
     padding: 0 5px 8px;
     box-sizing: border-box;
@@ -2362,12 +2369,14 @@ textarea.focused {
     overflow: hidden;
     max-height: 10000em;
     margin: auto;
-    width: 85%;
+    width: 100%;
+    max-width: 550px;
 }
 
 .upload .selection-wrapper.shown:last-child {
     margin-top: 1.2em;
     text-align: center;
+    padding: 0 1em;
 }
 
 .selection-wrapper header {
@@ -2620,6 +2629,7 @@ form.months-list label span {
     padding: 0.75em 0;
     box-sizing: border-box;
     width: 70vw;
+    width: fit-content;
     max-width: 25em;
 }
 
@@ -2780,6 +2790,7 @@ form.months-list label span {
 .stats-wrapper time,
 .stats-wrapper a {
     white-space: nowrap;
+    display: inline-block;
 }
 
 @media screen and (max-width: 500px) {
@@ -2899,7 +2910,7 @@ section.error-boundary-page {
 }
 
 .copy-panel .btn.copy-to-clipboard {
-    width: 6em;
+    padding: 0 1em;
     margin: 0.5em auto;
     border: 1px solid #076cab;
 }
@@ -2909,12 +2920,12 @@ section.error-boundary-page {
     position: absolute;
     top: -1.5em;
     margin: auto;
-    width: 12em;
+    white-space: nowrap;
     color: transparent;
     text-shadow: none;
     background-color: none;
     box-shadow: 0 0 5px transparent;
-    padding: 0.3em 0;
+    padding: 0.3em 1em;
     border-radius: 5em;
     z-index: -1;
     visibility: hidden;

@@ -40,4 +40,6 @@ document.addEventListener('mouseup', () => {
     clickedElemPath = [];
 })
 
-window.addEventListener('resize', () => document.getElementById('root').style.height = window.innerHeight + 'px')
+document.getElementById('root').style.minHeight = window.innerHeight + 'px'
+
+window.addEventListener('resize', () => document.getElementById('root').style.minHeight = window.innerHeight + 'px')

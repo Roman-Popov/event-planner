@@ -267,14 +267,17 @@ class DayDetailsPage extends Component {
                                         className={`btn btn-add-fin-result ${task.done && !task.res ? 'visible initial' : ''}`}
                                         title="Add financial result"
                                         onClick={(e) => {
-                                            const openedForm = document.querySelector('.result-form.visible');
+                                            const openedForm = document.querySelector('.result-form.visible'),
+                                                currentForm = document.querySelector(`.result[data-task="${index}"] .result-form`);
 
                                             if (openedForm) {
                                                 openedForm.classList.remove('visible');
                                                 openedForm.parentElement.querySelector('.btn-add-fin-result').classList.add('visible');
                                             }
                                             e.target.classList.remove('visible', 'initial');
-                                            document.querySelector(`.result[data-task="${index}"] .result-form`).classList.add('visible');
+                                            currentForm.querySelector(`#revenue-task-${index}`).value = '';
+                                            currentForm.querySelector(`#expenses-task-${index}`).value = '';
+                                            currentForm.classList.add('visible');
                                         }}
                                     >
                                         Add financial result
@@ -360,7 +363,7 @@ class DayDetailsPage extends Component {
                 )) : ''}
 
                 <span className="end-of-tasks">
-                    {dayTasks.length ? 'There is no more tasks for today' :
+                    {dayTasks.length ? 'There is no more tasks for this day' :
                         'There is no tasks yet'}
                 </span>
 
